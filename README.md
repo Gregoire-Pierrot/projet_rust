@@ -38,37 +38,37 @@ Plus de détailles [ici](https://e-uapv2024.univ-avignon.fr/mod/page/view.php?id
  - **Chaque arme** peut avoir une spécialitée / attributs : `feu`, `terre`, ...
 
 #### Temps : 
- - Le joueur a un temps de jeu limité.
+ - **Temps de jeu limité**.
+ - **But** : rajouter du temps de jeu, le joueur va découvrir une première fois la carte / le jeu / les mécaniques dans la première run et pourra le finir dès la deuxième.
+ - **Temps calculé** en fonction des actions réalisés (déplacement, combats, quête, nuit à l'auberge, ...).
  - Une fois l'objectif final atteint, la limite de temps saute (scénario du mob qui va tout détruire au bout d'un certain temps, une fois battue plus de menace).
- - But : rajouter du temps de jeu, le joueur va découvrir une première fois la carte / le jeu / les mécaniques dans la première run et pourra le finir dès la deuxième.
- - Temps calculé en fonction des actions réalisés (déplacement, combats, quête, nuit à l'auberge, ...).
 
 #### Personnage :
- - Personnalisation :
+ - **Personnalisation** :
    - Le joueur choisi sont nom en début de partie.
    - Son pronom (il, elle, iel).
    - Choisi où vont aller les points de stats et de compétences.
- - Caractéristiques :
-   - En combat :
+ - **Caractéristiques** :
+   - **En combat** :
      - Force : augmente les dégâts brutes.
      - Dextérité : permet de pouvoir équipé un plus grand panelle d'armes.
      - Intélligence : augmente les dégâts de magie.
-   - En et hors combat :
+   - **En et hors combat**:
      - Vitesse : augmente la fréquence d'actions & diminue le temps consomé.
      - Esquive : diminue la précision de l'adversaire & diminue le nombre de monstre rencontré.
      - Chance : augmente le taux de coups critique & augmente les chances de drops.
-   - Niveau :
+   - **Niveau** :
      - Par niveau gagné : 2 points à dépenser dans chaque catégorie de caractéristiques (en combat & en / hors combat).
    - Certaines quêtes donnent des points en plus.
    - L'équipement influe sur les stats (mais ne modifie pas les stats de bases).
 
 #### Quêtes :
-  - Quête principal.
-  - Quêtes secondaires :
+  - **Quête principal**.
+  - **Quêtes secondaires** :
     - Les quêtes secondaires peuvent être réalisé en 1 à 4 étapes.
 
 #### Carte :
-  - Divisé en 5 zones : (ref info)
+  - **Divisé en 5 zones** : (ref info)
     - début : `python`, `scratch`.
     - désert : `android`, `apk`.
     - jungle : `java`, `mangoDB`.
@@ -77,7 +77,7 @@ Plus de détailles [ici](https://e-uapv2024.univ-avignon.fr/mod/page/view.php?id
   - La carte est soumis à des Intempérie par zones.
 
 #### Villes :
-  - Réputation :
+  - **Réputation** :
     - On fonction des actions, la réputations du joueur évolue.
     - Augmentation : perte de temps mais récompenses.
     - Diminution : impossiblité de marchander.
