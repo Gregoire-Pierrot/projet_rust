@@ -4,6 +4,8 @@
 
 ## Etape 0 :
 
+##### Objectif : Faire le déplacement du joueur dans une map et enregistrer son déplacement (fonction de sauvegarde)
+
 - Créer un fichier json d'une map (pour test)
 - Créer les structures : Entité, Lieu, Joueur
 - Charger le fichier
