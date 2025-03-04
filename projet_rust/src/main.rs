@@ -54,23 +54,20 @@ fn prendre_lieu_id(id: &str) -> Result<Lieu, String> {
 
 fn ChangerPositionJoueur(position: &str) -> Result<(), String> {
     let data = fs::read_to_string("masterFile.json").unwrap();
-    let mut items: Vec<serde_json::Value> = serde_json::from_str(&data).unwrap();
-
-    let Some(joueur_json) = items.iter_mut().find(|item| item.get("type").and_then(|t| t.as_str()) == Some("Joueur"))// On cherche le joueur
-        else {
-            return Err("Aucun joueur trouvé".to_string());
-        };
-    
-    if let Some(nouvelle_position) = joueur_json.get_mut("position") {
-        *nouvelle_position = serde_json::Value::String(position.to_string());// Modifier la position du joueur
-    }
-        
-    let updated_data = serde_json::to_string_pretty(&items).unwrap();// Sauvegarder les données dans le fichier
+    let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+    master_file.Joueur.position = position.to_string();
+    let updated_data = serde_json::to_string_pretty(&master_file).unwrap();// Sauvegarder les données dans le fichier
     fs::write("masterFile.json", updated_data).unwrap();
     Ok(())
 }
 
+
 fn main(){
     let joueur = get_joueur();
     println!("Joueur : description {}, nom {}, pronom {}, niveau {}, position {}", joueur.description, joueur.nom, joueur.pronom, joueur.niveau, joueur.position);
+
+    match ChangerPositionJoueur("pièce2") {
+        Ok(_) => println!("Position du joueur modifié"),
+        Err(e) => println!("Erreur : {}", e),
+    }
 }
