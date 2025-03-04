@@ -1,32 +1,33 @@
-[
-  {
-    "description": "Un joueur lambda",
-    "niveau": "0",
-    "nom": "Jhon",
-    "position": "pièce1",
-    "pronom": "il",
-    "type": "Joueur"
-  },
-  {
-    "Connections": [
-      {
-        "destination": "pièce2"
-      }
-    ],
-    "desc": "Une chambre vachement bleue",
-    "id": "pièce1",
-    "nom": "chambre bleue",
-    "type": "Lieu"
-  },
-  {
-    "Connections": [
-      {
-        "destination": "pièce1"
-      }
-    ],
-    "desc": "Une chambre vachement rouge",
-    "id": "pièce2",
-    "nom": "chambre rouge",
-    "type": "Lieu"
-  }
-]
+{
+  "Joueur": [
+    {
+      "description": "Un joueur lambda",
+      "nom": "Jhon",
+      "pronom": "il",
+      "niveau": "0",
+      "position": "pièce1"
+    }
+  ],
+  "Lieu": [
+    {
+      "Description": "Une chambre vachement bleue",
+      "id": "pièce1",
+      "nom": "chambre bleue",
+      "Connections": [
+        {
+          "destination": "pièce2"
+        }
+      ]
+    },
+    {
+      "Description": "Une chambre vachement rouge",
+      "id": "pièce2",
+      "nom": "chambre rouge",
+      "Connections": [
+        {
+          "destination": "pièce1"
+        }
+      ]
+    }
+  ]
+}
