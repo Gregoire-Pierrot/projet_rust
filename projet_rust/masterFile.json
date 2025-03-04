@@ -10,7 +10,7 @@
   ],
   "Lieu": [
     {
-      "Description": "Une chambre vachement bleue",
+      "description": "Une chambre vachement bleue",
       "id": "pièce1",
       "nom": "chambre bleue",
       "Connections": [
@@ -20,7 +20,7 @@
       ]
     },
     {
-      "Description": "Une chambre vachement rouge",
+      "description": "Une chambre vachement rouge",
       "id": "pièce2",
       "nom": "chambre rouge",
       "Connections": [

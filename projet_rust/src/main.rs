@@ -16,24 +16,31 @@ struct Joueur {
 struct Lieu {
     id: String,
     nom: String,
-    desc: String,
+    description: String,
     Connections: Vec<Connection>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Connection {
+struct Connection { 
     destination: String,
 }
 
-fn PrendreInfoJoueur() -> Result<Joueur, String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let items: Vec<serde_json::Value> = serde_json::from_str(&data).unwrap();
-    items.iter()
-        .filter(|item| item.get("type").and_then(|t| t.as_str()) == Some("Joueur"))
-        .filter_map(|item| serde_json::from_value(item.clone()).ok()) //converti chaque élément du Vec<Value> en un objet Joueur ???
-        .next()
-        .ok_or_else(|| "Aucun joueur".to_string())
+#[derive(Serialize, Deserialize, Debug)]
+struct MasterFile {
+    Joueur: Vec<Joueur>,
+    Lieu: Vec<Lieu>,
 }
+
+fn PrendreInfoJoueur() -> Result<Joueur, String>{
+    let data = fs::read_to_string("masterFile.json").unwrap();
+    println!("Contenu du fichier : {}", data);
+    let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+    for joueur in master_file.Joueur {
+       return Ok(joueur);
+    }
+    return Err("erreur".to_string());
+}
+
 
 fn PrendreLieuId(id: &str) -> Result<Lieu, String> {
     let data = fs::read_to_string("masterFile.json").unwrap();
@@ -45,29 +52,6 @@ fn PrendreLieuId(id: &str) -> Result<Lieu, String> {
         .ok_or_else(|| format!("Aucun lieu trouvé avec : {}", id))
 }
 
-fn PrendreToutesInfo() {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let items: Vec<serde_json::Value> = serde_json::from_str(&data).unwrap();
-    for item in items {
-        match item.get("type").and_then(|t| t.as_str()) {
-            Some("Joueur") => {
-                let joueur: Joueur = serde_json::from_value(item).unwrap();
-                println!("Joueur: {}", joueur.description);
-                println!("Joueur: {}", joueur.position);
-            }
-            Some("Lieu") => {
-                let lieu: Lieu = serde_json::from_value(item).unwrap();
-                println!("Lieu: {}", lieu.nom);
-                let connections: Vec<Connection> = lieu.Connections;
-                for connection in connections{
-                    println!("Lieu possibles: {}", connection.destination);
-                }
-            }
-            _ => println!("Type inconnu trouvé dans les données."),
-        }
-        println!("");
-    }
-}
 
 fn ChangerPositionJoueur(position: &str) -> Result<(), String> {
     let data = fs::read_to_string("masterFile.json").unwrap();
@@ -88,17 +72,9 @@ fn ChangerPositionJoueur(position: &str) -> Result<(), String> {
 }
 
 fn main(){
-    PrendreToutesInfo();
-
-    let joueur = PrendreInfoJoueur();
-    println!("Joueur trouvé: {:?}", joueur);
-
-    let lieu = PrendreLieuId("pièce2");
-    println!("Lieu trouvé: {:?}", lieu);
-
-    match ChangerPositionJoueur("pièce1") {
-        Ok(_) => println!("Position du joueur modifié"),
+    
+    match PrendreInfoJoueur() {
+        Ok(joueur) => println!("{}",joueur.description),
         Err(e) => println!("Erreur : {}", e),
     }
-    
 }
