@@ -3,28 +3,24 @@
     "description": "Un joueur lambda",
     "nom": "Jhon",
     "pronom": "il",
-    "niveau": "0",
+    "niveau": 0,
     "position": "pièce2"
   },
   "Lieux": [
     {
       "id": "pièce1",
-      "nom": "chambre bleue",
       "description": "Une chambre vachement bleue",
-      "Connections": [
-        {
-          "destination": "pièce2"
-        }
+      "nom": "chambre bleue",
+      "destinations_id": [
+        "pièce2"
       ]
     },
     {
       "id": "pièce2",
-      "nom": "chambre rouge",
       "description": "Une chambre vachement rouge",
-      "Connections": [
-        {
-          "destination": "pièce1"
-        }
+      "nom": "chambre rouge",
+      "destinations_id": [
+        "pièce1"
       ]
     }
   ]
