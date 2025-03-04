@@ -10,6 +10,30 @@ struct Joueur {
     pronom: String,
     niveau: String,
     position:String,
+  
+mod structs;
+
+use structs::{Joueur, Lieu, Meteo};
+
+fn main() {
+    println!("Début du test");
+
+    let joueur = Joueur::new(
+        "Le joueur".to_string(),
+        "C'est vous !".to_string(),
+        "je suis un pronom".to_string(),
+        1,
+        Lieu::new(
+            "Salle c137".to_string(),
+            "c137".to_string(),
+            Vec::new(),
+            Meteo::Interieur,
+        ),
+    );
+
+    println!("Joueur : {:#?}", joueur);
+
+    println!("Fin du test");
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -60,14 +84,4 @@ fn ChangerPositionJoueur(position: &str) -> Result<(), String> {
     fs::write("masterFile.json", updated_data).unwrap();
     Ok(())
 }
-
-
-fn main(){
-    let joueur = get_joueur();
-    println!("Joueur : description {}, nom {}, pronom {}, niveau {}, position {}", joueur.description, joueur.nom, joueur.pronom, joueur.niveau, joueur.position);
-
-    match ChangerPositionJoueur("pièce2") {
-        Ok(_) => println!("Position du joueur modifié"),
-        Err(e) => println!("Erreur : {}", e),
-    }
 }
