@@ -26,32 +26,24 @@ struct Connection {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct Lieux {
+struct MasterFile {
+    Joueur: Joueur,
     Lieux: Vec<Lieu>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-struct MasterFile {
-    Joueur: Vec<Joueur>,
-    Lieu: Vec<Lieu>,
-}
-
-fn PrendreInfoJoueur() -> Result<Joueur, String>{
+fn get_joueur() -> Joueur {
     let data = fs::read_to_string("masterFile.json").unwrap();
     println!("Contenu du fichier : {}", data);
-    let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    for joueur in master_file.Joueur {
-       return Ok(joueur);
-    }
-    return Err("erreur".to_string());
+    let master_file : MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+    master_file.Joueur
 }
 
 
 fn prendre_lieu_id(id: &str) -> Result<Lieu, String> {
     let data = fs::read_to_string("masterFile.json").unwrap();
     println!("data = {}", data);
-    let lieux: Lieux = serde_json::from_str(&data).expect("Erreur de parsing");
-    for lieu in lieux.Lieux {
+    let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+    for lieu in master_file.Lieux {
         if lieu.id == id {
             return Ok(lieu);
         }
@@ -79,16 +71,6 @@ fn ChangerPositionJoueur(position: &str) -> Result<(), String> {
 }
 
 fn main(){
-    PrendreToutesInfo();
-
-    let joueur = PrendreInfoJoueur();
-    println!("Joueur trouvé: {:?}", joueur);
-
-    let lieu = PrendreLieuId("pièce2");
-    println!("Lieu trouvé: {:?}", lieu);
-
-    match ChangerPositionJoueur("pièce1") {
-        Ok(_) => println!("Position du joueur modifié"),
-        Err(e) => println!("Erreur : {}", e),
-    }
+    let joueur = get_joueur();
+    println!("Joueur : description {}, nom {}, pronom {}, niveau {}, position {}", joueur.description, joueur.nom, joueur.pronom, joueur.niveau, joueur.position);
 }

@@ -1,13 +1,11 @@
 {
-  "Joueur": [
-    {
+  "Joueur": {
       "description": "Un joueur lambda",
       "nom": "Jhon",
       "pronom": "il",
       "niveau": "0",
       "position": "pièce1"
-    }
-  ],
+  },
   "Lieux": [
     {
       "description": "Une chambre vachement bleue",
