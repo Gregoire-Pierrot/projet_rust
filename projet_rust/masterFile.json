@@ -1,0 +1,31 @@
+{
+  "Joueur": {
+    "description": "Un joueur lambda",
+    "nom": "Jhon",
+    "pronom": "il",
+    "niveau": "0",
+    "position": "pièce2"
+  },
+  "Lieux": [
+    {
+      "id": "pièce1",
+      "nom": "chambre bleue",
+      "description": "Une chambre vachement bleue",
+      "Connections": [
+        {
+          "destination": "pièce2"
+        }
+      ]
+    },
+    {
+      "id": "pièce2",
+      "nom": "chambre rouge",
+      "description": "Une chambre vachement rouge",
+      "Connections": [
+        {
+          "destination": "pièce1"
+        }
+      ]
+    }
+  ]
+}
