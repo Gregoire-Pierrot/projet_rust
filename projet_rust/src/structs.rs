@@ -123,6 +123,14 @@ impl Joueur {
         self.niveau += niveau;
     }
 
+    pub fn set_nom(&mut self, nom: String) {
+        self.nom = nom;
+    }
+
+    pub fn set_pronom(&mut self, pronom: String) {
+        self.pronom = pronom;
+    }
+
     pub fn set_position(&mut self, lieu: String) {
         self.position = lieu;
     }
