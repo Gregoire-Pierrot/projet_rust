@@ -31,7 +31,7 @@
       "destinations_id": [
         "pièce2"
       ],
-      "meteo":"humide"
+      "meteo": "interieur"
     },
     {
       "id": "pièce2",
@@ -42,7 +42,7 @@
       "destinations_id": [
         "pièce1"
       ],
-      "meteo":"sec"
+      "meteo":"interieur"
     }
   ]
 }
