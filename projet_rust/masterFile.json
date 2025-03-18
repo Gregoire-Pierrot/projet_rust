@@ -19,7 +19,10 @@
       "multiplicateur_xp":0
     },
     "temps":0,
-    "reputations":"gentil"
+    "reputations":[
+      40,
+      90
+    ]
   },
   "Lieux": [
     {
