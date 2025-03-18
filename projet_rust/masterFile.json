@@ -1,30 +1,30 @@
 {
   "Joueur": {
-    "entitee": {
+    "entite": {
       "description": "Un joueur lambda",
-      "nom": "Jhon"
+      "nom": "Jane"
     },
-    "pronom": "il",
-    "niveau": 0,
+    "pronom": "elle",
+    "niveau": 9,
     "position": "pièce2"
   },
   "Lieux": [
     {
-      "id": "pièce1",
-      "entitee": {
+      "entite": {
         "description": "Une chambre vachement bleue",
         "nom": "chambre bleue"
       },
+      "id": "pièce1",
       "destinations_id": [
         "pièce2"
       ]
     },
     {
-      "id": "pièce2",
-      "entitee": {
+      "entite": {
         "description": "Une chambre vachement rouge",
         "nom": "chambre rouge"
       },
+      "id": "pièce2",
       "destinations_id": [
         "pièce1"
       ]

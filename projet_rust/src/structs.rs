@@ -1,14 +1,14 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Entite {
     description: String,
     nom: String,
 }
 
 impl Entite {
-    pub fn new(description: String, nom: String) -> Entite {
-        Entite { description, nom }
+    pub fn new(description: String, nom: String) -> Self {
+        Self { description, nom }
     }
 
     pub fn get_description(&self) -> String {
@@ -17,6 +17,10 @@ impl Entite {
 
     pub fn get_nom(&self) -> String {
         self.nom.clone()
+    }
+
+    pub fn set_nom(&mut self, nom: String) {
+        self.nom = nom;
     }
 }
 
@@ -30,20 +34,18 @@ pub enum Meteo {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Lieu {
+    entite: Entite,
     id: String,
-    description: String,
-    nom: String,
     destinations_id: Vec<String>,
     //entites: Vec<Entite>,
     //meteo: Meteo,
 }
 
 impl Lieu {
-    pub fn new(id: String, description: String, nom: String/*, entites: Vec<Entite>, meteo: Meteo*/) -> Lieu {
-        Lieu {
+    pub fn new(entite: Entite, id: String/*, entites: Vec<Entite>, meteo: Meteo*/) -> Self {
+        Self {
+            entite,
             id,
-            description,
-            nom,
             destinations_id: Vec::new(),
             //entites,
             //meteo,
@@ -55,11 +57,11 @@ impl Lieu {
     }
 
     pub fn get_description(&self) -> String {
-        self.description.clone()
+        self.entite.get_description()
     }
 
     pub fn get_nom(&self) -> String {
-        self.nom.clone()
+        self.entite.get_nom()
     }
 
     pub fn get_destinations_id(&self) -> Vec<String> {
@@ -79,20 +81,24 @@ impl Lieu {
     }
 }
 
+impl std::fmt::Display for Lieu {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "Lieu : description = {}, nom = {}", self.get_description(), self.get_nom())
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
-    description: String,
-    nom: String,
+    entite: Entite,
     pronom: String,
     niveau: u16,
     position: String
 }
 
 impl Joueur {
-    pub fn new(description: String, nom: String, pronom: String, niveau: u16, position: String) -> Joueur {
-        Joueur {
-            description,
-            nom,
+    pub fn new(entite: Entite,pronom: String, niveau: u16, position: String) -> Self {
+        Self {
+            entite,
             pronom,
             niveau,
             position,
@@ -100,11 +106,11 @@ impl Joueur {
     }
 
     pub fn get_description(&self) -> String {
-        self.description.clone()
+        self.entite.get_description()
     }
 
     pub fn get_nom(&self) -> String {
-        self.nom.clone()
+        self.entite.get_nom()
     }
 
     pub fn get_pronom(&self) -> String {
@@ -124,7 +130,7 @@ impl Joueur {
     }
 
     pub fn set_nom(&mut self, nom: String) {
-        self.nom = nom;
+        self.entite.set_nom(nom)
     }
 
     pub fn set_pronom(&mut self, pronom: String) {
@@ -133,5 +139,11 @@ impl Joueur {
 
     pub fn set_position(&mut self, lieu: String) {
         self.position = lieu;
+    }
+}
+
+impl std::fmt::Display for Joueur {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "Joueur : description = {}, nom = {}, pronom = {}, niveau = {}, position = {}", self.get_description(), self.get_nom(), self.get_pronom(), self.get_niveau(), self.get_position())
     }
 }

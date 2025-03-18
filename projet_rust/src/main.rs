@@ -1,14 +1,14 @@
 mod structs;
-mod JsonManager;
+mod json_manager;
 
 use structs::{Joueur, Lieu};
-use JsonManager::{get_joueur, prendre_lieu_id, changer_position_joueur, changer_pronom_joueur,changer_niveau_joueur,changer_nom_joueur};
+use json_manager::{get_joueur, prendre_lieu_id, changer_position_joueur, changer_pronom_joueur,changer_niveau_joueur,changer_nom_joueur};
 
 fn main() {
     let mut joueur = get_joueur();
     joueur.set_position("pièce1".to_string());
     joueur.set_pronom("il".to_string());
-    println!("Joueur : description = {}, nom = {}, pronom = {}, niveau = {}, position = {}", joueur.get_description(), joueur.get_nom(), joueur.get_pronom(), joueur.get_niveau(), joueur.get_position());
+    println!("{}", joueur);
 
     match changer_nom_joueur("Jane") {
         Ok(_) => println!("Nom changé"),
@@ -32,5 +32,5 @@ fn main() {
 
     let joueur = get_joueur();
 
-    println!("Joueur : description = {}, nom = {}, pronom = {}, niveau = {}, position = {}", joueur.get_description(), joueur.get_nom(), joueur.get_pronom(), joueur.get_niveau(), joueur.get_position());
+    println!("{}", joueur);
 }
