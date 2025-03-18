@@ -1,9 +1,9 @@
 {
   "Joueur": {
     "description": "Un joueur lambda",
-    "nom": "Jhon",
-    "pronom": "il",
-    "niveau": 0,
+    "nom": "Jane",
+    "pronom": "elle",
+    "niveau": 19,
     "position": "pièce2"
   },
   "Lieux": [
