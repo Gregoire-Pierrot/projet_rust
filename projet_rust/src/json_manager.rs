@@ -38,7 +38,7 @@ pub fn changer_pronom_joueur(pronom: &str) -> Result<(), String> {
     Ok(())
 }
 
-pub fn changer_niveau_joueur(niveau: &u16) -> Result<(), String> {
+pub fn changer_niveau_joueur(niveau: &u8) -> Result<(), String> {
     let data = fs::read_to_string("masterFile.json").unwrap();
     let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
     master_file.Joueur.add_niveau(*niveau);
