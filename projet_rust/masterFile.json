@@ -1,33 +1,48 @@
 {
   "Joueur": {
-    "entite": {
+    "personnage": {
+      "entite": {
       "description": "Un joueur lambda",
-      "nom": "Jane"
+      "nom": "Jhon"
+      },
+      "pronom": "il",
+      "niveau": 0,
+      "position": "pièce2",
+      "pv":100,
+      "force":0,
+      "dexterite":0,
+      "intelligence":0,
+      "vitesse":0,
+      "esquive":0,
+      "resistance_physique":0,
+      "resistance_magique":0,
+      "multiplicateur_xp":0
     },
-    "pronom": "elle",
-    "niveau": 9,
-    "position": "pièce2"
+    "temps":0,
+    "reputations":"gentil"
   },
   "Lieux": [
     {
+      "id": "pièce1",
       "entite": {
         "description": "Une chambre vachement bleue",
         "nom": "chambre bleue"
       },
-      "id": "pièce1",
       "destinations_id": [
         "pièce2"
-      ]
+      ],
+      "meteo":"humide"
     },
     {
+      "id": "pièce2",
       "entite": {
         "description": "Une chambre vachement rouge",
         "nom": "chambre rouge"
       },
-      "id": "pièce2",
       "destinations_id": [
         "pièce1"
-      ]
+      ],
+      "meteo":"sec"
     }
   ]
 }
