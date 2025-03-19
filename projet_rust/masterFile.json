@@ -25,6 +25,117 @@
       90
     ]
   },
+  "Pnj":[
+    {
+    "id": "0",
+    "personnage": {
+      "entite": {
+        "description": "Un PNJ lambda",
+        "nom": "Garrus"
+      },
+      "position": "pièce1",
+      "pronom": "il",
+      "niveau": 9,
+      "pv": 100,
+      "force": 0,
+      "dexterite": 0,
+      "intelligence": 0,
+      "vitesse": 0,
+      "esquive": 0,
+      "chance": 0,
+      "resistance_physique": 0,
+      "resistance_magique": 0,
+      "multiplicateur_xp": 0
+    },
+    "dialogue": [
+      "Je suis un PNJ",
+      "Je suis un PNJ",
+      "Je suis un PNJ"
+    ]
+  },{
+    "id": "1",
+    "personnage": {
+      "entite": {
+          "description": "Un PNJ lambda",
+          "nom": "Seth"
+        },
+        "position": "pièce1",
+        "pronom": "il",
+        "niveau": 9,
+        "pv": 100,
+        "force": 0,
+        "dexterite": 0,
+        "intelligence": 0,
+        "vitesse": 0,
+        "esquive": 0,
+        "chance": 0,
+        "resistance_physique": 0,
+        "resistance_magique": 0,
+        "multiplicateur_xp": 0
+    },
+    "dialogue": [
+      "Je suis un PNJ",
+      "Je suis un PNJ",
+      "Je suis un PNJ"
+    ]
+  }
+  ],
+  "Ennemie":[
+      {
+      "id": "0",
+      "personnage": {
+        "entite": {
+            "description": "Un ennemie lambda",
+            "nom": "Moissonneur"
+          },
+          "position": "pièce1",
+          "pronom": "il",
+          "niveau": 9,
+          "pv": 100,
+          "force": 0,
+          "dexterite": 0,
+          "intelligence": 0,
+          "vitesse": 0,
+          "esquive": 0,
+          "chance": 0,
+          "resistance_physique": 0,
+          "resistance_magique": 0,
+          "multiplicateur_xp": 0
+      },
+      "dialogue": [
+      "Je suis un Ennemie",
+      "Je suis un Ennemie",
+      "Je suis un Ennemie"
+      ]
+    },
+    {
+      "id": "1",
+      "personnage": {
+        "entite": {
+            "description": "Un ennemie lambda",
+            "nom": "Récolteur"
+          },
+          "position": "pièce1",
+          "pronom": "il",
+          "niveau": 9,
+          "pv": 100,
+          "force": 0,
+          "dexterite": 0,
+          "intelligence": 0,
+          "vitesse": 0,
+          "esquive": 0,
+          "chance": 0,
+          "resistance_physique": 0,
+          "resistance_magique": 0,
+          "multiplicateur_xp": 0
+      },
+      "dialogue": [
+      "Je suis un Ennemie",
+      "Je suis un Ennemie",
+      "Je suis un Ennemie"
+      ]
+    }
+  ],
   "Lieux": [
     {
       "entite": {
