@@ -2,12 +2,13 @@
   "Joueur": {
     "personnage": {
       "entite": {
+        "id": "joueur",
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
       "position": "pièce2",
       "pronom": "elle",
-      "niveau": 9,
+      "niveau": 36,
       "pv": 100,
       "force": 0,
       "dexterite": 0,
@@ -16,46 +17,46 @@
       "esquive": 0,
       "chance": 0,
       "resistance_physique": 0,
-      "resistance_magique": 0,
-      "multiplicateur_xp": 0
+      "resistance_magique": 0
     },
     "temps": 0,
     "reputations": [
       40,
       90
-    ]
+    ],
+    "multiplicateur_xp": 0
   },
-  "Pnj":[
+  "Pnj": [
     {
-    "id": "0",
-    "personnage": {
-      "entite": {
-        "description": "Un PNJ lambda",
-        "nom": "Garrus"
+      "personnage": {
+        "entite": {
+          "id": "pnj_1",
+          "description": "Un PNJ lambda",
+          "nom": "Garrus"
+        },
+        "position": "pièce1",
+        "pronom": "il",
+        "niveau": 9,
+        "pv": 100,
+        "force": 0,
+        "dexterite": 0,
+        "intelligence": 0,
+        "vitesse": 0,
+        "esquive": 0,
+        "chance": 0,
+        "resistance_physique": 0,
+        "resistance_magique": 0
       },
-      "position": "pièce1",
-      "pronom": "il",
-      "niveau": 9,
-      "pv": 100,
-      "force": 0,
-      "dexterite": 0,
-      "intelligence": 0,
-      "vitesse": 0,
-      "esquive": 0,
-      "chance": 0,
-      "resistance_physique": 0,
-      "resistance_magique": 0,
-      "multiplicateur_xp": 0
+      "dialogues": [
+        "Je suis un PNJ",
+        "Je suis un PNJ",
+        "Je suis un PNJ"
+      ]
     },
-    "dialogue": [
-      "Je suis un PNJ",
-      "Je suis un PNJ",
-      "Je suis un PNJ"
-    ]
-  },{
-    "id": "1",
-    "personnage": {
-      "entite": {
+    {
+      "personnage": {
+        "entite": {
+          "id": "pnj_2",
           "description": "Un PNJ lambda",
           "nom": "Seth"
         },
@@ -70,79 +71,76 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0,
-        "multiplicateur_xp": 0
-    },
-    "dialogue": [
-      "Je suis un PNJ",
-      "Je suis un PNJ",
-      "Je suis un PNJ"
-    ]
-  }
+        "resistance_magique": 0
+      },
+      "dialogues": [
+        "Je suis un PNJ",
+        "Je suis un PNJ",
+        "Je suis un PNJ"
+      ]
+    }
   ],
-  "Ennemie":[
-      {
-      "id": "0",
+  "Ennemie": [
+    {
       "personnage": {
         "entite": {
-            "description": "Un ennemie lambda",
-            "nom": "Moissonneur"
-          },
-          "position": "pièce1",
-          "pronom": "il",
-          "niveau": 9,
-          "pv": 100,
-          "force": 0,
-          "dexterite": 0,
-          "intelligence": 0,
-          "vitesse": 0,
-          "esquive": 0,
-          "chance": 0,
-          "resistance_physique": 0,
-          "resistance_magique": 0,
-          "multiplicateur_xp": 0
+          "id": "ennemie_1",
+          "description": "Un ennemie lambda",
+          "nom": "Moissonneur"
+        },
+        "position": "pièce1",
+        "pronom": "il",
+        "niveau": 9,
+        "pv": 100,
+        "force": 0,
+        "dexterite": 0,
+        "intelligence": 0,
+        "vitesse": 0,
+        "esquive": 0,
+        "chance": 0,
+        "resistance_physique": 0,
+        "resistance_magique": 0
       },
-      "dialogue": [
-      "Je suis un Ennemie",
-      "Je suis un Ennemie",
-      "Je suis un Ennemie"
+      "dialogues": [
+        "Je suis un Ennemie",
+        "Je suis un Ennemie",
+        "Je suis un Ennemie"
       ]
     },
     {
-      "id": "1",
       "personnage": {
         "entite": {
-            "description": "Un ennemie lambda",
-            "nom": "Récolteur"
-          },
-          "position": "pièce1",
-          "pronom": "il",
-          "niveau": 9,
-          "pv": 100,
-          "force": 0,
-          "dexterite": 0,
-          "intelligence": 0,
-          "vitesse": 0,
-          "esquive": 0,
-          "chance": 0,
-          "resistance_physique": 0,
-          "resistance_magique": 0,
-          "multiplicateur_xp": 0
+          "id": "ennemie_2",
+          "description": "Un ennemie lambda",
+          "nom": "Recolteur"
+        },
+        "position": "pièce1",
+        "pronom": "il",
+        "niveau": 9,
+        "pv": 100,
+        "force": 0,
+        "dexterite": 0,
+        "intelligence": 0,
+        "vitesse": 0,
+        "esquive": 0,
+        "chance": 0,
+        "resistance_physique": 0,
+        "resistance_magique": 0
       },
-      "dialogue": [
-      "Je suis un Ennemie",
-      "Je suis un Ennemie",
-      "Je suis un Ennemie"
+      "dialogues": [
+        "Je suis un Ennemie",
+        "Je suis un Ennemie",
+        "Je suis un Ennemie"
       ]
     }
   ],
   "Lieux": [
     {
       "entite": {
+        "id": "pièce1",
         "description": "Une chambre vachement bleue",
         "nom": "chambre bleue"
       },
-      "id": "pièce1",
       "destinations_id": [
         "pièce2"
       ],
@@ -150,10 +148,10 @@
     },
     {
       "entite": {
+        "id": "pièce2",
         "description": "Une chambre vachement rouge",
         "nom": "chambre rouge"
       },
-      "id": "pièce2",
       "destinations_id": [
         "pièce1"
       ],

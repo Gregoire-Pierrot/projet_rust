@@ -1,70 +1,77 @@
-use crate::structs;
-
-use structs::{Joueur, Lieu};
+use crate::{Joueur, Pnj, Ennemie, Lieu};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
 use std::fs;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct MasterFile {
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MasterFile {
     Joueur: Joueur,
+    Pnj : Vec<Pnj>,
+    Ennemie : Vec<Ennemie>,
     Lieux: Vec<Lieu>,
 }
 
-////Joueur////
-
-pub fn get_joueur() -> Joueur {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let master_file : MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    master_file.Joueur
-}
-
-pub fn changer_nom_joueur(nom: &str) -> Result<(), String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    master_file.Joueur.set_nom(nom.to_string());
-    let updated_data = serde_json::to_string_pretty(&master_file).unwrap();// Sauvegarder les données dans le fichier
-    fs::write("masterFile.json", updated_data).unwrap();
-    Ok(())
-}
-
-pub fn changer_pronom_joueur(pronom: &str) -> Result<(), String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    master_file.Joueur.set_pronom(pronom.to_string());
-    let updated_data = serde_json::to_string_pretty(&master_file).unwrap();// Sauvegarder les données dans le fichier
-    fs::write("masterFile.json", updated_data).unwrap();
-    Ok(())
-}
-
-pub fn changer_niveau_joueur(niveau: &u8) -> Result<(), String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    master_file.Joueur.add_niveau(*niveau);
-    let updated_data = serde_json::to_string_pretty(&master_file).unwrap();// Sauvegarder les données dans le fichier
-    fs::write("masterFile.json", updated_data).unwrap();
-    Ok(())
-}
-
-pub fn changer_position_joueur(position: &str) -> Result<(), String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let mut master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    master_file.Joueur.set_position(position.to_string());
-    let updated_data = serde_json::to_string_pretty(&master_file).unwrap();// Sauvegarder les données dans le fichier
-    fs::write("masterFile.json", updated_data).unwrap();
-    Ok(())
-}
-
-////Lieu////
-
-pub fn prendre_lieu_id(id: &str) -> Result<Lieu, String> {
-    let data = fs::read_to_string("masterFile.json").unwrap();
-    let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-    for lieu in master_file.Lieux {
-        if lieu.get_id() == id {
-            return Ok(lieu);
+impl MasterFile {
+    ////MasterFile////
+    pub fn new() -> Self {
+        let data = fs::read_to_string("masterFile.json").unwrap();
+        let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+        Self {
+            Joueur: master_file.Joueur,
+            Pnj: master_file.Pnj,
+            Ennemie: master_file.Ennemie,
+            Lieux: master_file.Lieux,
         }
     }
-    return Err("Lieu introuvable".to_string());
+
+    ////Lieu////
+
+    pub fn prendre_lieu_id(&self, id: &str) -> Result<Lieu, String> {
+        for lieu in self.Lieux.clone() {
+            if lieu.get_id() == id {
+                return Ok(lieu);
+            }
+        }
+        return Err("Lieu introuvable".to_string());
+    }
+
+
+    ////Joueur////
+
+    pub fn get_joueur(&self) -> Joueur {
+        self.Joueur.clone()
+    }
+
+    pub fn sauvegarder(&mut self, joueur: &Joueur) {
+        self.Joueur = joueur.clone();
+        let updated_data = serde_json::to_string_pretty(&self).unwrap();// Sauvegarder les données dans le fichier
+        fs::write("masterFile.json", updated_data).unwrap();
+    }
+
+
+    ////PNJ////
+
+    pub fn prendre_pnj_id(&self, id: &str) -> Result<Pnj, String> {
+        for pnj in self.Pnj.clone() {
+            if pnj.get_id() == id {
+                return Ok(pnj);
+            }
+        }
+        return Err("PNJ introuvable".to_string());
+    }
+
+
+    ////Ennemie////
+
+    pub fn prendre_ennemie_id(&self, id: &str) -> Result<Ennemie, String> {
+        for ennemie in self.Ennemie.clone() {
+            if ennemie.get_id() == id {
+                return Ok(ennemie);
+            }
+        }
+        return Err("Ennemie introuvable".to_string());
+    }
 }
+
+
