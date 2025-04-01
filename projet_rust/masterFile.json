@@ -157,5 +157,31 @@
       ],
       "meteo": "Interieur"
     }
+  ],
+  "Consommable": [
+    {
+    "Objet": {
+      "entite":{
+        "id": "pomme",
+        "description": "Une pomme",
+        "nom": "pomme"
+      },
+      "prix": 10,
+      "objet" : null
+    },
+    "Effet": [
+      0,1
+    ]
+    }
+  ],
+  "Attaque" : [
+    {
+    "entite":{
+      "id": "brise_glace",
+      "description": "Une attaque qui brise la glace",
+      "nom": "brise glace"
+    },
+    
+    }
   ]
 }

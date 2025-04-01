@@ -5126,8 +5126,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": -56,
-									"top": 64,
+									"left": -72,
+									"top": 48,
 									"width": 10,
 									"height": 10
 								},
@@ -5143,8 +5143,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": -56,
-									"top": 64,
+									"left": -72,
+									"top": 48,
 									"width": 10,
 									"height": 10
 								}
@@ -8151,6 +8151,104 @@
 							"headQualifiersCompartment": {
 								"$ref": "AAAAAAGVzhzUIZonw5k="
 							}
+						},
+						{
+							"_type": "UMLGeneralizationView",
+							"_id": "AAAAAAGV8WaKUd+oEyA=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"model": {
+								"$ref": "AAAAAAGV8WaKT9+mTww="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGV8WaKUd+prMI=",
+									"_parent": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"model": {
+										"$ref": "AAAAAAGV8WaKT9+mTww="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"parentStyle": false,
+									"left": 992,
+									"top": 675,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"edgePosition": 1
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGV8WaKUd+qDB4=",
+									"_parent": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"model": {
+										"$ref": "AAAAAAGV8WaKT9+mTww="
+									},
+									"visible": null,
+									"font": "Arial;13;0",
+									"parentStyle": false,
+									"left": 992,
+									"top": 660,
+									"height": 13,
+									"alpha": 1.5707963267948966,
+									"distance": 30,
+									"hostEdge": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"edgePosition": 1
+								},
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAGV8WaKUt+rio0=",
+									"_parent": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"model": {
+										"$ref": "AAAAAAGV8WaKT9+mTww="
+									},
+									"visible": false,
+									"font": "Arial;13;0",
+									"parentStyle": false,
+									"left": 992,
+									"top": 705,
+									"height": 13,
+									"alpha": -1.5707963267948966,
+									"distance": 15,
+									"hostEdge": {
+										"$ref": "AAAAAAGV8WaKUd+oEyA="
+									},
+									"edgePosition": 1
+								}
+							],
+							"font": "Arial;13;0",
+							"parentStyle": false,
+							"head": {
+								"$ref": "AAAAAAGVOG8b/u/rf5E="
+							},
+							"tail": {
+								"$ref": "AAAAAAGVzfDkBf6/Fto="
+							},
+							"lineStyle": 1,
+							"points": "992:727;992:696;1207:696",
+							"showVisibility": true,
+							"nameLabel": {
+								"$ref": "AAAAAAGV8WaKUd+prMI="
+							},
+							"stereotypeLabel": {
+								"$ref": "AAAAAAGV8WaKUd+qDB4="
+							},
+							"propertyLabel": {
+								"$ref": "AAAAAAGV8WaKUt+rio0="
+							}
 						}
 					]
 				},
@@ -8277,7 +8375,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVODbZ5bYy32s="
 							},
-							"name": "Multiplicateur Xp"
+							"name": "Multiplicateur Xp",
+							"type": ""
 						}
 					]
 				},
@@ -8694,7 +8793,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVOEKgNbrH0P0="
 							},
-							"name": "Inventaire {.}"
+							"name": "Inventaire {.}",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -8819,7 +8919,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVOEKgNbrH0P0="
 							},
-							"name": "Attaques"
+							"name": "Attaques",
+							"type": ""
 						}
 					]
 				},
@@ -9255,7 +9356,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVOG8b/u/pUGY="
 							},
-							"name": "Id"
+							"name": "Id",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -9457,7 +9559,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVOHsUuANhoiM="
 							},
-							"name": "Destination"
+							"name": "Destination",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10165,7 +10268,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVQo0b9nx2wps="
 							},
-							"name": "Prix"
+							"name": "Prix",
+							"type": ""
 						}
 					]
 				},
@@ -10373,6 +10477,19 @@
 								},
 								"aggregation": "composite"
 							}
+						},
+						{
+							"_type": "UMLGeneralization",
+							"_id": "AAAAAAGV8WaKT9+mTww=",
+							"_parent": {
+								"$ref": "AAAAAAGVzfDkBP69NtA="
+							},
+							"source": {
+								"$ref": "AAAAAAGVzfDkBP69NtA="
+							},
+							"target": {
+								"$ref": "AAAAAAGVOG8b/u/pUGY="
+							}
 						}
 					],
 					"attributes": [
@@ -10382,7 +10499,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "Force"
+							"name": "Force",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10390,7 +10508,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "Dextérité"
+							"name": "Dextérité",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10398,7 +10517,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "Intelligence"
+							"name": "Intelligence",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10406,7 +10526,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "%BonusForce"
+							"name": "%BonusForce",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10414,7 +10535,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "%BonusDextérité"
+							"name": "%BonusDextérité",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -10422,7 +10544,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGVzfDkBP69NtA="
 							},
-							"name": "%BonusIntelligence"
+							"name": "%BonusIntelligence",
+							"type": ""
 						}
 					]
 				}
