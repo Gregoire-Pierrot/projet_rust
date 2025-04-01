@@ -17,7 +17,10 @@
       "esquive": 0,
       "chance": 0,
       "resistance_physique": 0,
-      "resistance_magique": 0
+      "resistance_magique": 0,
+      "attaque":[
+        "brise_glace", "tempête_feu"
+      ]
     },
     "temps": 0,
     "reputations": [
@@ -45,7 +48,8 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0
+        "resistance_magique": 0,
+        "attaque": []
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -71,7 +75,8 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0
+        "resistance_magique": 0,
+        "attaque": []
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -99,7 +104,10 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0
+        "resistance_magique": 0,
+        "attaque":[
+          "tempête_feu"
+        ]
       },
       "dialogues": [
         "Je suis un Ennemie",
@@ -125,7 +133,10 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0
+        "resistance_magique": 0,
+        "attaque":[
+          "tempête_feu"
+        ]
       },
       "dialogues": [
         "Je suis un Ennemie",
@@ -160,7 +171,7 @@
   ],
   "Consommable": [
     {
-    "Objet": {
+    "objet": {
       "entite":{
         "id": "pomme",
         "description": "Une pomme",
@@ -169,9 +180,18 @@
       "prix": 10,
       "objet" : null
     },
-    "Effet": [
-      0,1
+    "effet": [
+      10,0,0,0,0,0,0,0
     ]
+    }
+  ],
+  "Objet": [
+    {
+      "entite": {
+        "id": "clé",
+        "description": "Une clé",
+        "nom": "clé"
+      }
     }
   ],
   "Attaque" : [
@@ -179,9 +199,27 @@
     "entite":{
       "id": "brise_glace",
       "description": "Une attaque qui brise la glace",
-      "nom": "brise glace"
+      "nom": "Brise glace"
     },
-    
-    }
+    "force" : 10,
+    "dexterite":0,
+    "intelligence":0,
+    "%bonus_force":10,
+    "%bonus_dexterite":0,
+    "%bonus_intelligence":0
+    },
+    {
+      "entite":{
+        "id": "tempête_feu",
+        "description": "Une attaque qui déclanche une tempête de feu",
+        "nom": "Tempête de feu"
+      },
+      "force" :0,
+      "dexterite":0,
+      "intelligence":10,
+      "%bonus_force":0,
+      "%bonus_dexterite":0,
+      "%bonus_intelligence":10
+      }
   ]
 }
