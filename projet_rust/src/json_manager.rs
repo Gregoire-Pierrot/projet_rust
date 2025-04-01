@@ -1,8 +1,10 @@
-use crate::{Joueur, Pnj, Ennemie, Lieu};
+use crate::{Joueur, Pnj, Ennemie, Lieu, Consommable, Equipement};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
 use std::fs;
+
+use crate::structs::Ressource;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MasterFile {
@@ -10,6 +12,9 @@ pub struct MasterFile {
     Pnj : Vec<Pnj>,
     Ennemie : Vec<Ennemie>,
     Lieux: Vec<Lieu>,
+    Consommable: Vec<Consommable>,
+    Ressource: Vec<Ressource>,
+    Equipement: Vec<Equipement>
 }
 
 impl MasterFile {
@@ -22,6 +27,9 @@ impl MasterFile {
             Pnj: master_file.Pnj,
             Ennemie: master_file.Ennemie,
             Lieux: master_file.Lieux,
+            Consommable: master_file.Consommable,
+            Ressource: master_file.Ressource,
+            Equipement: master_file.Equipement
         }
     }
 
@@ -71,6 +79,18 @@ impl MasterFile {
             }
         }
         return Err("Ennemie introuvable".to_string());
+    }
+
+
+    ////Consommable////
+
+    pub fn prendre_consommable_id(&self, id: &str) -> Result<Consommable, String> {
+        for consommable in self.Consommable.clone() {
+            if consommable.get_id() == id {
+                return Ok(consommable);
+            }
+        }
+        return Err("Consommable introuvable".to_string());
     }
 }
 

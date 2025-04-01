@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 use crate::structs::Entite;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub enum Meteo {
+enum Meteo {
     Soleil,
     Pluie,
     Neige,
@@ -19,7 +19,7 @@ impl std::fmt::Display for Meteo {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Lieu {
     entite: Entite,
-    destinations_id: Vec<String>,
+    destinations_id: Vec<String>, // liste des id des différentes destinations
     //entites: Vec<String>,
     meteo: Meteo,
 }

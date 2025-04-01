@@ -4,11 +4,15 @@ mod lieu;
 mod joueur;
 mod pnj;
 mod ennemie;
+mod consommable;
+mod equipement;
 
 use lieu::Lieu;
 use joueur::Joueur;
 use pnj::Pnj;
 use ennemie::Ennemie;
+use consommable::Consommable;
+use equipement::Equipement;
 use json_manager::MasterFile;
 
 fn main() {

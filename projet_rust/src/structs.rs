@@ -16,7 +16,7 @@ impl std::fmt::Display for Entite {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Personnage {
     pub entite: Entite,
-    pub position: String,
+    pub position: String, //id de Lieu
     pub pronom: String,
     pub niveau: u8,
     pub pv: u16,
@@ -36,3 +36,27 @@ impl std::fmt::Display for Personnage {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Ressource {
+    pub entite: Entite,
+    pub prix: u32,
+    pub ressource: Vec<String>
+}
+
+impl Ressource {
+    fn str_ressource(&self) -> String {
+        let mut str_ressource = String::new();
+        for i in 0..self.ressource.len()-1 {
+            str_ressource.push_str(&self.ressource[i]);
+            str_ressource.push_str(", ");
+        }
+        str_ressource.push_str(&self.ressource[self.ressource.len()-1]);
+        str_ressource
+    }
+}
+
+impl std::fmt::Display for Ressource {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "ressource : entite = [{}], prix = {}, ressource = {}",self.entite, self.prix, self.str_ressource())
+    }
+}
