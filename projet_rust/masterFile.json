@@ -298,7 +298,7 @@
       "pourcent_bonus_intelligence":0,
       "pourcent_bonus_vitesse":10,
       "pourcent_bonus_esquive":0,
-      "%bonus_chance":0,
+      "pourcent_bonus_chance":0,
       "pourcent_bonus_resistance_physique":0,
       "pourcent_bonus_resistance_magique":0,
       "categorie":"Arme"
