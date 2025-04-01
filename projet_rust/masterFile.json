@@ -194,15 +194,7 @@
   ],
   "Consommable": [
     {
-    "objet": {
-      "entite":{
-        "id": "pomme",
-        "description": "Une pomme",
-        "nom": "pomme"
-      },
-      "prix": 10,
-      "objet" : null
-    },
+    "objet": "pomme",
     "effet": [
       10,0,0,0,0,0,0,0
     ]
@@ -216,6 +208,24 @@
         "nom": "clé"
       },
       "prix": 5,
+      "objet" : "fer"
+    },
+    {
+      "entite": {
+        "id": "fer",
+        "description": "Du fer",
+        "nom": "fer"
+      },
+      "prix": 15,
+      "objet" : "fer"
+    },
+    {
+      "entite":{
+        "id": "pomme",
+        "description": "Une pomme",
+        "nom": "pomme"
+      },
+      "prix": 10,
       "objet" : null
     }
   ],
