@@ -301,7 +301,7 @@
       "%bonus_chance":0,
       "%bonus_resistance_physique":0,
       "%bonus_resistance_magique":0,
-      "type":"Arme"
+      "categorie":"Arme"
     },
     {
       "ressource": {
@@ -331,7 +331,7 @@
       "%bonus_chance":0,
       "%bonus_resistance_physique":0,
       "%bonus_resistance_magique":0,
-      "type":"Armure"
+      "categorie":"Armure"
     }
   ],
   "Attaque" : [
