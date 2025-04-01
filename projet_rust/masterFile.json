@@ -217,7 +217,7 @@
         "nom": "fer"
       },
       "prix": 15,
-      "objet" : "fer"
+      "objet" : null
     },
     {
       "entite":{
