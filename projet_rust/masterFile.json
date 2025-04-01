@@ -18,7 +18,7 @@
       "chance": 0,
       "resistance_physique": 0,
       "resistance_magique": 0,
-      "attaque":[
+      "attaques":[
         "brise_glace", "tempête_feu"
       ],
       "equipement":[
@@ -247,7 +247,7 @@
       "prix": 10,
       "ressource" : []
     },
-    "effet": [
+    "effets": [
       10,0,0,0,0,0,0,0
     ]
     }
