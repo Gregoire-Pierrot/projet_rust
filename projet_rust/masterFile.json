@@ -34,7 +34,10 @@
       40,
       90
     ],
-    "multiplicateur_xp": 0
+    "multiplicateur_xp": 0,
+    "quetes" : [
+      "principale"
+    ]
   },
   "Pnj": [
     {
@@ -56,16 +59,16 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque": []
+        "attaque": [],
+        "equipement":[],
+        "inventaire":[
+          "pomme"
+        ]
       },
       "dialogues": [
         "Je suis un PNJ",
         "Je suis un PNJ",
         "Je suis un PNJ"
-      ],
-      "equipement":[],
-      "inventaire":[
-        "pomme"
       ]
     },
     {
@@ -87,16 +90,16 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque": []
+        "attaque": [],
+        "equipement":[],
+        "inventaire":[
+          "pomme"
+        ]
       },
       "dialogues": [
         "Je suis un PNJ",
         "Je suis un PNJ",
         "Je suis un PNJ"
-      ],
-      "equipement":[],
-      "inventaire":[
-        "pomme"
       ]
     }
   ],
@@ -122,6 +125,10 @@
         "resistance_magique": 0,
         "attaque":[
           "tempête_feu"
+        ],
+        "equipement":[],
+        "inventaire":[
+          "pomme"
         ]
       },
       "dialogues": [
@@ -129,9 +136,9 @@
         "Je suis un Ennemie",
         "Je suis un Ennemie"
       ],
-      "equipement":[],
-      "inventaire":[
-        "pomme"
+      "droptable": [
+        "pomme",
+        "epee_feu"
       ]
     },
     {
@@ -155,6 +162,10 @@
         "resistance_magique": 0,
         "attaque":[
           "tempête_feu"
+        ],
+        "equipement":[],
+        "inventaire":[
+          "pomme"
         ]
       },
       "dialogues": [
@@ -162,9 +173,9 @@
         "Je suis un Ennemie",
         "Je suis un Ennemie"
       ],
-      "equipement":[],
-      "inventaire":[
-        "pomme"
+      "droptable": [
+        "pomme",
+        "plastron_feu"
       ]
     }
   ],
@@ -178,7 +189,10 @@
       "destinations_id": [
         "pièce2"
       ],
-      "meteo": "Interieur"
+      "meteo": "Interieur",
+      "contient" : [
+        "pomme","ennemie_1","pnj_2"
+      ]
     },
     {
       "entite": {
@@ -189,12 +203,50 @@
       "destinations_id": [
         "pièce1"
       ],
-      "meteo": "Interieur"
+      "meteo": "Interieur",
+      "contient" : [
+        "pomme","ennemie_2","pnj_1"
+      ]
     }
   ],
+  "Quete": [
+    {
+      "entite": {
+        "id": "principale",
+        "description": "La quete principale",
+        "nom": "Quête principale"
+       },
+      "lieu" : "pièce1",
+      "recompense": [
+        "pomme"
+      ],
+      "quete":"pricipale_2"
+    },
+    {
+      "entite": {
+        "id": "pricipale_2",
+        "description": "La quete principale étape 2",
+        "nom": "Quête principale: étape 2"
+       },
+      "lieu" : "pièce2",
+      "recompense": [
+        "pomme"
+      ],
+      "quete":"null"
+    }
+  ]
+  ,
   "Consommable": [
     {
-    "ressource": "pomme",
+    "ressource": {
+      "entite": {
+        "id": "pomme",
+        "description": "Une pomme",
+        "nom": "pome"
+      },
+      "prix": 10,
+      "ressource" : []
+    },
     "effet": [
       10,0,0,0,0,0,0,0
     ]
@@ -208,7 +260,7 @@
         "nom": "clé"
       },
       "prix": 5,
-      "ressource" : "fer"
+      "ressource" : ["fer"]
     },
     {
       "entite": {
@@ -217,7 +269,7 @@
         "nom": "fer"
       },
       "prix": 15,
-      "ressource" : null
+      "ressource" : []
     }
   ],
   "Equipement":[
@@ -228,7 +280,8 @@
           "description": "Une épee du feu",
           "nom": "épee du feu"
         },
-        "prix": 100
+        "prix": 100,
+        "ressource" : ["fer"]
       },
       "bonus_pv":0,
       "bonus_force":0,
@@ -257,7 +310,8 @@
           "description": "Un plastron du feu",
           "nom": "plastron de feu"
         },
-        "prix": 100
+        "prix": 100,
+        "ressource" : ["fer"]
       },
       "bonus_pv":0,
       "bonus_force":0,
