@@ -23,6 +23,10 @@
       ],
       "equipement":[
         "epee_feu","plastron_feu"
+      ],
+      "inventaire":[
+        "clé",
+        "pomme"
       ]
     },
     "temps": 0,
@@ -59,7 +63,10 @@
         "Je suis un PNJ",
         "Je suis un PNJ"
       ],
-      "equipement":[]
+      "equipement":[],
+      "inventaire":[
+        "pomme"
+      ]
     },
     {
       "personnage": {
@@ -87,7 +94,10 @@
         "Je suis un PNJ",
         "Je suis un PNJ"
       ],
-      "equipement":[]
+      "equipement":[],
+      "inventaire":[
+        "pomme"
+      ]
     }
   ],
   "Ennemie": [
@@ -119,7 +129,10 @@
         "Je suis un Ennemie",
         "Je suis un Ennemie"
       ],
-      "equipement":[]
+      "equipement":[],
+      "inventaire":[
+        "pomme"
+      ]
     },
     {
       "personnage": {
@@ -149,7 +162,10 @@
         "Je suis un Ennemie",
         "Je suis un Ennemie"
       ],
-      "equipement":[]
+      "equipement":[],
+      "inventaire":[
+        "pomme"
+      ]
     }
   ],
   "Lieux": [
@@ -198,7 +214,9 @@
         "id": "clé",
         "description": "Une clé",
         "nom": "clé"
-      }
+      },
+      "prix": 5,
+      "objet" : null
     }
   ],
   "Equipement":[
