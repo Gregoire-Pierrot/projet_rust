@@ -293,14 +293,14 @@
       "bonus_resistance_physique":0,
       "bonus_resistance_magique":0,
       "bonus_multiplcateur_xp":0,
-      "%bonus_force":10,
-      "%bonus_dexterite":0,
-      "%bonus_intelligence":0,
-      "%bonus_vitesse":10,
-      "%bonus_esquive":0,
+      "pourcent_bonus_force":10,
+      "pourcent_bonus_dexterite":0,
+      "pourcent_bonus_intelligence":0,
+      "pourcent_bonus_vitesse":10,
+      "pourcent_bonus_esquive":0,
       "%bonus_chance":0,
-      "%bonus_resistance_physique":0,
-      "%bonus_resistance_magique":0,
+      "pourcent_bonus_resistance_physique":0,
+      "pourcent_bonus_resistance_magique":0,
       "categorie":"Arme"
     },
     {
@@ -323,14 +323,14 @@
       "bonus_resistance_physique":0,
       "bonus_resistance_magique":0,
       "bonus_multiplcateur_xp":0,
-      "%bonus_force":10,
-      "%bonus_dexterite":0,
-      "%bonus_intelligence":0,
-      "%bonus_vitesse":10,
-      "%bonus_esquive":0,
-      "%bonus_chance":0,
-      "%bonus_resistance_physique":0,
-      "%bonus_resistance_magique":0,
+      "pourcent_bonus_force":10,
+      "pourcent_bonus_dexterite":0,
+      "pourcent_bonus_intelligence":0,
+      "pourcent_bonus_vitesse":10,
+      "pourcent_bonus_esquive":0,
+      "pourcent_bonus_chance":0,
+      "pourcent_bonus_resistance_physique":0,
+      "pourcent_bonus_resistance_magique":0,
       "categorie":"Armure"
     }
   ],
@@ -344,9 +344,9 @@
     "force" : 10,
     "dexterite":0,
     "intelligence":0,
-    "%bonus_force":10,
-    "%bonus_dexterite":0,
-    "%bonus_intelligence":0
+    "pourcent_bonus_force":10,
+    "pourcent_bonus_dexterite":0,
+    "pourcent_bonus_intelligence":0
     },
     {
       "entite":{
@@ -357,9 +357,9 @@
       "force" :0,
       "dexterite":0,
       "intelligence":10,
-      "%bonus_force":0,
-      "%bonus_dexterite":0,
-      "%bonus_intelligence":10
+      "pourcent_bonus_force":0,
+      "pourcent_bonus_dexterite":0,
+      "pourcent_bonus_intelligence":10
       }
   ]
 }
