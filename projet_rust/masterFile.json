@@ -194,13 +194,13 @@
   ],
   "Consommable": [
     {
-    "objet": "pomme",
+    "ressource": "pomme",
     "effet": [
       10,0,0,0,0,0,0,0
     ]
     }
   ],
-  "Objet": [
+  "Ressource": [
     {
       "entite": {
         "id": "clé",
@@ -208,7 +208,7 @@
         "nom": "clé"
       },
       "prix": 5,
-      "objet" : "fer"
+      "ressource" : "fer"
     },
     {
       "entite": {
@@ -217,21 +217,12 @@
         "nom": "fer"
       },
       "prix": 15,
-      "objet" : null
-    },
-    {
-      "entite":{
-        "id": "pomme",
-        "description": "Une pomme",
-        "nom": "pomme"
-      },
-      "prix": 10,
-      "objet" : null
+      "ressource" : null
     }
   ],
   "Equipement":[
     {
-      "objet": {
+      "ressource": {
         "entite":{
           "id": "epee_feu",
           "description": "Une épee du feu",
@@ -260,7 +251,7 @@
       "type":"Arme"
     },
     {
-      "objet": {
+      "ressource": {
         "entite":{
           "id": "plastron_feu",
           "description": "Un plastron du feu",
