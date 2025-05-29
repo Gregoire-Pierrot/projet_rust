@@ -121,17 +121,17 @@ voir le fichier des [armes](Weapons.md).
 | Modélisation                          | Ylies & Grégoire  | Modélisation du jeu                                                     | ✅      |
 | Json de test                          | Ylies             | Json réprésentant les différentes entités du jeu                        | ✅      |
 | Modélisation code                     | Grégoire          | Modélisation des entités du jeu                                         | 🕐      |
-| System d'interface en mode terminal   | Grégoire          | Interface graphique pour jouer                                          | ❌      |
-| System de choix (d'intéraction)       | Grégoire          | Ensemble de tout les choix possible au joueur à un moment donné         | ❌      |
-| System de déplacement                 | Ylies             | Possibilité de déplacement entre les différentes zones                  | ❌      |
-| System d'interaction avec les pnj     | Ylies             | Intéraction avec les pnj (dialogue, quêtes, commerce, ...)              | ❌      |
-| System de combat                      | Ylies             | -                                                                       | ❌      |
-| System de loot                        | Ylies             | -                                                                       | ❌      |
-| System de commerce                    | Grégoire          | -                                                                       | ❌      |
+| Systeme d'interface en mode terminal  | Grégoire          | Interface graphique pour jouer                                          | ❌      |
+| Systeme de choix (d'intéraction)      | Grégoire          | Ensemble de tout les choix possible au joueur à un moment donné         | ❌      |
+| Systeme de déplacement                | Ylies             | Possibilité de déplacement entre les différentes zones                  | ❌      |
+| Systeme d'interaction avec les pnj    | Ylies             | Intéraction avec les pnj (dialogue, quêtes, commerce, ...)              | ❌      |
+| Systeme de combat                     | Ylies             | -                                                                       | ❌      |
+| Systeme de loot                       | Ylies             | -                                                                       | ❌      |
+| Systeme de commerce                   | Grégoire          | -                                                                       | ❌      |
 | Gestion du joueur                     | Ylies             | Possibilité de modifié les stats du joueur                              | ❌      |
 | Gestion de l'équipement               | Ylies             | Possiblité de modifié l'équipement actif du joueur                      | ❌      |
-| System de gestion du temps            | Grégoire          | Gestion du temps en fonction des différentes actions du joueur          | ❌      |
-| System de quêtes                      | Ylies             | Systeme de gestion des quêtes (acceptation, mise à jour et récompense)  | ❌      |
-| System de réputation                  | Grégoire          | Modification de la réputation du joueur en fonction de ses actions      | ❌      |
+| Systeme de gestion du temps           | Grégoire          | Gestion du temps en fonction des différentes actions du joueur          | ❌      |
+| Systeme de quêtes                     | Ylies             | Systeme de gestion des quêtes (acceptation, mise à jour et récompense)  | ❌      |
+| Systeme de réputation                 | Grégoire          | Modification de la réputation du joueur en fonction de ses actions      | ❌      |
 | -                                     | -                 | -                                                                       | -        |
 | Json jeu                              | -                 | Histoire, lieux, monstres, et ressources du jeu final                   | ❌      |
