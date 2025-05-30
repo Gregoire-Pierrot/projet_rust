@@ -24,6 +24,25 @@ impl Quete {
 
     pub fn get_recompense(&self) -> Vec<String> {self.recompense.clone()}
 
+
+    pub fn set_description(&mut self, description: String) -> String { self.entite.description = description}
+    pub fn set_nom(&mut self, nom: String) -> String {self.entite.nom = nom}
+    pub fn set_lieu(&mut self, lieu: String) -> String {self.lieu = lieu}
+    pub fn set_quete_suivante(&mut self, quete_suivante: String) -> String {self.quete_suivante = quete_suivante}
+    pub fn set_recompense(&mut self, recompense: Vec<String>) -> Vec<String> {self.recompense = recompense}
+
+    pub fn add_recompense(&mut self, recompense: String) {
+        self.recompense.push(recompense);
+    }
+
+    pub fn remove_recompense(&mut self, recompense: String){
+        if let Some(pos) = self.recompense.iter().position(|x| *x == recompense) {
+            self.recompense.remove(pos);
+        } else {
+            panic!("Erreur : la recompense [{}] n'existe pas dans la quete [{}]", recompense, self.entite.id);
+        }
+    }
+
 }
 
 impl std::fmt::Display for Quete {
