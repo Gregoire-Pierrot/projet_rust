@@ -14,3 +14,12 @@ pub fn suivi_quete(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut 
     joueur.add_quete(quete_suivante);
     //manque juste la sauvegarde dans le fichier
 }
+
+
+pub fn ajout_recompense_inventaire(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut Quete){
+    let recompense = quete.get_recompense();
+    for (item, quantite) in recompense.iter() {
+        joueur.add_item_inventaire(item.clone(), *quantite);
+    }
+    //manque juste la sauvegarde dans le fichier
+}

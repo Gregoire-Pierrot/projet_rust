@@ -19,6 +19,8 @@ use equipement::Equipement;
 use json_manager::MasterFile;
 use quete::Quete;
 use action_quetes::suivi_quete;
+use action_quetes::ajout_recompense_inventaire;
+
 
 fn main() {
     let mut master_file = MasterFile::new();
@@ -28,5 +30,8 @@ fn main() {
     println!("{:?}", joueur);
 
     suivi_quete(&mut master_file,&mut joueur,&mut quete);
+    println!("{:?}", joueur);
+
+    ajout_recompense_inventaire(&mut master_file, &mut joueur, &mut quete);
     println!("{:?}", joueur);
 }

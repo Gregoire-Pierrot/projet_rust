@@ -24,10 +24,10 @@
       "equipement":[
         "epee_feu","plastron_feu"
       ],
-      "inventaire":[
-        "clé",
-        "pomme"
-      ]
+      "inventaire":{
+        "clé":1,
+        "pomme":5
+      }
     },
     "temps": 0,
     "reputations": [
@@ -61,9 +61,9 @@
         "resistance_magique": 0,
         "attaque": [],
         "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "inventaire":{
+          "pomme":5
+        }
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -92,9 +92,9 @@
         "resistance_magique": 0,
         "attaque": [],
         "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "inventaire":{
+          "pomme":5
+        }
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -127,9 +127,9 @@
           "tempête_feu"
         ],
         "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "inventaire":{
+          "pomme":5
+        }
       },
       "dialogues": [
         "Je suis un Ennemie",
@@ -164,9 +164,9 @@
           "tempête_feu"
         ],
         "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "inventaire":{
+          "pomme":5
+        }
       },
       "dialogues": [
         "Je suis un Ennemie",
@@ -217,9 +217,10 @@
         "nom": "Quête principale"
        },
       "lieu" : "pièce1",
-      "recompense": [
-        "pomme"
-      ],
+      "recompense": {
+        "pomme":5,
+        "climatiseur":4
+      },
       "quete_suivante":"pricipale_2"
     },
     {
@@ -229,9 +230,9 @@
         "nom": "Quête principale: étape 2"
        },
       "lieu" : "pièce2",
-      "recompense": [
-        "pomme"
-      ],
+      "recompense": {
+        "pomme":5
+      },
       "quete_suivante":"null"
     }
   ]

@@ -95,6 +95,14 @@ impl Joueur {
         else { panic!("Erreur : la quete [{}] n'existe pas dans la quete [{}]", quete, self.str_quetes());}
     }
 
+    pub fn add_item_inventaire(&mut self, item: String, quantite: u32) {
+        if let Some(quantite_inventaire) = self.personnage.inventaire.get_mut(&item) {
+            *quantite_inventaire += quantite;
+        } else {
+            self.personnage.inventaire.insert(item, quantite);
+        }
+    }
+
 }
 
 impl std::fmt::Display for Joueur {

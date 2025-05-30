@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Entite {
@@ -17,6 +18,7 @@ impl std::fmt::Display for Entite {
 pub struct Personnage {
     pub entite: Entite,
     pub position: String, //id de Lieu
+    pub inventaire: HashMap<String, u32>,
     pub pronom: String,
     pub niveau: u8,
     pub pv: u16,
@@ -30,9 +32,23 @@ pub struct Personnage {
     pub resistance_magique: u16
 }
 
+impl Personnage {
+    pub fn str_inventaire(&self) -> String {
+        let mut str_inventaire = String::new();
+        for (item, quantite) in &self.inventaire {
+            str_inventaire.push_str(&format!("{}: {}, ", item, quantite));
+        }
+        if !str_inventaire.is_empty() {
+            str_inventaire.pop();
+            str_inventaire.pop();
+        }
+        str_inventaire
+    }
+}
+
 impl std::fmt::Display for Personnage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Personnage : entite = [{}], pronom = {}, niveau = {}, position = {}, pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}",self.entite, self.pronom, self.niveau, self.position, self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique)
+        write!(f, "Personnage : entite = [{}], pronom = {}, niveau = {}, position = {}, inventaire = {}, pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}",self.entite, self.pronom, self.niveau, self.position, self.str_inventaire() ,self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique)
     }
 }
 
