@@ -96,13 +96,13 @@ impl MasterFile {
     }
 
 
-    pub fn prendre_quete_id(&self, id: &str) -> Result<Quete, String> {
+    pub fn prendre_quete_id(&self, id: &str) -> Quete {
         for quete in self.Quete.clone() {
             if quete.get_id() == id {
-                return Ok(quete);
+                return quete;
             }
         }
-        return Err("Quete introuvable".to_string());
+        panic!("Quête introuvable avec l'id : {}", id);
     }
 }
 

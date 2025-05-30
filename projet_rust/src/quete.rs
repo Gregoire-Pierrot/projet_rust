@@ -43,6 +43,8 @@ impl Quete {
         }
     }
 
+    
+
 }
 
 impl std::fmt::Display for Quete {

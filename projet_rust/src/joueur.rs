@@ -86,6 +86,15 @@ impl Joueur {
         quetes
     }
 
+    pub fn add_quete(&mut self, quetes: String){
+        self.quetes.push(quetes);
+    }
+
+    pub fn remove_quete(&mut self, quete: String){
+        if let Some(pos) = self.quetes.iter().position(|x| *x == quete){ self.quetes.remove(pos); }
+        else { panic!("Erreur : la quete [{}] n'existe pas dans la quete [{}]", quete, self.str_quetes());}
+    }
+
 }
 
 impl std::fmt::Display for Joueur {

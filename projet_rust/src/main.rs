@@ -7,6 +7,8 @@ mod ennemie;
 mod consommable;
 mod equipement;
 mod quete;
+mod action_quetes;
+
 
 use lieu::Lieu;
 use joueur::Joueur;
@@ -16,11 +18,15 @@ use consommable::Consommable;
 use equipement::Equipement;
 use json_manager::MasterFile;
 use quete::Quete;
+use action_quetes::suivi_quete;
 
 fn main() {
     let mut master_file = MasterFile::new();
     let mut joueur = master_file.get_joueur();
     let mut quete = master_file.prendre_quete_id("principale");
 
+    println!("{:?}", joueur);
+
+    suivi_quete(&mut master_file,&mut joueur,&mut quete);
     println!("{:?}", joueur);
 }
