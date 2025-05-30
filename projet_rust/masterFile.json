@@ -6,9 +6,9 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "position": "pièce2",
+      "position": "piece3",
       "pronom": "elle",
-      "niveau": 36,
+      "niveau": 45,
       "pv": 100,
       "force": 0,
       "dexterite": 0,
@@ -17,27 +17,14 @@
       "esquive": 0,
       "chance": 0,
       "resistance_physique": 0,
-      "resistance_magique": 0,
-      "attaques":[
-        "brise_glace", "tempête_feu"
-      ],
-      "equipement":[
-        "epee_feu","plastron_feu"
-      ],
-      "inventaire":[
-        "clé",
-        "pomme"
-      ]
+      "resistance_magique": 0
     },
     "temps": 0,
     "reputations": [
       40,
       90
     ],
-    "multiplicateur_xp": 0,
-    "quetes" : [
-      "principale"
-    ]
+    "multiplicateur_xp": 0
   },
   "Pnj": [
     {
@@ -58,12 +45,7 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0,
-        "attaque": [],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "resistance_magique": 0
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -89,12 +71,7 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0,
-        "attaque": [],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "resistance_magique": 0
       },
       "dialogues": [
         "Je suis un PNJ",
@@ -122,23 +99,12 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0,
-        "attaque":[
-          "tempête_feu"
-        ],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "resistance_magique": 0
       },
       "dialogues": [
         "Je suis un Ennemie",
         "Je suis un Ennemie",
         "Je suis un Ennemie"
-      ],
-      "droptable": [
-        "pomme",
-        "epee_feu"
       ]
     },
     {
@@ -159,23 +125,12 @@
         "esquive": 0,
         "chance": 0,
         "resistance_physique": 0,
-        "resistance_magique": 0,
-        "attaque":[
-          "tempête_feu"
-        ],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "resistance_magique": 0
       },
       "dialogues": [
         "Je suis un Ennemie",
         "Je suis un Ennemie",
         "Je suis un Ennemie"
-      ],
-      "droptable": [
-        "pomme",
-        "plastron_feu"
       ]
     }
   ],
@@ -189,10 +144,7 @@
       "destinations_id": [
         "pièce2"
       ],
-      "meteo": "Interieur",
-      "contient" : [
-        "pomme","ennemie_1","pnj_2"
-      ]
+      "meteo": "Interieur"
     },
     {
       "entite": {
@@ -203,53 +155,30 @@
       "destinations_id": [
         "pièce1"
       ],
-      "meteo": "Interieur",
-      "contient" : [
-        "pomme","ennemie_2","pnj_1"
-      ]
+      "meteo": "Interieur"
     }
   ],
-  "Quete": [
-    {
-      "entite": {
-        "id": "principale",
-        "description": "La quete principale",
-        "nom": "Quête principale"
-       },
-      "lieu" : "pièce1",
-      "recompense": [
-        "pomme"
-      ],
-      "quete":"pricipale_2"
-    },
-    {
-      "entite": {
-        "id": "pricipale_2",
-        "description": "La quete principale étape 2",
-        "nom": "Quête principale: étape 2"
-       },
-      "lieu" : "pièce2",
-      "recompense": [
-        "pomme"
-      ],
-      "quete":"null"
-    }
-  ]
-  ,
   "Consommable": [
     {
-    "ressource": {
-      "entite": {
-        "id": "pomme",
-        "description": "Une pomme",
-        "nom": "pome"
+      "ressource": {
+        "entite": {
+          "id": "pomme",
+          "description": "Une pomme",
+          "nom": "pome"
+        },
+        "prix": 10,
+        "ressource": []
       },
-      "prix": 10,
-      "ressource" : []
-    },
-    "effets": [
-      10,0,0,0,0,0,0,0
-    ]
+      "effets": [
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
     }
   ],
   "Ressource": [
@@ -260,7 +189,9 @@
         "nom": "clé"
       },
       "prix": 5,
-      "ressource" : ["fer"]
+      "ressource": [
+        "fer"
+      ]
     },
     {
       "entite": {
@@ -269,99 +200,75 @@
         "nom": "fer"
       },
       "prix": 15,
-      "ressource" : []
+      "ressource": []
     }
   ],
-  "Equipement":[
+  "Equipement": [
     {
       "ressource": {
-        "entite":{
+        "entite": {
           "id": "epee_feu",
           "description": "Une épee du feu",
           "nom": "épee du feu"
         },
         "prix": 100,
-        "ressource" : ["fer"]
+        "ressource": [
+          "fer"
+        ]
       },
-      "bonus_pv":0,
-      "bonus_force":0,
-      "bonus_dexterite":0,
-      "bonus_intelligence":0,
-      "bonus_vitesse":0,
-      "bonus_esquive":0,
-      "bonus_chance":0,
-      "bonus_resistance_physique":0,
-      "bonus_resistance_magique":0,
-      "bonus_multiplicateur_xp":0,
-      "pourcent_bonus_pv":10,
-      "pourcent_bonus_force":10,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":0,
-      "pourcent_bonus_vitesse":10,
-      "pourcent_bonus_esquive":0,
-      "pourcent_bonus_chance":0,
-      "pourcent_bonus_resistance_physique":0,
-      "pourcent_bonus_resistance_magique":0,
-      "categorie":"Arme"
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": "Arme"
     },
     {
       "ressource": {
-        "entite":{
+        "entite": {
           "id": "plastron_feu",
           "description": "Un plastron du feu",
           "nom": "plastron de feu"
         },
         "prix": 100,
-        "ressource" : ["fer"]
+        "ressource": [
+          "fer"
+        ]
       },
-      "bonus_pv":0,
-      "bonus_force":0,
-      "bonus_dexterite":0,
-      "bonus_intelligence":0,
-      "bonus_vitesse":0,
-      "bonus_esquive":0,
-      "bonus_chance":0,
-      "bonus_resistance_physique":0,
-      "bonus_resistance_magique":0,
-      "bonus_multiplicateur_xp":0,
-      "pourcent_bonus_pv":10,
-      "pourcent_bonus_force":10,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":0,
-      "pourcent_bonus_vitesse":10,
-      "pourcent_bonus_esquive":0,
-      "pourcent_bonus_chance":0,
-      "pourcent_bonus_resistance_physique":0,
-      "pourcent_bonus_resistance_magique":0,
-      "categorie":"Armure"
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": "Armure"
     }
-  ],
-  "Attaque" : [
-    {
-    "entite":{
-      "id": "brise_glace",
-      "description": "Une attaque qui brise la glace",
-      "nom": "Brise glace"
-    },
-    "force" : 10,
-    "dexterite":0,
-    "intelligence":0,
-    "pourcent_bonus_force":10,
-    "pourcent_bonus_dexterite":0,
-    "pourcent_bonus_intelligence":0
-    },
-    {
-      "entite":{
-        "id": "tempête_feu",
-        "description": "Une attaque qui déclanche une tempête de feu",
-        "nom": "Tempête de feu"
-      },
-      "force" :0,
-      "dexterite":0,
-      "intelligence":10,
-      "pourcent_bonus_force":0,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":10
-      }
   ]
 }

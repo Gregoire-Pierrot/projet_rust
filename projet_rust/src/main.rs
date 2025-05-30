@@ -6,7 +6,9 @@ mod pnj;
 mod ennemie;
 mod consommable;
 mod equipement;
+mod deplacement;
 
+use crate::deplacement::deplacement;
 use lieu::Lieu;
 use joueur::Joueur;
 use pnj::Pnj;
@@ -18,9 +20,12 @@ use json_manager::MasterFile;
 fn main() {
     let mut master_file = MasterFile::new();
     let mut joueur = master_file.get_joueur();
-    joueur.set_position("pièce1".to_string());
+
+    println!("{}",deplacement(&mut master_file,&mut joueur,"piece3"));
+
+    /*joueur.set_position("pièce1".to_string());
     joueur.set_pronom("il".to_string());
-    println!("{}", joueur);
+    println!("{}", joueur);*/
 
     /*match master_file.changer_nom_joueur("Jane") {
         Ok(_) => println!("Nom changé"),
@@ -42,7 +47,7 @@ fn main() {
         Err(e) => println!("Erreur lors de la modification de la position du joueur : {}", e)
     }*/
 
-    master_file.sauvegarder(&joueur);
+    /*master_file.sauvegarder(&joueur);
 
     println!("{}", joueur);
 
@@ -54,4 +59,5 @@ fn main() {
     master_file.sauvegarder(&joueur);
 
     println!("{}", joueur);
+    */
 }
