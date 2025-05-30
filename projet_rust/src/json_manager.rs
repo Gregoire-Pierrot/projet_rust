@@ -1,4 +1,4 @@
-use crate::{Joueur, Pnj, Ennemie, Lieu, Consommable, Equipement};
+use crate::{Joueur, Pnj, Ennemie, Lieu, Consommable, Equipement, Quete};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
@@ -14,7 +14,8 @@ pub struct MasterFile {
     Lieux: Vec<Lieu>,
     Consommable: Vec<Consommable>,
     Ressource: Vec<Ressource>,
-    Equipement: Vec<Equipement>
+    Equipement: Vec<Equipement>,
+    Quete: Vec<Quete>
 }
 
 impl MasterFile {
@@ -29,7 +30,8 @@ impl MasterFile {
             Lieux: master_file.Lieux,
             Consommable: master_file.Consommable,
             Ressource: master_file.Ressource,
-            Equipement: master_file.Equipement
+            Equipement: master_file.Equipement,
+            Quete: master_file.Quete
         }
     }
 
@@ -91,6 +93,16 @@ impl MasterFile {
             }
         }
         return Err("Consommable introuvable".to_string());
+    }
+
+
+    pub fn prendre_quete_id(&self, id: &str) -> Result<Quete, String> {
+        for quete in self.Quete.clone() {
+            if quete.get_id() == id {
+                return Ok(quete);
+            }
+        }
+        return Err("Quete introuvable".to_string());
     }
 }
 
