@@ -234,6 +234,18 @@
         "pomme":5
       },
       "quete_suivante":"null"
+    },
+    {
+      "entite": {
+        "id": "secondaire_1",
+        "description": "La quete secondaire étape 1",
+        "nom": "Quête secondaire: étape 1"
+       },
+      "lieu" : "pièce3",
+      "recompense": {
+        "pomme":5
+      },
+      "quete_suivante":"null"
     }
   ]
   ,

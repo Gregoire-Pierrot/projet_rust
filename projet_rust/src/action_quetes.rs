@@ -4,8 +4,8 @@ use crate::joueur::Joueur;
 use crate::quete::Quete;
 
 
-pub fn ajout_quetes(master_file: &mut MasterFile,joueur: &mut Joueur){
-    
+pub fn ajout_quete_joueur(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mut Quete){
+    joueur.add_quete(quete.get_id());
 }
 
 pub fn suivi_quete(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut Quete){
