@@ -7,3 +7,5 @@ pub fn deplacement(master_file: &mut MasterFile,joueur: &mut Joueur,destination:
     let texte = "Vous vous êtes déplacé vers ".to_owned()+&destination.to_string();
     texte
 }
+
+// Pour l'appeler -> println!("{}",deplacement(&mut master_file,&mut joueur,"piece3"));
