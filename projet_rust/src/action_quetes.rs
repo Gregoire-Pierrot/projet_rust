@@ -23,3 +23,9 @@ pub fn ajout_recompense_inventaire(master_file: &mut MasterFile,joueur: &mut Jou
     }
     //manque juste la sauvegarde dans le fichier
 }
+
+pub fn fin_de_quete(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mut Quete){
+    ajout_recompense_inventaire(master_file, joueur, quete);
+    suivi_quete(master_file, joueur, quete);
+    //manque juste la sauvegarde dans le fichier
+}
