@@ -22,5 +22,5 @@ fn main() {
     let mut joueur = master_file.get_joueur();
     let mut quete = master_file.prendre_quete_id("principale");
 
-    println!("{:?}", quete);
+    println!("{:?}", joueur);
 }

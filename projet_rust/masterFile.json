@@ -220,7 +220,7 @@
       "recompense": [
         "pomme"
       ],
-      "quete":"pricipale_2"
+      "quete_suivante":"pricipale_2"
     },
     {
       "entite": {
@@ -232,7 +232,7 @@
       "recompense": [
         "pomme"
       ],
-      "quete":"null"
+      "quete_suivante":"null"
     }
   ]
   ,

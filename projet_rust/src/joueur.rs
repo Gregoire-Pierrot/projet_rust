@@ -7,7 +7,8 @@ pub struct Joueur {
     personnage: Personnage,
     temps: u32,
     reputations: Vec<u16>,
-    multiplicateur_xp: u16
+    multiplicateur_xp: u16,
+    quetes: Vec<String>
 }
 
 impl Joueur {
@@ -71,10 +72,24 @@ impl Joueur {
         res.push_str(&self.reputations[self.reputations.len()-1].to_string());
         res
     }
+
+    pub fn get_quetes(&self) -> Vec<String> { self.quetes.clone()}
+    pub fn set_quetes(&mut self, quetes: Vec<String>) { self.quetes = quetes}
+
+    fn str_quetes(&self) -> String {
+        let mut quetes = String::new();
+        for i in 0..self.quetes.len()-1 {
+            quetes.push_str(&self.quetes[i].to_string());
+            quetes.push_str(", ");
+        }
+        quetes.push_str(&self.quetes[self.quetes.len()-1].to_string());
+        quetes
+    }
+
 }
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], temps = {}, reputation = {}, multiplicateur_xp = {}", self.personnage, self.temps, self.str_reputations(), self.multiplicateur_xp)
+        write!(f, "Joueur : personnage = [{}], temps = {}, reputation = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.temps, self.str_reputations(), self.multiplicateur_xp, self.str_quetes())
     }
 }

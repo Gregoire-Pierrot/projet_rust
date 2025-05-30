@@ -25,11 +25,11 @@ impl Quete {
     pub fn get_recompense(&self) -> Vec<String> {self.recompense.clone()}
 
 
-    pub fn set_description(&mut self, description: String) -> String { self.entite.description = description}
-    pub fn set_nom(&mut self, nom: String) -> String {self.entite.nom = nom}
-    pub fn set_lieu(&mut self, lieu: String) -> String {self.lieu = lieu}
-    pub fn set_quete_suivante(&mut self, quete_suivante: String) -> String {self.quete_suivante = quete_suivante}
-    pub fn set_recompense(&mut self, recompense: Vec<String>) -> Vec<String> {self.recompense = recompense}
+    pub fn set_description(&mut self, description: String) { self.entite.description = description}
+    pub fn set_nom(&mut self, nom: String) {self.entite.nom = nom}
+    pub fn set_lieu(&mut self, lieu: String) {self.lieu = lieu}
+    pub fn set_quete_suivante(&mut self, quete_suivante: String) {self.quete_suivante = quete_suivante}
+    pub fn set_recompense(&mut self, recompense: Vec<String>) {self.recompense = recompense}
 
     pub fn add_recompense(&mut self, recompense: String) {
         self.recompense.push(recompense);
