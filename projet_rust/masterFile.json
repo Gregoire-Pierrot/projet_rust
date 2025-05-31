@@ -221,7 +221,10 @@
         "pomme":5,
         "climatiseur":4
       },
-      "quete_suivante":"pricipale_2"
+      "quete_suivante":"pricipale_2",
+      "fin_de_quete": {
+        "obtention": "clé"
+      }
     },
     {
       "entite": {
@@ -233,7 +236,10 @@
       "recompense": {
         "pomme":5
       },
-      "quete_suivante":"null"
+      "quete_suivante":"null",
+      "fin_de_quete": {
+        "interaction": "porte_1"
+      }
     },
     {
       "entite": {
@@ -245,7 +251,25 @@
       "recompense": {
         "pomme":5
       },
-      "quete_suivante":"null"
+      "quete_suivante":"null",
+      "fin_de_quete": {
+        "combat": "ennemie_1"
+      }
+    },
+    {
+      "entite": {
+        "id": "secondaire_1",
+        "description": "La quete secondaire étape 1",
+        "nom": "Quête secondaire: étape 1"
+       },
+      "lieu" : "pièce3",
+      "recompense": {
+        "pomme":5
+      },
+      "quete_suivante":"null",
+      "fin_de_quete": {
+        "dialogue": "dialogue_1_1"
+      }
     }
   ]
   ,
@@ -255,7 +279,7 @@
       "entite": {
         "id": "pomme",
         "description": "Une pomme",
-        "nom": "pome"
+        "nom": "pomme"
       },
       "prix": 10,
       "ressource" : []
@@ -284,6 +308,7 @@
       "prix": 15,
       "ressource" : []
     }
+    
   ],
   "Equipement":[
     {

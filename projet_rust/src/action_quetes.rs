@@ -2,7 +2,7 @@ use crate::json_manager::MasterFile;
 
 use crate::joueur::Joueur;
 use crate::quete::Quete;
-
+use crate::structs::Ressource;
 
 pub fn ajout_quete_joueur(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mut Quete){
     joueur.add_quete(quete.get_id());
@@ -28,4 +28,15 @@ pub fn fin_de_quete(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mu
     ajout_recompense_inventaire(master_file, joueur, quete);
     suivi_quete(master_file, joueur, quete);
     //manque juste la sauvegarde dans le fichier
+}
+
+
+pub fn completion_quete(master_file: &mut MasterFile,joueur: &mut Joueur, id_condition: String){
+    let quetes: Vec<String> = joueur.get_quetes();
+    for quete_id in quetes {
+        let quete: Quete = master_file.prendre_quete_id(quete_id);
+        if quete.find_fin_de_quete(id_condition.clone()) {
+            println!("quete fini")
+        }
+    }
 }

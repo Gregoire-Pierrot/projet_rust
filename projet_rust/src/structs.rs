@@ -69,6 +69,10 @@ impl Ressource {
         str_ressource.push_str(&self.ressource[self.ressource.len()-1]);
         str_ressource
     }
+
+    pub fn get_id(&self) -> String {
+        self.entite.id.clone()
+    }
 }
 
 impl std::fmt::Display for Ressource {

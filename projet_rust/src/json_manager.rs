@@ -95,14 +95,26 @@ impl MasterFile {
         return Err("Consommable introuvable".to_string());
     }
 
+    ////Quete////
 
-    pub fn prendre_quete_id(&self, id: &str) -> Quete {
+    pub fn prendre_quete_id(&self, id: String) -> Quete {
         for quete in self.Quete.clone() {
             if quete.get_id() == id {
                 return quete;
             }
         }
         panic!("Quête introuvable avec l'id : {}", id);
+    }
+
+
+    ////Ressource////
+    pub fn prendre_ressource_id(&self, id: String) -> Ressource {
+        for ressource in self.Ressource.clone() {
+            if ressource.get_id() == id {
+                return ressource;
+            }
+        }
+        panic!("Ressource introuvable avec l'id : {}", id);
     }
 }
 

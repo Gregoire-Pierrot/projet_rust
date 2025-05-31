@@ -3,6 +3,15 @@ use serde::{Serialize, Deserialize};
 use crate::structs::Entite;
 use std::collections::HashMap;
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+enum FinDeQuete {
+    Combat(String),
+    Dialogue(String),
+    Obtention(String),
+    Interaction(String),
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Quete {
@@ -10,6 +19,7 @@ pub struct Quete {
     lieu: String,
     recompense: HashMap<String, u32>,
     quete_suivante: String,
+    fin_de_quete: FinDeQuete,
 }
 
 impl Quete {
@@ -26,6 +36,32 @@ impl Quete {
 
     pub fn get_recompense(&self) -> HashMap<String, u32> {self.recompense.clone()}
 
+    pub fn get_fin_de_quete(&self) -> FinDeQuete {self.fin_de_quete.clone()}
+
+    pub fn find_fin_de_quete(&self, id_fin_de_quete: String) -> bool {
+        match &self.fin_de_quete {
+            FinDeQuete::Obtention(objet) if objet == &id_fin_de_quete => {
+                println!("Fin de quête par obtention de {}", objet);
+                return true
+            }
+            FinDeQuete::Combat(enemy) if enemy == &id_fin_de_quete => {
+                println!("Fin de quête par combat contre {}", enemy);
+                return true
+            }
+            FinDeQuete::Dialogue(dialogue) if dialogue == &id_fin_de_quete => {
+                println!("Fin de quête par dialogue avec {}", dialogue);
+                return true
+            }
+            FinDeQuete::Interaction(inter) if inter == &id_fin_de_quete => {
+                println!("Fin de quête par interaction avec {}", inter);
+                return true
+            }
+            _ => {
+                println!("Ce n'est pas la bonne condition de fin.");
+                return false
+            }
+        }
+    }
 
     pub fn set_description(&mut self, description: String) { self.entite.description = description}
     pub fn set_nom(&mut self, nom: String) {self.entite.nom = nom}
