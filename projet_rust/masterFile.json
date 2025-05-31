@@ -131,7 +131,7 @@
           "pomme":5
         }
       },
-      "dialogues": [
+     "dialogues": [
         "Je suis un Ennemie",
         "Je suis un Ennemie",
         "Je suis un Ennemie"
@@ -221,7 +221,9 @@
         "pomme":5,
         "climatiseur":4
       },
-      "quete_suivante":"pricipale_2",
+      "quetes_suivantes": ["pricipale_2"],
+      "ajout_quete":"",
+      "statut":"encours",
       "fin_de_quete": {
         "obtention": "clé"
       }
@@ -236,7 +238,9 @@
       "recompense": {
         "pomme":5
       },
-      "quete_suivante":"null",
+      "ajout_quete":"",
+      "quetes_suivantes": [],
+      "statut":"noncommencee",
       "fin_de_quete": {
         "interaction": "porte_1"
       }
@@ -251,22 +255,26 @@
       "recompense": {
         "pomme":5
       },
-      "quete_suivante":"null",
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
       "fin_de_quete": {
         "combat": "ennemie_1"
       }
     },
     {
       "entite": {
-        "id": "secondaire_1",
-        "description": "La quete secondaire étape 1",
-        "nom": "Quête secondaire: étape 1"
+        "id": "secondaire_2_1",
+        "description": "La quete secondaire 2 étape 1",
+        "nom": "Quête secondaire 2: étape 1"
        },
       "lieu" : "pièce3",
       "recompense": {
         "pomme":5
       },
-      "quete_suivante":"null",
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
       "fin_de_quete": {
         "dialogue": "dialogue_1_1"
       }

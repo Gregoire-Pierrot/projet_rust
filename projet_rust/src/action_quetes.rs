@@ -5,16 +5,22 @@ use crate::quete::Quete;
 use crate::structs::Ressource;
 
 pub fn ajout_quete_joueur(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mut Quete){
-    joueur.add_quete(quete.get_id());
-}
-
-pub fn suivi_quete(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut Quete){
-    let quete_suivante = quete.get_quete_suivante();
-    joueur.remove_quete(quete.get_id());
-    joueur.add_quete(quete_suivante);
+    let mut new_quete: Quete =  master_file.prendre_quete_id(quete.get_ajout_quete());
+    joueur.add_quete(new_quete.get_id());
+    new_quete.set_statut(crate::quete::StatutQuete::EnCours);
     //manque juste la sauvegarde dans le fichier
 }
 
+pub fn suivi_quete(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut Quete){ //fonction pour continuer une quête de joueur 
+    let quete_suivante = quete.get_quete_suivante();
+    if quete_suivante.len() == 1 {
+        joueur.remove_quete(quete.get_id());
+        quete.set_statut(crate::quete::StatutQuete::Terminee);
+        joueur.add_quete(quete_suivante[0].clone());
+        println!("Quête terminée : [{:?}]", quete.get_statut());
+    }
+    //manque juste la sauvegarde dans le fichier
+}
 
 pub fn ajout_recompense_inventaire(master_file: &mut MasterFile,joueur: &mut Joueur,quete: &mut Quete){
     let recompense = quete.get_recompense();

@@ -12,13 +12,23 @@ enum FinDeQuete {
     Interaction(String),
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(rename_all = "lowercase")]
+pub enum StatutQuete {
+    EnCours,
+    Terminee,
+    NonCommencee,
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Quete {
     entite: Entite,
     lieu: String,
     recompense: HashMap<String, u32>,
-    quete_suivante: String,
+    ajout_quete: String,
+    quetes_suivantes: Vec<String>,
+    statut: StatutQuete,
     fin_de_quete: FinDeQuete,
 }
 
@@ -32,9 +42,13 @@ impl Quete {
 
     pub fn get_lieu(&self) -> String {self.lieu.clone()}
 
-    pub fn get_quete_suivante(&self) -> String {self.quete_suivante.clone()}
+    pub fn get_quete_suivante(&self) -> Vec<String> {self.quetes_suivantes.clone()}
 
     pub fn get_recompense(&self) -> HashMap<String, u32> {self.recompense.clone()}
+
+    pub fn get_ajout_quete(&self) -> String {self.ajout_quete.clone()}
+
+    pub fn get_statut(&self) -> StatutQuete {self.statut.clone()}
 
     pub fn get_fin_de_quete(&self) -> FinDeQuete {self.fin_de_quete.clone()}
 
@@ -66,7 +80,7 @@ impl Quete {
     pub fn set_description(&mut self, description: String) { self.entite.description = description}
     pub fn set_nom(&mut self, nom: String) {self.entite.nom = nom}
     pub fn set_lieu(&mut self, lieu: String) {self.lieu = lieu}
-    pub fn set_quete_suivante(&mut self, quete_suivante: String) {self.quete_suivante = quete_suivante}
+    pub fn set_quete_suivante(&mut self, quetes_suivantes: Vec<String>) {self.quetes_suivantes = quetes_suivantes}
     pub fn set_recompense(&mut self, recompense: HashMap<String, u32>) {self.recompense = recompense}
 
  
@@ -82,13 +96,13 @@ impl Quete {
         self.recompense.remove(recompense);
     }
 
-
+    pub fn set_statut(&mut self, statut: StatutQuete) {self.statut = statut;}
 
 }
 
 impl std::fmt::Display for Quete {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Quete : id = [{}], nom = [{}], description = [{}], lieu = [{}] , recompense = [{:?}], quete suivante = [{}]",
-        self.entite.id, self.entite.nom, self.entite.description, self.lieu, self.recompense, self.quete_suivante)
+        write!(f, "Quete : id = [{}], nom = [{}], description = [{}], lieu = [{}] , recompense = [{:?}], quete(s) suivante(s) = [{:?}], statut = [{:?}], fin de quête = [{:?}], ajout de quête = [{}]",
+        self.entite.id, self.entite.nom, self.entite.description, self.lieu, self.recompense, self.quetes_suivantes, self.statut, self.fin_de_quete, self.ajout_quete)
     }
 }
