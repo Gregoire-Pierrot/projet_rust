@@ -66,9 +66,7 @@
         }
       },
       "dialogues": [
-        "Je suis un PNJ",
-        "Je suis un PNJ",
-        "Je suis un PNJ"
+        "Dialogue_pnj_1"
       ]
     },
     {
@@ -97,9 +95,7 @@
         }
       },
       "dialogues": [
-        "Je suis un PNJ",
-        "Je suis un PNJ",
-        "Je suis un PNJ"
+        "Dialogue_pnj_1"
       ]
     }
   ],
@@ -132,9 +128,7 @@
         }
       },
      "dialogues": [
-        "Je suis un Ennemie",
-        "Je suis un Ennemie",
-        "Je suis un Ennemie"
+        "Dialogue_ennemie_1"
       ],
       "droptable": [
         "pomme",
@@ -169,9 +163,7 @@
         }
       },
       "dialogues": [
-        "Je suis un Ennemie",
-        "Je suis un Ennemie",
-        "Je suis un Ennemie"
+        "Dialogue_ennemie_1"
       ],
       "droptable": [
         "pomme",
@@ -278,6 +270,32 @@
       "fin_de_quete": {
         "dialogue": "dialogue_1_1"
       }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1",
+        "description": "Je suis un PNJ",
+        "nom": "PNJ dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {}
+    },
+    {
+      "entite": {
+        "id": "Dialogue_ennemie_1",
+        "description": "Je suis un Ennemie",
+        "nom": "Ennemie dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {}
     }
   ]
   ,
