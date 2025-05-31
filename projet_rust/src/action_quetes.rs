@@ -34,9 +34,11 @@ pub fn fin_de_quete(master_file: &mut MasterFile,joueur: &mut Joueur, quete: &mu
 pub fn completion_quete(master_file: &mut MasterFile,joueur: &mut Joueur, id_condition: String){
     let quetes: Vec<String> = joueur.get_quetes();
     for quete_id in quetes {
-        let quete: Quete = master_file.prendre_quete_id(quete_id);
+        let mut quete: Quete = master_file.prendre_quete_id(quete_id);
         if quete.find_fin_de_quete(id_condition.clone()) {
-            println!("quete fini")
+            println!("quete fini");
+            fin_de_quete(master_file, joueur, &mut quete);
+            break;
         }
     }
 }

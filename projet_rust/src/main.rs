@@ -36,6 +36,9 @@ fn main() {
     let mut ressource = master_file.prendre_ressource_id(String::from("clé"));
     completion_quete(&mut master_file,&mut joueur, ressource.get_id());
 
+    println!();
+    println!("Affichage de la fin d'une quête :");
+    println!("{:?}", joueur);
 
     /*
     fin_de_quete(&mut master_file,&mut joueur,&mut quete);
