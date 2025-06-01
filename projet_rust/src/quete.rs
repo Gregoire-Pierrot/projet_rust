@@ -98,6 +98,33 @@ impl Quete {
 
     pub fn set_statut(&mut self, statut: StatutQuete) {self.statut = statut;}
 
+
+
+    pub fn get_str_recompense(&self) -> String {
+        let mut str_recompense = String::new();
+        for (item, quantite) in &self.recompense {
+            str_recompense.push_str(&format!("{}: {}, ", item, quantite));
+        }
+        if !str_recompense.is_empty() {
+            str_recompense.pop();
+            str_recompense.pop();
+        }
+        str_recompense
+    }
+
+    pub fn get_str_fin_de_quete(&self) -> String {
+        match &self.fin_de_quete {
+            FinDeQuete::Combat(enemy) => format!("Combat contre {}", enemy),
+            FinDeQuete::Dialogue(dialogue) => format!("Dialogue avec {}", dialogue),
+            FinDeQuete::Obtention(objet) => format!("Obtention de {}", objet),
+            FinDeQuete::Interaction(interaction) => format!("Interaction avec {}", interaction),
+        }
+    }
+
+    pub fn get_details_quete(&self) -> Vec<String> { //Fonctions pour récupérer les détails à afficher dans l'interface quand on clique sur une quête
+        let details:Vec<String> = vec![self.entite.nom.clone(), self.entite.description.clone(), self.lieu.clone(), self.get_str_recompense(),self.get_str_fin_de_quete(),];
+        details
+    }
 }
 
 impl std::fmt::Display for Quete {

@@ -282,7 +282,7 @@
       "quetes_suivantes": [],
       "ajout_quete":"",
       "statut":"noncommencee",
-      "fin_de_quete": {}
+      "fin_de_quete": {"dialogue": "quelque_chose"}
     },
     {
       "entite": {
@@ -295,7 +295,7 @@
       "quetes_suivantes": [],
       "ajout_quete":"",
       "statut":"noncommencee",
-      "fin_de_quete": {}
+      "fin_de_quete": {"dialogue": "quelque_chose"}
     }
   ]
   ,
