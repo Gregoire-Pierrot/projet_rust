@@ -71,6 +71,15 @@ impl MasterFile {
         return Err("PNJ introuvable".to_string());
     }
 
+    pub fn prendre_pnj_id_string(&self, id: String) -> Pnj {
+        for pnj in self.Pnj.clone() {
+            if pnj.get_id() == id {
+                return pnj;
+            }
+        }
+        panic!("PNJ introuvable {}",id);
+    }
+
 
     ////Ennemie////
 

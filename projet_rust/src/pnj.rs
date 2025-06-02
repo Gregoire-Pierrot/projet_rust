@@ -50,6 +50,7 @@ impl Pnj {
         res.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
         res
     }
+
 }
 
 impl std::fmt::Display for Pnj {

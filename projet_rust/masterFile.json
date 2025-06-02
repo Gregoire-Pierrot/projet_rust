@@ -279,6 +279,62 @@
        },
       "lieu" : "pièce3",
       "recompense": {},
+      "quetes_suivantes": [
+        "Dialogue_pnj_1_1",
+        "Dialogue_pnj_1_2",
+        "Dialogue_pnj_1_3"
+      ],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {"dialogue": "quelque_chose"}
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_1",
+        "description": "Qui êtes vous ?",
+        "nom": "joueur dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
+      "quetes_suivantes": ["Dialogue_pnj_1_1_1"],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {"dialogue": "quelque_chose"}
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_1_1",
+        "description": "Je suis un PNJ ?!",
+        "nom": "pnj dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {"dialogue": "quelque_chose"}
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_2",
+        "description": "Avez vous quelque chose à me vendre ?",
+        "nom": "joueur dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete":"",
+      "statut":"noncommencee",
+      "fin_de_quete": {"dialogue": "quelque_chose"}
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_3",
+        "description": "Vous êtes disponible ?",
+        "nom": "joueur dialogue"
+       },
+      "lieu" : "pièce3",
+      "recompense": {},
       "quetes_suivantes": [],
       "ajout_quete":"",
       "statut":"noncommencee",
