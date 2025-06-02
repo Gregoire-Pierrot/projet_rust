@@ -5,7 +5,8 @@ use crate::structs::Personnage;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
     personnage: Personnage,
-    dialogues: Vec<String>
+    dialogues: Vec<String>,
+    droptable: Vec<String>,
 }
 
 impl Ennemie {
@@ -41,6 +42,8 @@ impl Ennemie {
 
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
+    pub fn get_droptable(&self) -> Vec<String> { self.droptable.clone() }
+
     fn str_dialogues(&self) -> String {
         let mut res = String::new();
         for i in 0..self.dialogues.len()-1 {
@@ -50,10 +53,20 @@ impl Ennemie {
         res.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
         res
     }
+
+    fn str_drop_table(&self) -> String {
+        let mut res = String::new();
+        for i in 0..self.droptable.len()-1 {
+            res.push_str(&self.droptable[i].to_string());
+            res.push_str(", ");
+        }
+        res.push_str(&self.droptable[self.droptable.len()-1].to_string());
+        res
+    }
 }
 
 impl std::fmt::Display for Ennemie {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Ennemie : personnage = [{}], dialogues = [{}]", self.personnage, self.str_dialogues())
+        write!(f, "Ennemie : personnage = [{}], dialogues = [{}], droptable = [{}]", self.personnage, self.str_dialogues(), self.str_drop_table())
     }
 }

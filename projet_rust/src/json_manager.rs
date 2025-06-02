@@ -1,4 +1,4 @@
-use crate::{Joueur, Pnj, Ennemie, Lieu, Consommable, Equipement};
+use crate::{Joueur, Pnj, Ennemie, Lieu, Quete, Consommable, Equipement, Attaque};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
@@ -11,10 +11,12 @@ pub struct MasterFile {
     Joueur: Joueur,
     Pnj : Vec<Pnj>,
     Ennemie : Vec<Ennemie>,
-    Lieux: Vec<Lieu>,
+    Lieu: Vec<Lieu>,
+    Quete: Vec<Quete>,
     Consommable: Vec<Consommable>,
     Ressource: Vec<Ressource>,
-    Equipement: Vec<Equipement>
+    Equipement: Vec<Equipement>,
+    Attaque: Vec<Attaque>
 }
 
 impl MasterFile {
@@ -26,17 +28,19 @@ impl MasterFile {
             Joueur: master_file.Joueur,
             Pnj: master_file.Pnj,
             Ennemie: master_file.Ennemie,
-            Lieux: master_file.Lieux,
+            Lieu: master_file.Lieu,
+            Quete: master_file.Quete,
             Consommable: master_file.Consommable,
             Ressource: master_file.Ressource,
-            Equipement: master_file.Equipement
+            Equipement: master_file.Equipement,
+            Attaque: master_file.Attaque
         }
     }
 
     ////Lieu////
 
     pub fn prendre_lieu_id(&self, id: &str) -> Result<Lieu, String> {
-        for lieu in self.Lieux.clone() {
+        for lieu in self.Lieu.clone() {
             if lieu.get_id() == id {
                 return Ok(lieu);
             }
@@ -92,6 +96,37 @@ impl MasterFile {
         }
         return Err("Consommable introuvable".to_string());
     }
+
+    ////Ressource////
+
+    pub fn prendre_ressource_id(&self, id: &str) -> Result<Ressource, String> {
+        for ressource in self.Ressource.clone() {
+            if ressource.get_id() == id {
+                return Ok(ressource);
+            }
+        }
+        return Err("Ressource introuvable".to_string());
+    }
+
+    ////Equipement////
+
+    pub fn prendre_equipement_id(&self, id: &str) -> Result<Equipement, String> {
+        for equipement in self.Equipement.clone() {
+            if equipement.get_id() == id {
+                return Ok(equipement);
+            }
+        }
+        return Err("Equipement introuvable".to_string());
+    }
+
+    ////Quete////
+
+    pub fn prendre_quete_id(&self, id: &str) -> Result<Quete, String> {
+        for quete in self.Quete.clone() {
+            if quete.get_id() == id {
+                return Ok(quete);
+            }
+        }
+        return Err("Quête introuvable".to_string());
+    }
 }
-
-

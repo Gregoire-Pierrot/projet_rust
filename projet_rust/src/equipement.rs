@@ -42,6 +42,36 @@ pub struct Equipement {
 }
 
 impl Equipement {
+    pub fn new(ressource: Ressource, bonus_pv: u16, bonus_force: u16, bonus_dexterite: u16, bonus_intelligence: u16, bonus_vitesse: u16, bonus_esquive: u16, bonus_chance: u16, bonus_resistance_physique: u16, bonus_resistance_magique: u16, bonus_multiplicateur_xp: u16, pourcent_bonus_pv: u16, pourcent_bonus_force: u16, pourcent_bonus_dexterite: u16, pourcent_bonus_intelligence: u16, pourcent_bonus_vitesse: u16, pourcent_bonus_esquive: u16, pourcent_bonus_chance: u16, pourcent_bonus_resistance_physique: u16, pourcent_bonus_resistance_magique: u16, categorie: String) -> Self {
+        Self {
+            ressource: ressource.clone(),
+            bonus_pv,
+            bonus_force,
+            bonus_dexterite,
+            bonus_intelligence,
+            bonus_vitesse,
+            bonus_esquive,
+            bonus_chance,
+            bonus_resistance_physique,
+            bonus_resistance_magique,
+            bonus_multiplicateur_xp,
+            pourcent_bonus_pv,
+            pourcent_bonus_force,
+            pourcent_bonus_dexterite,
+            pourcent_bonus_intelligence,
+            pourcent_bonus_vitesse,
+            pourcent_bonus_esquive,
+            pourcent_bonus_chance,
+            pourcent_bonus_resistance_physique,
+            pourcent_bonus_resistance_magique,
+            categorie: match categorie.as_str() {
+                "Arme" => Categorie::Arme,
+                "Armure" => Categorie::Armure,
+                _ => panic!("Erreur sur l'équipement : id={}, la catégorie doit être Arme ou Armure.", ressource.entite.id)
+            }
+        }
+    }
+
     pub fn get_id(&self) -> String { self.ressource.entite.id.clone() }
 
     pub fn get_description(&self) -> String { self.ressource.entite.description.clone() }
@@ -89,11 +119,13 @@ impl Equipement {
     pub fn get_pourcent_bonus_resistance_physique(&self) -> u16 { self.pourcent_bonus_resistance_physique.clone() }
 
     pub fn get_pourcent_bonus_resistance_magique(&self) -> u16 { self.pourcent_bonus_resistance_magique.clone() }
+
+    pub fn get_categorie(&self) -> Categorie { self.categorie.clone() }
 }
 
 impl std::fmt::Display for Equipement {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Equipement : ressource = [{}], bonus_pv : {}, bonus_force : {}, bonus_dexterite : {}, bonus_intelligence : {}, bonus_vitesse : {}, bonus_esquive : {}, bonus_chance : {}, bonus_resistance_physique : {}, bonus_resistance_magique : {}, bonus_multiplicateur_xp : {}, pourcent_bonus_pv : {}, pourcent_bonus_force : {}, pourcent_bonus_dexterite : {}, pourcent_bonus_intelligence : {}, pourcent_bonus_vitesse : {}, pourcent_bonus_esquive : {}, pourcent_bonus_chance : {}, pourcent_bonus_resistance_physique : {}, pourcent_bonus_resistance_magique : {}",
-            self.ressource, self.bonus_pv, self.bonus_force, self.bonus_dexterite, self.bonus_intelligence, self.bonus_vitesse, self.bonus_esquive, self.bonus_chance, self.bonus_resistance_physique, self.bonus_resistance_magique, self.bonus_multiplicateur_xp, self.pourcent_bonus_pv, self.pourcent_bonus_force, self.pourcent_bonus_dexterite, self.pourcent_bonus_intelligence, self.pourcent_bonus_vitesse, self.pourcent_bonus_esquive, self.pourcent_bonus_chance, self.pourcent_bonus_resistance_physique, self.pourcent_bonus_resistance_magique)
+        write!(f, "Equipement : ressource = [{}], bonus_pv : {}, bonus_force : {}, bonus_dexterite : {}, bonus_intelligence : {}, bonus_vitesse : {}, bonus_esquive : {}, bonus_chance : {}, bonus_resistance_physique : {}, bonus_resistance_magique : {}, bonus_multiplicateur_xp : {}, pourcent_bonus_pv : {}, pourcent_bonus_force : {}, pourcent_bonus_dexterite : {}, pourcent_bonus_intelligence : {}, pourcent_bonus_vitesse : {}, pourcent_bonus_esquive : {}, pourcent_bonus_chance : {}, pourcent_bonus_resistance_physique : {}, pourcent_bonus_resistance_magique : {}, categorie = {}",
+            self.ressource, self.bonus_pv, self.bonus_force, self.bonus_dexterite, self.bonus_intelligence, self.bonus_vitesse, self.bonus_esquive, self.bonus_chance, self.bonus_resistance_physique, self.bonus_resistance_magique, self.bonus_multiplicateur_xp, self.pourcent_bonus_pv, self.pourcent_bonus_force, self.pourcent_bonus_dexterite, self.pourcent_bonus_intelligence, self.pourcent_bonus_vitesse, self.pourcent_bonus_esquive, self.pourcent_bonus_chance, self.pourcent_bonus_resistance_physique, self.pourcent_bonus_resistance_magique, self.categorie)
     }
 }

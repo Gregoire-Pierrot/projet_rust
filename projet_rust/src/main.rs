@@ -1,18 +1,22 @@
 mod structs;
 mod json_manager;
 mod lieu;
+mod quete;
 mod joueur;
 mod pnj;
 mod ennemie;
 mod consommable;
 mod equipement;
+mod attaque;
 
-use lieu::Lieu;
 use joueur::Joueur;
 use pnj::Pnj;
 use ennemie::Ennemie;
+use lieu::Lieu;
+use quete::Quete;
 use consommable::Consommable;
 use equipement::Equipement;
+use attaque::Attaque;
 use json_manager::MasterFile;
 
 fn main() {

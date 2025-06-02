@@ -19,24 +19,24 @@ impl std::fmt::Display for Meteo {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Lieu {
     entite: Entite,
-    destinations_id: Vec<String>, // liste des id des différentes destinations
-    //entites: Vec<String>,
+    destinations: Vec<String>,
     meteo: Meteo,
+    contient: Vec<String>
 }
 
 impl Lieu {
-    pub fn new(entite: Entite, destinations_id: Vec<String> /*entites: Vec<String>*/, meteo: String) -> Self {
+    pub fn new(entite: Entite, destinations: Vec<String> /*entites: Vec<String>*/, meteo: String, contient: Vec<String>) -> Self {
         Self {
             entite,
-            destinations_id,
-            //entites,
+            destinations,
             meteo: match meteo.as_str() {
                 "Soleil" => Meteo::Soleil,
                 "Pluie" => Meteo::Pluie,
                 "Neige" => Meteo::Neige,
                 "Interieur" => Meteo::Interieur,
                 _ => Meteo::Interieur
-            }
+            },
+            contient
         }
     }
 
@@ -46,27 +46,35 @@ impl Lieu {
 
     pub fn get_nom(&self) -> String { self.entite.nom.clone() }
 
-    pub fn get_destinations_id(&self) -> Vec<String> { self.destinations_id.clone() }
+    pub fn get_destinations(&self) -> Vec<String> { self.destinations.clone() }
 
-    fn str_destination_id(&self) -> String {
+    pub fn get_meteo(&self) -> Meteo { self.meteo.clone() }
+
+    pub fn get_contient(&self) -> Vec<String> { self.contient.clone() }
+
+    fn str_destinations(&self) -> String {
         let mut res = String::new();
-        for i in 0..self.destinations_id.len()-1 {
-            res.push_str(self.destinations_id[i].as_str());
+        for i in 0..self.destinations.len()-1 {
+            res.push_str(self.destinations[i].as_str());
             res.push_str(", ");
         }
-        res.push_str(self.destinations_id[self.destinations_id.len()-1].as_str());
+        res.push_str(self.destinations[self.destinations.len()-1].as_str());
         res
     }
 
-    //fn get_entites(&self) -> Vec<Entite> { self.entites.clone() }
-
-    fn get_meteo(&self) -> Meteo { self.meteo.clone() }
-
-    pub fn add_destination_id(&mut self, id: String) { self.destinations_id.push(id); }
+    fn str_contient(&self) -> String {
+        let mut res = String::new();
+        for i in 0..self.contient.len()-1 {
+            res.push_str(self.contient[i].as_str());
+            res.push_str(", ");
+        }
+        res.push_str(self.contient[self.contient.len()-1].as_str());
+        res
+    }
 }
 
 impl std::fmt::Display for Lieu {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Lieu : id = {}, description = {}, nom = {}, destinations = {}, meteo = {}",self.entite.id, self.entite.description, self.entite.nom, self.str_destination_id(), self.meteo)
+        write!(f, "Lieu : entite = [{}], destinations = {}, meteo = {}, contient [{}]",self.entite, self.str_destinations(), self.meteo, self.str_contient())
     }
 }

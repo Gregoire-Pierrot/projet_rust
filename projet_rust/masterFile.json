@@ -8,7 +8,7 @@
       },
       "position": "pièce2",
       "pronom": "elle",
-      "niveau": 36,
+      "niveau": 45,
       "pv": 100,
       "force": 0,
       "dexterite": 0,
@@ -18,16 +18,18 @@
       "chance": 0,
       "resistance_physique": 0,
       "resistance_magique": 0,
-      "attaques":[
-        "brise_glace", "tempête_feu"
+      "attaques": [
+        "brise_glace",
+        "tempête_feu"
       ],
-      "equipement":[
-        "epee_feu","plastron_feu"
+      "equipement": [
+        "epee_feu",
+        "plastron_feu"
       ],
-      "inventaire":[
-        "clé",
-        "pomme"
-      ]
+      "inventaire": {
+        "clé": 1,
+        "pomme": 5
+      }
     },
     "temps": 0,
     "reputations": [
@@ -35,7 +37,7 @@
       90
     ],
     "multiplicateur_xp": 0,
-    "quetes" : [
+    "quetes": [
       "principale"
     ]
   },
@@ -59,16 +61,14 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque": [],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "attaques": [],
+        "equipement": [],
+        "inventaire": {
+          "pomme": 5
+        }
       },
       "dialogues": [
-        "Je suis un PNJ",
-        "Je suis un PNJ",
-        "Je suis un PNJ"
+        "Dialogue_pnj_1"
       ]
     },
     {
@@ -90,16 +90,14 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque": [],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "attaques": [],
+        "equipement": [],
+        "inventaire": {
+          "pomme": 5
+        }
       },
       "dialogues": [
-        "Je suis un PNJ",
-        "Je suis un PNJ",
-        "Je suis un PNJ"
+        "Dialogue_pnj_1"
       ]
     }
   ],
@@ -123,18 +121,16 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque":[
+        "attaques": [
           "tempête_feu"
         ],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "equipement": [],
+        "inventaire": {
+          "pomme": 5
+        }
       },
       "dialogues": [
-        "Je suis un Ennemie",
-        "Je suis un Ennemie",
-        "Je suis un Ennemie"
+        "Dialogue_ennemie_1"
       ],
       "droptable": [
         "pomme",
@@ -160,18 +156,16 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaque":[
+        "attaques": [
           "tempête_feu"
         ],
-        "equipement":[],
-        "inventaire":[
-          "pomme"
-        ]
+        "equipement": [],
+        "inventaire": {
+          "pomme": 5
+        }
       },
       "dialogues": [
-        "Je suis un Ennemie",
-        "Je suis un Ennemie",
-        "Je suis un Ennemie"
+        "Dialogue_ennemie_1"
       ],
       "droptable": [
         "pomme",
@@ -179,19 +173,21 @@
       ]
     }
   ],
-  "Lieux": [
+  "Lieu": [
     {
       "entite": {
         "id": "pièce1",
         "description": "Une chambre vachement bleue",
         "nom": "chambre bleue"
       },
-      "destinations_id": [
+      "destinations": [
         "pièce2"
       ],
       "meteo": "Interieur",
-      "contient" : [
-        "pomme","ennemie_1","pnj_2"
+      "contient": [
+        "pomme",
+        "ennemie_1",
+        "pnj_2"
       ]
     },
     {
@@ -200,12 +196,14 @@
         "description": "Une chambre vachement rouge",
         "nom": "chambre rouge"
       },
-      "destinations_id": [
+      "destinations": [
         "pièce1"
       ],
       "meteo": "Interieur",
-      "contient" : [
-        "pomme","ennemie_2","pnj_1"
+      "contient": [
+        "pomme",
+        "ennemie_2",
+        "pnj_1"
       ]
     }
   ],
@@ -215,41 +213,190 @@
         "id": "principale",
         "description": "La quete principale",
         "nom": "Quête principale"
-       },
-      "lieu" : "pièce1",
-      "recompense": [
-        "pomme"
+      },
+      "lieu": "pièce1",
+      "recompense": {
+        "pomme": 5,
+        "climatiseur": 4
+      },
+      "quetes_suivantes": [
+        "pricipale_2"
       ],
-      "quete":"pricipale_2"
+      "ajout_quete": "",
+      "statut": "encours",
+      "fin_de_quete": {
+        "obtention": "clé"
+      }
     },
     {
       "entite": {
         "id": "pricipale_2",
         "description": "La quete principale étape 2",
         "nom": "Quête principale: étape 2"
-       },
-      "lieu" : "pièce2",
-      "recompense": [
-        "pomme"
+      },
+      "lieu": "pièce2",
+      "recompense": {
+        "pomme": 5
+      },
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "interaction": "porte_1"
+      }
+    },
+    {
+      "entite": {
+        "id": "secondaire_1",
+        "description": "La quete secondaire étape 1",
+        "nom": "Quête secondaire: étape 1"
+      },
+      "lieu": "pièce3",
+      "recompense": {
+        "pomme": 5
+      },
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "combat": "ennemie_1"
+      }
+    },
+    {
+      "entite": {
+        "id": "secondaire_2_1",
+        "description": "La quete secondaire 2 étape 1",
+        "nom": "Quête secondaire 2: étape 1"
+      },
+      "lieu": "pièce3",
+      "recompense": {
+        "pomme": 5
+      },
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "dialogue_1_1"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1",
+        "description": "Je suis un PNJ",
+        "nom": "PNJ dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [
+        "Dialogue_pnj_1_1",
+        "Dialogue_pnj_1_2",
+        "Dialogue_pnj_1_3"
       ],
-      "quete":"null"
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_1",
+        "description": "Qui êtes vous ?",
+        "nom": "joueur dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [
+        "Dialogue_pnj_1_1_1"
+      ],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_1_1",
+        "description": "Je suis un PNJ ?!",
+        "nom": "pnj dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_2",
+        "description": "Avez vous quelque chose à me vendre ?",
+        "nom": "joueur dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_3",
+        "description": "Vous êtes disponible ?",
+        "nom": "joueur dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_ennemie_1",
+        "description": "Je suis un Ennemie",
+        "nom": "Ennemie dialogue"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "ajout_quete": "",
+      "statut": "noncommencee",
+      "fin_de_quete": {
+        "dialogue": "quelque_chose"
+      }
     }
-  ]
-  ,
+  ],
   "Consommable": [
     {
-    "ressource": {
-      "entite": {
-        "id": "pomme",
-        "description": "Une pomme",
-        "nom": "pome"
+      "ressource": {
+        "entite": {
+          "id": "pomme",
+          "description": "Une pomme",
+          "nom": "pomme"
+        },
+        "prix": 10,
+        "ressource": []
       },
-      "prix": 10,
-      "ressource" : []
-    },
-    "effets": [
-      10,0,0,0,0,0,0,0
-    ]
+      "effets": [
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
     }
   ],
   "Ressource": [
@@ -260,7 +407,9 @@
         "nom": "clé"
       },
       "prix": 5,
-      "ressource" : ["fer"]
+      "ressource": [
+        "fer"
+      ]
     },
     {
       "entite": {
@@ -269,99 +418,103 @@
         "nom": "fer"
       },
       "prix": 15,
-      "ressource" : []
+      "ressource": []
     }
   ],
-  "Equipement":[
+  "Equipement": [
     {
       "ressource": {
-        "entite":{
+        "entite": {
           "id": "epee_feu",
           "description": "Une épee du feu",
           "nom": "épee du feu"
         },
         "prix": 100,
-        "ressource" : ["fer"]
+        "ressource": [
+          "fer"
+        ]
       },
-      "bonus_pv":0,
-      "bonus_force":0,
-      "bonus_dexterite":0,
-      "bonus_intelligence":0,
-      "bonus_vitesse":0,
-      "bonus_esquive":0,
-      "bonus_chance":0,
-      "bonus_resistance_physique":0,
-      "bonus_resistance_magique":0,
-      "bonus_multiplicateur_xp":0,
-      "pourcent_bonus_pv":10,
-      "pourcent_bonus_force":10,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":0,
-      "pourcent_bonus_vitesse":10,
-      "pourcent_bonus_esquive":0,
-      "pourcent_bonus_chance":0,
-      "pourcent_bonus_resistance_physique":0,
-      "pourcent_bonus_resistance_magique":0,
-      "categorie":"Arme"
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": "Arme"
     },
     {
       "ressource": {
-        "entite":{
+        "entite": {
           "id": "plastron_feu",
           "description": "Un plastron du feu",
           "nom": "plastron de feu"
         },
         "prix": 100,
-        "ressource" : ["fer"]
+        "ressource": [
+          "fer"
+        ]
       },
-      "bonus_pv":0,
-      "bonus_force":0,
-      "bonus_dexterite":0,
-      "bonus_intelligence":0,
-      "bonus_vitesse":0,
-      "bonus_esquive":0,
-      "bonus_chance":0,
-      "bonus_resistance_physique":0,
-      "bonus_resistance_magique":0,
-      "bonus_multiplicateur_xp":0,
-      "pourcent_bonus_pv":10,
-      "pourcent_bonus_force":10,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":0,
-      "pourcent_bonus_vitesse":10,
-      "pourcent_bonus_esquive":0,
-      "pourcent_bonus_chance":0,
-      "pourcent_bonus_resistance_physique":0,
-      "pourcent_bonus_resistance_magique":0,
-      "categorie":"Armure"
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": "Armure"
     }
   ],
-  "Attaque" : [
+  "Attaque": [
     {
-    "entite":{
-      "id": "brise_glace",
-      "description": "Une attaque qui brise la glace",
-      "nom": "Brise glace"
-    },
-    "force" : 10,
-    "dexterite":0,
-    "intelligence":0,
-    "pourcent_bonus_force":10,
-    "pourcent_bonus_dexterite":0,
-    "pourcent_bonus_intelligence":0
+      "entite": {
+        "id": "brise_glace",
+        "description": "Une attaque qui brise la glace",
+        "nom": "Brise glace"
+      },
+      "force": 10,
+      "dexterite": 0,
+      "intelligence": 0,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0
     },
     {
-      "entite":{
+      "entite": {
         "id": "tempête_feu",
         "description": "Une attaque qui déclanche une tempête de feu",
         "nom": "Tempête de feu"
       },
-      "force" :0,
-      "dexterite":0,
-      "intelligence":10,
-      "pourcent_bonus_force":0,
-      "pourcent_bonus_dexterite":0,
-      "pourcent_bonus_intelligence":10
-      }
+      "force": 0,
+      "dexterite": 0,
+      "intelligence": 10,
+      "pourcent_bonus_force": 0,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 10
+    }
   ]
 }

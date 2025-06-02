@@ -7,7 +7,8 @@ pub struct Joueur {
     personnage: Personnage,
     temps: u32,
     reputations: Vec<u16>,
-    multiplicateur_xp: u16
+    multiplicateur_xp: u16,
+    quetes: Vec<String>
 }
 
 impl Joueur {
@@ -54,14 +55,50 @@ impl Joueur {
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
     pub fn set_resistance_magique(&mut self, resistance_magique: u16) { self.personnage.resistance_magique = resistance_magique; }
 
-    pub fn get_multiplicateur_xp(&self) -> u16 { self.multiplicateur_xp.clone() }
-    pub fn set_multiplicateur_xp(&mut self, multiplicateur_xp: u16) { self.multiplicateur_xp = multiplicateur_xp; }
+    pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
+    pub fn add_attaque(&mut self, attaque: String) {
+        if !self.personnage.attaques.contains(&attaque) {
+            self.personnage.attaques.push(attaque);
+        }
+    }
+    pub fn remove_attaque(&mut self, attaque: &String) {
+        if let Some(pos) = self.personnage.attaques.iter().position(|x| x == attaque) {
+            self.personnage.attaques.remove(pos);
+        }
+    }
+
+    pub fn get_equipement(&self) -> Vec<String> { self.personnage.equipement.clone() }
+    // fn add_equipement(&mut self, equipement: String)
+    pub fn remove_equipement(&mut self, equipement: &String) {
+        if let Some(pos) = self.personnage.equipement.iter().position(|x| x == equipement) {
+            self.personnage.equipement.remove(pos);
+            self.add_inventaire(equipement.clone(), 1);
+        }
+    }
+
+    pub fn get_inventaire(&self) -> std::collections::HashMap<String, u32> { self.personnage.inventaire.clone() }
+    pub fn add_inventaire(&mut self, item: String, quantite: u32) {
+        let entry = self.personnage.inventaire.entry(item).or_insert(0);
+        *entry += quantite;
+    }
+    //pub fn remove_inventaire(&mut self, item: &String, quantite: u32) 
 
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
     pub fn set_temps(&mut self, temps: u32) { self.temps = temps; }
 
     pub fn get_reputations(&self) -> Vec<u16> { self.reputations.clone() }
     pub fn set_reputations(&mut self, reputation: Vec<u16>) { self.reputations = reputation; }
+
+    pub fn get_multiplicateur_xp(&self) -> u16 { self.multiplicateur_xp.clone() }
+    pub fn set_multiplicateur_xp(&mut self, multiplicateur_xp: u16) { self.multiplicateur_xp = multiplicateur_xp; }
+    
+    pub fn get_quetes(&self) -> Vec<String> { self.quetes.clone() }
+    pub fn add_quete(&mut self, quete: String) {
+        if !self.quetes.contains(&quete) {
+            self.quetes.push(quete);
+        }
+    }
+    
     fn str_reputations(&self) -> String {
         let mut res = String::new();
         for i in 0..self.reputations.len()-1 {
@@ -71,10 +108,20 @@ impl Joueur {
         res.push_str(&self.reputations[self.reputations.len()-1].to_string());
         res
     }
+
+    fn str_quetes(&self) -> String {
+        let mut res = String::new();
+        for i in 0..self.quetes.len()-1 {
+            res.push_str(&self.quetes[i]);
+            res.push_str(", ");
+        }
+        res.push_str(&self.quetes[self.quetes.len()-1]);
+        res
+    }
 }
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], temps = {}, reputation = {}, multiplicateur_xp = {}", self.personnage, self.temps, self.str_reputations(), self.multiplicateur_xp)
+        write!(f, "Joueur : personnage = [{}], temps = {}, reputation = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.temps, self.str_reputations(), self.multiplicateur_xp, self.str_quetes())
     }
 }
