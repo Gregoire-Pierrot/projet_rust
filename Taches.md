@@ -26,7 +26,7 @@
 
 ## PNJ
 
-![Modélisation PNJ](PNJ.png)
+![Modélisation PNJ](modélisation_rust/PNJ.png)
 
 Ce qu'il faut faire : 
 
@@ -36,21 +36,28 @@ Ce qu'il reste à faire:
 
 ## Déplacement
 
+![Modélisation Déplacement](modélisation_rust/Deplacement.png)
+
 Ce qu'il faut faire : 
 
 Ce qui à été fait :
 
 Ce qu'il reste à faire:
 
-## Équipements
+
+## Équipements et Joueur
+
+![Modélisation Joueur](modélisation_rust/Joueur.png)
 
 Ce qu'il faut faire : 
-
+ 
 Ce qui à été fait :
 
 Ce qu'il reste à faire:
 
 ## Combat
+
+![Modélisation Combat](modélisation_rust/Combat.png)
 
 Ce qu'il faut faire : 
 
