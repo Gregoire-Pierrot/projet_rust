@@ -47,8 +47,10 @@ fn main() {
     //master_file.sauvegarder(&joueur);
 
     println!();
-    println!("L'attaque brise glace fait {} de dégats", joueur.attaque(&"brise_glace".to_string()));
-    println!("L'attaque tempête de feu fait {} de dégats", joueur.attaque(&"tempête_feu".to_string()));
+    let mut degats: Vec<u16> =joueur.attaque(&"brise_glace".to_string());
+    println!("L'attaque brise glace fait {} de dégats brutes et {} de dégats magiques",degats[0],degats[1]);
+    degats=joueur.attaque(&"tempête_feu".to_string());
+    println!("L'attaque tempête de feu fait {} de dégats brutes et {} de dégats magiques",degats[0],degats[1]);
 
     /*println!();
     println!("Ennemie avant attribution de lieu :");

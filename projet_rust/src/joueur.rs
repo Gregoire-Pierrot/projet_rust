@@ -206,6 +206,90 @@ impl Joueur {
         }
     }
 
+    pub fn calcul_dexterite(&mut self) -> u16 {
+        let mut dexterite: u16 = self.personnage.dexterite;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    dexterite += equipement_obj.get_bonus_dexterite();
+                    dexterite += (dexterite * equipement_obj.get_pourcent_bonus_dexterite()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        dexterite
+    }
+
+    pub fn calcul_vitesse(&mut self) -> u16 {
+        let mut vitesse: u16 = self.personnage.vitesse;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    vitesse += equipement_obj.get_bonus_vitesse();
+                    vitesse += (vitesse * equipement_obj.get_pourcent_bonus_vitesse()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        vitesse
+    }
+
+    pub fn calcul_esquive(&mut self) -> u16 {
+        let mut esquive: u16 = self.personnage.esquive;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    esquive += equipement_obj.get_bonus_esquive();
+                    esquive += (esquive * equipement_obj.get_pourcent_bonus_esquive()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        esquive
+    }
+
+    pub fn calcul_chance(&mut self) -> u16 {
+        let mut chance: u16 = self.personnage.chance;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    chance += equipement_obj.get_bonus_chance();
+                    chance += (chance * equipement_obj.get_pourcent_bonus_chance()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        chance
+    }
+
+    pub fn calcul_resistance_physique(&mut self) -> u16 {
+        let mut resistance_physique: u16 = self.personnage.resistance_physique;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    resistance_physique += equipement_obj.get_bonus_resistance_physique();
+                    resistance_physique += (resistance_physique * equipement_obj.get_pourcent_bonus_resistance_physique()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        resistance_physique
+    }
+
+     pub fn calcul_resistance_magique(&mut self) -> u16 {
+        let mut resistance_magique: u16 = self.personnage.resistance_magique;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    resistance_magique += equipement_obj.get_bonus_resistance_magique();
+                    resistance_magique += (resistance_magique * equipement_obj.get_pourcent_bonus_resistance_magique()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        resistance_magique
+    }
+
     pub fn calcul_force(&mut self) -> u16 { // Dégats physique
         let mut force: u16 = self.personnage.force;
         let mut master_file  = MasterFile::new();
@@ -234,9 +318,9 @@ impl Joueur {
         intelligence
     }
 
-    pub fn attaque(&mut self,attaque_id: &String) -> u16 {// base + equipement + %base+equipement + attaque + %total
+    pub fn attaque(&mut self,attaque_id: &String) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
         let mut master_file  = MasterFile::new();
-        let mut degats: u16 = 0;
+        let mut degats: Vec<u16> = vec![0, 0]; // [dégâts physique, dégâts magique]
         if let Ok(attaque) = master_file.prendre_attaque_id(&attaque_id) {
             let mut degats_brute: u16 = self.calcul_force()+attaque.get_force();
             degats_brute += (degats_brute * attaque.get_pourcent_bonus_force()) / 100;// base + attaque + %base+attaque
@@ -244,7 +328,8 @@ impl Joueur {
             let mut degats_magique: u16 = self.calcul_intelligence()+attaque.get_intelligence();
             degats_magique += (degats_magique * attaque.get_pourcent_bonus_intelligence()) / 100;// base + attaque + %base+attaque
 
-            degats+= degats_brute + degats_magique;
+            degats[0] = degats_brute;
+            degats[1] = degats_magique;
         }
         degats
     }
