@@ -127,10 +127,13 @@
           "description": "Un ennemie lambda",
           "nom": "Moissonneur"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
-        "pv": 100,
+        "attaques": [
+          "tempête_feu"
+        ],
+        "position": "",
+        "pronom": "",
+        "niveau": 0,
+        "pv": 0,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
@@ -139,9 +142,6 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaques": [
-          "tempête_feu"
-        ],
         "equipement": {
           "Casque": null,
           "Jambieres": null,
@@ -150,17 +150,12 @@
           "Gants": null,
           "Plastron": null
         },
-        "inventaire": {
-          "pomme": 5
-        }
+        "inventaire": {}
       },
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
-      "droptable": [
-        "pomme",
-        "epee_feu"
-      ]
+      "droptable": []
     },
     {
       "personnage": {
@@ -169,10 +164,13 @@
           "description": "Un ennemie lambda",
           "nom": "Recolteur"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
-        "pv": 100,
+        "attaques": [
+          "tempête_feu"
+        ],
+        "position": "",
+        "pronom": "",
+        "niveau": 0,
+        "pv": 0,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
@@ -181,28 +179,18 @@
         "chance": 0,
         "resistance_physique": 0,
         "resistance_magique": 0,
-        "attaques": [
-          "tempête_feu"
-        ],
         "equipement": {
-          "Gants": null,
-          "Plastron": null,
           "Casque": null,
+          "Jambieres": null,
           "Arme": null,
           "Bottes": null,
-          "Jambieres": null
+          "Gants": null,
+          "Plastron": null
         },
-        "inventaire": {
-          "pomme": 5
-        }
+        "inventaire": {}
       },
-      "dialogues": [
-        "Dialogue_ennemie_1"
-      ],
-      "droptable": [
-        "pomme",
-        "plastron_feu"
-      ]
+      "dialogues": [],
+      "droptable": []
     }
   ],
   "Lieu": [
@@ -218,7 +206,35 @@
       "meteo": "Interieur",
       "contient": [
         "pomme",
-        "ennemie_1",
+        {
+          "id": "ennemie_1",
+          "niveau": 9,
+          "pv": 100,
+          "force": 10,
+          "dexterite": 15,
+          "intelligence": 20,
+          "vitesse": 5,
+          "esquive": 2,
+          "chance": 7,
+          "resistance_physique": 50,
+          "resistance_magique": 25,
+          "equipement": {
+            "Casque": "casque_feu",
+            "Jambieres": null,
+            "Arme": "epee_feu",
+            "Bottes": "bottes_feu",
+            "Gants": null,
+            "Plastron": null
+          },
+          "inventaire": {
+            "pomme": 5
+          },
+          "droptable": [
+            "pomme",
+            "epee_feu"
+          ],
+          "position": "pièce1"
+        },
         "pnj_2"
       ]
     },
@@ -234,7 +250,35 @@
       "meteo": "Interieur",
       "contient": [
         "pomme",
-        "ennemie_2",
+        {
+          "id": "ennemie_2",
+          "niveau": 9,
+          "pv": 100,
+          "force": 0,
+          "dexterite": 0,
+          "intelligence": 0,
+          "vitesse": 0,
+          "esquive": 0,
+          "chance": 0,
+          "resistance_physique": 0,
+          "resistance_magique": 0,
+          "equipement": {
+            "Casque": null,
+            "Jambieres": null,
+            "Arme": null,
+            "Bottes": null,
+            "Gants": null,
+            "Plastron": null
+          },
+          "inventaire": {
+            "pomme": 5
+          },
+          "droptable": [
+            "pomme",
+            "epee_feu"
+          ],
+          "position": "pièce1"
+        },
         "pnj_1"
       ]
     }

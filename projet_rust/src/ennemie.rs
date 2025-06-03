@@ -63,6 +63,13 @@ impl Ennemie {
         res.push_str(&self.droptable[self.droptable.len()-1].to_string());
         res
     }
+
+    pub fn get_personnage(&self) -> &Personnage {
+        &self.personnage
+    }
+    pub fn set_personnage(&mut self, personnage: Personnage) {
+        self.personnage = personnage;
+    }
 }
 
 impl std::fmt::Display for Ennemie {
