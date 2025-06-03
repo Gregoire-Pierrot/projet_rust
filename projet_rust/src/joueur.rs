@@ -3,6 +3,7 @@ use serde::{Serialize, Deserialize};
 use crate::structs::Personnage;
 use std::collections::HashMap;
 use crate::equipement::Categorie;
+use crate::json_manager::MasterFile;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -71,53 +72,8 @@ impl Joueur {
 
     pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone() }
 
-    pub fn add_equipement(&mut self, categorie: &Categorie, equipement: &String) {
-        let eq = self.personnage.equipement.entry(categorie.clone()).or_insert(None);
-        if eq.is_some() {
-            println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
-        } else {
-            *eq = Some(equipement.clone());
-            println!("Équipement équipé dans la catégorie {:?}", categorie);
-            self.remove_inventaire(equipement, 1);
-        }
-    }
-
-    pub fn remove_equipement(&mut self, categorie: &Categorie) {
-        match self.personnage.equipement.get_mut(categorie) {
-            Some(equipement) => {
-                if let Some(eq) = equipement.take() {
-                    println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
-                    self.add_inventaire(eq, 1);
-                } else {
-                    println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
-                }
-            }
-            None => {
-                println!("Catégorie {:?} inconnue dans l'équipement.", categorie);
-            }
-        }
-    }
-
     pub fn get_inventaire(&self) -> std::collections::HashMap<String, u32> { self.personnage.inventaire.clone() }
-    pub fn add_inventaire(&mut self, item: String, quantite: u32) {
-        let entry = self.personnage.inventaire.entry(item).or_insert(0);
-        *entry += quantite;
-    }
-
-    pub fn remove_inventaire(&mut self, item: &String, quantite: u32){
-        if let Some(entry) = self.personnage.inventaire.get_mut(item) {
-            if *entry >= quantite {
-                *entry -= quantite;
-                if *entry == 0 {
-                    self.personnage.inventaire.remove(item);
-                }
-            } else {
-                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
-            }
-        } else {
-            println!("L'item {} n'est pas dans l'inventaire.", item);
-        }
-    }
+    
 
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
     pub fn set_temps(&mut self, temps: u32) { self.temps = temps; }
@@ -153,6 +109,101 @@ impl Joueur {
         }
         res.push_str(&self.quetes[self.quetes.len()-1]);
         res
+    }
+
+
+
+    pub fn add_equipement(&mut self, categorie: &Categorie, equipement: &String) {
+        let eq = self.personnage.equipement.entry(categorie.clone()).or_insert(None);
+        if eq.is_some() {
+            println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
+        } else {
+            *eq = Some(equipement.clone());
+            println!("Équipement équipé dans la catégorie {:?}", categorie);
+            self.remove_inventaire(equipement, 1);
+        }
+    }
+
+    pub fn remove_equipement(&mut self, categorie: &Categorie) {
+        match self.personnage.equipement.get_mut(categorie) {
+            Some(equipement) => {
+                if let Some(eq) = equipement.take() {
+                    println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
+                    self.add_inventaire(eq, 1);
+                } else {
+                    println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
+                }
+            }
+            None => {
+                println!("Catégorie {:?} inconnue dans l'équipement.", categorie);
+            }
+        }
+    }
+
+    pub fn add_inventaire(&mut self, item: String, quantite: u32) {
+        let entry = self.personnage.inventaire.entry(item).or_insert(0);
+        *entry += quantite;
+    }
+
+    pub fn remove_inventaire(&mut self, item: &String, quantite: u32){
+        if let Some(entry) = self.personnage.inventaire.get_mut(item) {
+            if *entry >= quantite {
+                *entry -= quantite;
+                if *entry == 0 {
+                    self.personnage.inventaire.remove(item);
+                }
+            } else {
+                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+            }
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item);
+        }
+    }
+
+    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>) {
+        self.personnage.force += effets[0];
+        self.personnage.dexterite += effets[1];
+        self.personnage.intelligence += effets[2];
+        self.personnage.vitesse += effets[3];
+        self.personnage.esquive += effets[4];
+        self.personnage.chance += effets[5];
+        self.personnage.resistance_physique += effets[6];
+        self.personnage.resistance_magique += effets[7];
+    }
+
+    pub fn utiliser_item(&mut self, item: &String) {
+        let master_file = MasterFile::new();
+        match master_file.prendre_consommable_id(item) {
+            Ok(consommable) => {
+                let effets = consommable.get_effets().clone();
+                let should_apply = {
+                    let inventaire = &mut self.personnage.inventaire;
+                    if let Some(quantite) = inventaire.get_mut(item) {
+                        if *quantite > 0 {
+                            *quantite -= 1;
+                            if *quantite == 0 {
+                                self.personnage.inventaire.remove(item);
+                            }
+                            true
+                        } else {
+                            println!("Quantité de {} insuffisante pour l'utiliser.", item);
+                            false
+                        }
+                    } else {
+                        println!("L'item {} n'est pas dans l'inventaire.", item);
+                        false
+                    }
+                };
+
+                if should_apply {
+                    self.appliquer_effets_items(effets);
+                    println!("Item {} utilisé.", item);
+                }
+            }
+            _ => {
+                println!("L'item {} n'est pas utilisable", item);
+            }
+        }
     }
 }
 
