@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
+use crate::equipement::Categorie;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Entite {
@@ -30,7 +31,7 @@ pub struct Personnage {
     pub resistance_physique: u16,
     pub resistance_magique: u16,
     pub attaques: Vec<String>,
-    pub equipement: Vec<String>,
+    pub equipement: HashMap<Categorie, Option<String>>,
     pub inventaire: HashMap<String, u32>,
 }
 
@@ -47,11 +48,17 @@ impl Personnage {
 
     fn str_equipement(&self) -> String {
         let mut str_equipement = String::new();
-        for i in 0..self.equipement.len()-1 {
-            str_equipement.push_str(&self.equipement[i]);
-            str_equipement.push_str(", ");
+        for (key, value) in &self.equipement {
+            let valeur_affichee = match value {
+                Some(v) => v.as_str(),
+                None => "aucun",
+            };
+            str_equipement.push_str(&format!("{}: {}, ", key, valeur_affichee));
         }
-        str_equipement.push_str(&self.equipement[self.equipement.len()-1]);
+        if !str_equipement.is_empty() {
+            str_equipement.pop(); 
+            str_equipement.pop(); 
+        }
         str_equipement
     }
 
@@ -61,8 +68,8 @@ impl Personnage {
             str_inventaire.push_str(&format!("{}: {}, ", key, value));
         }
         if !str_inventaire.is_empty() {
-            str_inventaire.pop(); // Remove last comma
-            str_inventaire.pop(); // Remove last space
+            str_inventaire.pop();
+            str_inventaire.pop();
         }
         str_inventaire
     }
@@ -82,6 +89,18 @@ pub struct Ressource {
 }
 
 impl Ressource {
+    pub fn new(id: String, description: String, nom: String, prix: u32, ressource: Vec<String>) -> Self {
+        Self {
+            entite: Entite {
+                id,
+                description,
+                nom,
+            },
+            prix,
+            ressource,
+        }
+    }
+
     pub fn get_id(&self) -> String {
         self.entite.id.clone()
     }

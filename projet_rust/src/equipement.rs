@@ -3,10 +3,14 @@ use serde::{Serialize, Deserialize};
 use crate::structs::Ressource;
 
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-enum Categorie {
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
+pub enum Categorie {
     Arme,
-    Armure
+    Casque,
+    Gants,
+    Plastron,
+    Jambieres,
+    Bottes,
 }
 
 impl std::fmt::Display for Categorie {
@@ -66,7 +70,11 @@ impl Equipement {
             pourcent_bonus_resistance_magique,
             categorie: match categorie.as_str() {
                 "Arme" => Categorie::Arme,
-                "Armure" => Categorie::Armure,
+                "Casque" => Categorie::Casque,
+                "Gants" => Categorie::Gants,
+                "Plastron" => Categorie::Plastron,
+                "Jambieres" => Categorie::Jambieres,
+                "Bottes" => Categorie::Bottes,
                 _ => panic!("Erreur sur l'équipement : id={}, la catégorie doit être Arme ou Armure.", ressource.entite.id)
             }
         }

@@ -1,6 +1,8 @@
 use serde::{Serialize, Deserialize};
 
 use crate::structs::Personnage;
+use std::collections::HashMap;
+use crate::equipement::Categorie;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -67,12 +69,41 @@ impl Joueur {
         }
     }
 
-    pub fn get_equipement(&self) -> Vec<String> { self.personnage.equipement.clone() }
-    // fn add_equipement(&mut self, equipement: String)
-    pub fn remove_equipement(&mut self, equipement: &String) {
-        if let Some(pos) = self.personnage.equipement.iter().position(|x| x == equipement) {
-            self.personnage.equipement.remove(pos);
-            self.add_inventaire(equipement.clone(), 1);
+    pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone() }
+    
+    pub fn add_equipement(&mut self, categorie: &Categorie, equipement: &String) {
+        match self.personnage.equipement.get_mut(categorie) {
+            Some(eq) => {
+                if let Some(equip) = eq.as_ref() {
+                    println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, equip);
+                } else {
+                    *eq = Some(equipement.clone());
+                    println!("Équipement équipé dans la catégorie {:?}", categorie);
+                }
+            }
+            None => {
+                self.personnage.equipement.insert(categorie.clone(), Some(equipement.clone()));
+                println!("Équipement équipé dans la catégorie {:?}", categorie);
+            }
+        }
+    }
+
+    pub fn remove_equipement(&mut self, categorie: &Categorie) {
+        match self.personnage.equipement.get_mut(categorie) {
+            Some(equipement) => {
+                match equipement.take() {
+                    Some(eq) => {
+                        println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
+                        self.add_inventaire(eq, 1);
+                    }
+                    None => {
+                        println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
+                    }
+                }
+            }
+            None => {
+                println!("Catégorie {:?} inconnue dans l'équipement.", categorie);
+            }
         }
     }
 

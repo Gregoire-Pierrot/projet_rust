@@ -16,46 +16,32 @@ use lieu::Lieu;
 use quete::Quete;
 use consommable::Consommable;
 use equipement::Equipement;
+use equipement::Categorie;
 use attaque::Attaque;
 use json_manager::MasterFile;
+use crate::structs::Ressource;
 
 fn main() {
     let mut master_file = MasterFile::new();
     let mut joueur = master_file.get_joueur();
-    joueur.set_position("pièce1".to_string());
-    joueur.set_pronom("il".to_string());
+
+    println!("Avant modification :");
+    println!();
     println!("{}", joueur);
 
-    /*match master_file.changer_nom_joueur("Jane") {
-        Ok(_) => println!("Nom changé"),
-        Err(e) => println!("Erreur lors de la modification du nom joueur : {}", e)
-    }
+    println!();
+    println!("Après modification :");
+    println!();
 
-    match master_file.changer_pronom_joueur("elle") {
-        Ok(_) => println!("Pronom changé"),
-        Err(e) => println!("Erreur lors de la modification pronom du joueur : {}", e)
-    }
+    let ressource = Ressource::new("epee1".to_string(), "Une épée en fer".to_string(),"epée de fer".to_string(), 100, vec!["fer".to_string()]);
+    let equipement = Equipement::new(ressource, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Arme".to_string());
+    joueur.add_equipement(&Categorie::Arme, &equipement.get_id().clone());
 
-    match master_file.changer_niveau_joueur(&9) {
-        Ok(_) => println!("Niveau augmenté"),
-        Err(e) => println!("Erreur lors de la modification du niveau du joueur : {}", e)
-    }
+    joueur.remove_equipement(&Categorie::Arme);
+    joueur.remove_equipement(&Categorie::Arme);
+    joueur.add_equipement(&Categorie::Arme, &equipement.get_id().clone());
     
-    match master_file.changer_position_joueur("pièce2") {
-        Ok(_) => println!("Position modifiée"),
-        Err(e) => println!("Erreur lors de la modification de la position du joueur : {}", e)
-    }*/
-
-    master_file.sauvegarder(&joueur);
-
+    println!();
     println!("{}", joueur);
-
-    joueur.set_nom("Jane".to_string());
-    joueur.set_pronom("elle".to_string());
-    joueur.add_niveau(9);
-    joueur.set_position("pièce2".to_string());
-
-    master_file.sauvegarder(&joueur);
-
-    println!("{}", joueur);
+    //master_file.sauvegarder(&joueur);
 }
