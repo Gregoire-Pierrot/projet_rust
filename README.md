@@ -129,7 +129,7 @@ voir le fichier des [armes](Weapons.md).
 | Systeme de loot                       | Ylies             | -                                                                       | ❌      |
 | Systeme de commerce                   | Grégoire          | -                                                                       | ❌      |
 | Gestion du joueur                     | Ylies             | Possibilité de modifié les stats du joueur                              | ❌      |
-| Gestion de l'équipement               | Ylies             | Possiblité de modifié l'équipement actif du joueur                      | ❌      |
+| Gestion de l'équipement               | Ylies             | Possiblité de modifié l'équipement actif du joueur                      | ✅      |
 | Systeme de gestion du temps           | Grégoire          | Gestion du temps en fonction des différentes actions du joueur          | ❌      |
 | Systeme de quêtes                     | Ylies             | Systeme de gestion des quêtes (acceptation, mise à jour et récompense)  | ❌      |
 | Systeme de réputation                 | Grégoire          | Modification de la réputation du joueur en fonction de ses actions      | ❌      |
