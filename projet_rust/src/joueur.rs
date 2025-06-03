@@ -70,35 +70,25 @@ impl Joueur {
     }
 
     pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone() }
-    
+
     pub fn add_equipement(&mut self, categorie: &Categorie, equipement: &String) {
-        match self.personnage.equipement.get_mut(categorie) {
-            Some(eq) => {
-                if let Some(equip) = eq.as_ref() {
-                    println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, equip);
-                } else {
-                    *eq = Some(equipement.clone());
-                    println!("Équipement équipé dans la catégorie {:?}", categorie);
-                }
-            }
-            None => {
-                self.personnage.equipement.insert(categorie.clone(), Some(equipement.clone()));
-                println!("Équipement équipé dans la catégorie {:?}", categorie);
-            }
+        let eq = self.personnage.equipement.entry(categorie.clone()).or_insert(None);
+        if eq.is_some() {
+            println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
+        } else {
+            *eq = Some(equipement.clone());
+            println!("Équipement équipé dans la catégorie {:?}", categorie);
         }
     }
 
     pub fn remove_equipement(&mut self, categorie: &Categorie) {
         match self.personnage.equipement.get_mut(categorie) {
             Some(equipement) => {
-                match equipement.take() {
-                    Some(eq) => {
-                        println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
-                        self.add_inventaire(eq, 1);
-                    }
-                    None => {
-                        println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
-                    }
+                if let Some(eq) = equipement.take() {
+                    println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
+                    self.add_inventaire(eq, 1);
+                } else {
+                    println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
                 }
             }
             None => {
