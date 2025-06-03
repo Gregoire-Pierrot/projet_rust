@@ -44,6 +44,8 @@ fn main() {
     println!();
     println!("{}", joueur);
 
+    //master_file.sauvegarder(&joueur);
+
     println!();
     println!("Ennemie avant attribution de lieu :");
     let mut ennemie = master_file.prendre_ennemie_id("ennemie_1");
@@ -74,5 +76,5 @@ fn main() {
         (Err(e), _) => eprintln!("Erreur lors de la récupération de l'ennemie : {}", e),
         (_, Err(e)) => eprintln!("Erreur lors de la récupération du lieu : {}", e),
     }
-    //master_file.sauvegarder(&joueur);
+    
 }

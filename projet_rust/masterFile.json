@@ -32,7 +32,8 @@
       },
       "inventaire": {
         "pomme": 5,
-        "clé": 1
+        "clé": 1,
+        "epee1": 1
       }
     },
     "temps": 0,

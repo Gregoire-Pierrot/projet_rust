@@ -78,6 +78,7 @@ impl Joueur {
         } else {
             *eq = Some(equipement.clone());
             println!("Équipement équipé dans la catégorie {:?}", categorie);
+            self.remove_inventaire(equipement, 1);
         }
     }
 
@@ -102,7 +103,21 @@ impl Joueur {
         let entry = self.personnage.inventaire.entry(item).or_insert(0);
         *entry += quantite;
     }
-    //pub fn remove_inventaire(&mut self, item: &String, quantite: u32) 
+
+    pub fn remove_inventaire(&mut self, item: &String, quantite: u32){
+        if let Some(entry) = self.personnage.inventaire.get_mut(item) {
+            if *entry >= quantite {
+                *entry -= quantite;
+                if *entry == 0 {
+                    self.personnage.inventaire.remove(item);
+                }
+            } else {
+                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+            }
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item);
+        }
+    }
 
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
     pub fn set_temps(&mut self, temps: u32) { self.temps = temps; }
