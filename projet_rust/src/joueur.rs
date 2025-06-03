@@ -333,6 +333,13 @@ impl Joueur {
         }
         degats
     }
+
+    pub fn defense(&mut self, degats_recus: &Vec<u16>) -> u16 {
+        let degats_physiques = degats_recus[0].saturating_sub(self.calcul_resistance_physique());
+        let degats_magiques = degats_recus[1].saturating_sub(self.calcul_resistance_magique());
+
+        degats_physiques + degats_magiques
+    }
 }
 
 impl std::fmt::Display for Joueur {

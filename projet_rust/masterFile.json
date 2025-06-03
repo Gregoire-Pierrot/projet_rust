@@ -16,8 +16,8 @@
       "vitesse": 0,
       "esquive": 0,
       "chance": 0,
-      "resistance_physique": 0,
-      "resistance_magique": 0,
+      "resistance_physique": 5,
+      "resistance_magique": 20,
       "attaques": [
         "brise_glace",
         "tempête_feu"
