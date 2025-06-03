@@ -129,4 +129,15 @@ impl MasterFile {
         }
         return Err("Quête introuvable".to_string());
     }
+
+    ////Attaque////
+
+    pub fn prendre_attaque_id(&self, id: &str) -> Result<Attaque, String> {
+        for attaque in self.Attaque.clone() {
+            if attaque.get_id() == id {
+                return Ok(attaque);
+            }
+        }
+        return Err("Attaque introuvable".to_string());
+    }
 }

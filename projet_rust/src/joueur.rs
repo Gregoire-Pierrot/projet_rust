@@ -205,6 +205,49 @@ impl Joueur {
             }
         }
     }
+
+    pub fn calcul_force(&mut self) -> u16 { // Dégats physique
+        let mut force: u16 = self.personnage.force;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    force += equipement_obj.get_bonus_force();
+                    force += (force * equipement_obj.get_pourcent_bonus_force()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        force
+    }
+
+    pub fn calcul_intelligence(&mut self) -> u16 { // Dégats magique
+        let mut intelligence: u16 = self.personnage.intelligence;
+        let mut master_file  = MasterFile::new();
+        for equipement in self.get_equipement() {
+            if let Some(equipement_id) = equipement.1 {
+                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
+                    intelligence += equipement_obj.get_bonus_intelligence();
+                    intelligence += (intelligence * equipement_obj.get_pourcent_bonus_intelligence()) / 100; // base + equipement + %base+equipement
+                }
+            }
+        }
+        intelligence
+    }
+
+    pub fn attaque(&mut self,attaque_id: &String) -> u16 {// base + equipement + %base+equipement + attaque + %total
+        let mut master_file  = MasterFile::new();
+        let mut degats: u16 = 0;
+        if let Ok(attaque) = master_file.prendre_attaque_id(&attaque_id) {
+            let mut degats_brute: u16 = self.calcul_force()+attaque.get_force();
+            degats_brute += (degats_brute * attaque.get_pourcent_bonus_force()) / 100;// base + attaque + %base+attaque
+
+            let mut degats_magique: u16 = self.calcul_intelligence()+attaque.get_intelligence();
+            degats_magique += (degats_magique * attaque.get_pourcent_bonus_intelligence()) / 100;// base + attaque + %base+attaque
+
+            degats+= degats_brute + degats_magique;
+        }
+        degats
+    }
 }
 
 impl std::fmt::Display for Joueur {

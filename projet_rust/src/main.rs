@@ -47,6 +47,10 @@ fn main() {
     //master_file.sauvegarder(&joueur);
 
     println!();
+    println!("L'attaque brise glace fait {} de dégats", joueur.attaque(&"brise_glace".to_string()));
+    println!("L'attaque tempête de feu fait {} de dégats", joueur.attaque(&"tempête_feu".to_string()));
+
+    /*println!();
     println!("Ennemie avant attribution de lieu :");
     let mut ennemie = master_file.prendre_ennemie_id("ennemie_1");
     println!("{:?}", ennemie);
@@ -75,6 +79,6 @@ fn main() {
         }
         (Err(e), _) => eprintln!("Erreur lors de la récupération de l'ennemie : {}", e),
         (_, Err(e)) => eprintln!("Erreur lors de la récupération du lieu : {}", e),
-    }
+    }*/
     
 }

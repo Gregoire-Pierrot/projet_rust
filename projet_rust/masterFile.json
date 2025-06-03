@@ -611,7 +611,7 @@
         ]
       },
       "bonus_pv": 0,
-      "bonus_force": 0,
+      "bonus_force": 10,
       "bonus_dexterite": 0,
       "bonus_intelligence": 0,
       "bonus_vitesse": 0,
@@ -646,7 +646,7 @@
       "bonus_pv": 0,
       "bonus_force": 0,
       "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
+      "bonus_intelligence": 22,
       "bonus_vitesse": 0,
       "bonus_esquive": 0,
       "bonus_chance": 0,
@@ -705,7 +705,7 @@
         "description": "Une attaque qui brise la glace",
         "nom": "Brise glace"
       },
-      "force": 10,
+      "force": 5,
       "dexterite": 0,
       "intelligence": 0,
       "pourcent_bonus_force": 10,
@@ -715,12 +715,12 @@
     {
       "entite": {
         "id": "tempête_feu",
-        "description": "Une attaque qui déclanche une tempête de feu",
+        "description": "Une attaque qui déclenche une tempête de feu",
         "nom": "Tempête de feu"
       },
       "force": 0,
       "dexterite": 0,
-      "intelligence": 10,
+      "intelligence": 15,
       "pourcent_bonus_force": 0,
       "pourcent_bonus_dexterite": 0,
       "pourcent_bonus_intelligence": 10
