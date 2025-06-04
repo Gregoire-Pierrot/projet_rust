@@ -10,14 +10,14 @@
       "pronom": "il",
       "niveau": 90,
       "pv": 100,
-      "force": 0,
-      "dexterite": 0,
-      "intelligence": 0,
-      "vitesse": 0,
-      "esquive": 0,
-      "chance": 0,
-      "resistance_physique": 5,
-      "resistance_magique": 20,
+      "force": 10,
+      "dexterite": 15,
+      "intelligence": 20,
+      "vitesse": 5,
+      "esquive": 2,
+      "chance": 7,
+      "resistance_physique": 50,
+      "resistance_magique": 25,
       "attaques": [
         "brise_glace",
         "tempête_feu"
@@ -26,12 +26,14 @@
         "Bottes": "bottes_feu",
         "Jambieres": "jambieres_feu",
         "Casque": "casque_feu",
-        "Arme": "épee_feu",
+        "Arme": "epee_feu",
         "Gants": null,
         "Plastron": "plastron_feu"
       },
       "inventaire": {
-        "pomme": 5,
+        "pomme": 10,
+        "glace" : 2,
+        "pilule_magique": 10,
         "clé": 1,
         "epee1": 1
       }
@@ -463,7 +465,7 @@
         "entite": {
           "id": "pomme",
           "description": "Une pomme",
-          "nom": "pomme"
+          "nom": "Pomme"
         },
         "prix": 10,
         "rarete": 0.99,
@@ -479,14 +481,59 @@
         0,
         0
       ]
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "glace",
+          "description": "Une glace",
+          "nom": "Glace à la pistache"
+        },
+        "prix": 2,
+        "rarete": 0.75,
+        "ressource": []
+      },
+      "effets": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "pilule_magique",
+          "description": "Une pilule qui augmente l'intelligence et la resistance magique",
+          "nom": "Pilule magique"
+        },
+        "prix": 35,
+        "rarete": 0.10,
+        "ressource": []
+      },
+      "effets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
     }
+    
   ],
   "Ressource": [
     {
       "entite": {
         "id": "clé",
         "description": "Une clé",
-        "nom": "clé"
+        "nom": "Clé"
       },
       "prix": 5,
       "rarete": 0.25,
@@ -498,7 +545,7 @@
       "entite": {
         "id": "fer",
         "description": "Du fer",
-        "nom": "fer"
+        "nom": "Fer"
       },
       "prix": 15,
       "rarete": 0.80,
@@ -506,9 +553,19 @@
     },
     {
       "entite": {
+        "id": "glace",
+        "description": "Une glace",
+        "nom": "Glace à la pistache"
+      },
+      "prix": 2,
+      "rarete": 0.75,
+      "ressource": []
+    },
+    {
+      "entite": {
         "id": "pomme",
         "description": "Une pomme",
-        "nom": "pomme"
+        "nom": "Pomme"
       },
       "prix": 1,
       "rarete": 0.95,
@@ -516,26 +573,38 @@
     },
     {
       "entite": {
-        "id": "pomme",
-        "description": "Une pomme",
-        "nom": "pomme"
+        "id": "epee_feu",
+        "description": "Une épee du feu",
+        "nom": "Épée de feu"
       },
-      "prix": 1,
-      "rarete": 0.95,
-      "ressource": []
+      "prix": 100,
+      "rarete": 0.09,
+      "ressource": [
+        "fer"
+      ]
     },
     {
-        "entite": {
-          "id": "epee_feu",
-          "description": "Une épee du feu",
-          "nom": "épee du feu"
-        },
-        "prix": 100,
-        "rarete": 0.09,
-        "ressource": [
-          "fer"
-        ]
-      }
+      "entite": {
+        "id": "epee1",
+        "description": "Une épée en fer",
+        "nom": "Épée de fer"
+      },
+      "prix": 100,
+      "rarete": 0.09,
+      "ressource": [
+        "fer"
+      ]
+    },
+    {
+      "entite": {
+        "id": "pilule_magique",
+        "description": "Une pilule qui augmente l'intelligence et la resistance magique",
+        "nom": "Pilule magique"
+      },
+      "prix": 35,
+      "rarete": 0.10,
+      "ressource": []
+    }
   ],
   "Equipement": [
     {
@@ -750,7 +819,7 @@
         "description": "Une attaque qui brise la glace",
         "nom": "Brise glace"
       },
-      "force": 5,
+      "force": 45,
       "dexterite": 0,
       "intelligence": 0,
       "pourcent_bonus_force": 10,

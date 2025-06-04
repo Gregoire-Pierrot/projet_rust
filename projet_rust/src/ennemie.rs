@@ -46,6 +46,8 @@ impl Ennemie {
 
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
 
+    pub fn get_attaques(&self) -> Vec<String> {self.personnage.attaques.clone()}
+
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
     pub fn get_droptable(&self) -> HashMap<String, f32> { self.droptable.clone() }
@@ -77,6 +79,8 @@ impl Ennemie {
     pub fn get_personnage(&self) -> &Personnage {
         &self.personnage
     }
+
+    
     pub fn set_personnage(&mut self, personnage: Personnage) {
         self.personnage = personnage;
     }
@@ -88,7 +92,7 @@ impl Ennemie {
         for (item, quantite) in self.personnage.inventaire.iter() {
             if let Ok(ressource) = master_file.prendre_ressource_id(item) {
                 let chance_loot: f32 = ressource.get_rarete()+self.droptable[item];
-                println!("chance d'avoir l'item : {} - {}",item,chance_loot);
+                //println!("chance d'avoir l'item : {} - {}",item,chance_loot);
                 if chance_loot>1.0 {
                     loot.insert(item.clone(), *quantite);
                 }
@@ -107,12 +111,51 @@ impl Ennemie {
         loot
     }
 
-    pub fn application_degats(&mut self,degats: u16, joueur: &mut Joueur){
-        self.set_pv(self.get_pv().saturating_sub(degats));
+    pub fn degats_recus_net(&mut self,degats_recus_brut: &Vec<u16>) -> u16{
+        self.personnage.defense(degats_recus_brut)
+    }
+
+    pub fn application_degats(&mut self,degats_recus_net: &u16, joueur: &mut Joueur) -> bool{
+                let new_pv = self.get_pv().saturating_sub(*degats_recus_net);
+
+        self.set_pv(new_pv);
+        /*
+        println!("degats reçus {:?}",degats_recus);
+        println!("get pv {}",self.get_pv());
+        println!("new_pv {}",new_pv);
+        println!("defense {}",defense);
+        */
         if self.get_pv() == 0 {
-            joueur.ajout_recompense_inventaire(self.lootable());
+            let mut loot = self.lootable();
+            joueur.ajout_recompense_inventaire(loot.clone());
+            println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
+            return true;
             //Fin de combat -> retour à l'interface
         }
+        false
+    }
+
+    pub fn combat(&mut self,joueur: &mut Joueur) -> bool {
+        //attaque
+        let master_file = MasterFile::new();
+        let mut rng = rand::thread_rng();
+        let attaques = self.get_attaques();
+        if !attaques.is_empty() {
+            let index = rng.gen_range(0..attaques.len());
+            let attaque_obj = match master_file.prendre_attaque_id(&attaques[index]) {
+                Ok(a) => a,
+                Err(a) => {
+                    eprintln!("Erreur : {}", a);
+                    return false;
+                }
+            };
+            let attaque = self.personnage.attaque(&attaques[index]);
+            let degats = self.degats_recus_net(&attaque);
+            println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
+            return joueur.application_degats(&degats);
+        }
+        false
+        //item à faire
     }
 
     

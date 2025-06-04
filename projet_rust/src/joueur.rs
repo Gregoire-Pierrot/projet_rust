@@ -163,8 +163,8 @@ impl Joueur {
     }
 
     pub fn appliquer_effets_items(&mut self, effets: Vec<u16>) {
-        self.personnage.force += effets[0];
-        self.personnage.dexterite += effets[1];
+        self.personnage.pv += effets[0];
+        self.personnage.force += effets[1];
         self.personnage.intelligence += effets[2];
         self.personnage.vitesse += effets[3];
         self.personnage.esquive += effets[4];
@@ -173,7 +173,7 @@ impl Joueur {
         self.personnage.resistance_magique += effets[7];
     }
 
-    pub fn utiliser_item(&mut self, item: &String) {
+    pub fn utiliser_item(&mut self, item: &String) -> bool {
         let master_file = MasterFile::new();
         match master_file.prendre_consommable_id(item) {
             Ok(consommable) => {
@@ -199,31 +199,44 @@ impl Joueur {
 
                 if should_apply {
                     self.appliquer_effets_items(effets);
-                    println!("Item {} utilisé.", item);
+                    return true;
+                    //println!("Item {} utilisé.", item);
                 }
             }
             _ => {
-                println!("L'item {} n'est pas utilisable", item);
+                //println!("L'item {} n'est pas utilisable", item);
             }
         }
+        false
     }
 
-    pub fn application_degats(&mut self,degats: u16){
-        self.set_pv(self.get_pv().saturating_sub(degats));
-        //game over si 0
-    }
-
-    
     pub fn ajout_recompense_inventaire(&mut self,recompense: HashMap<String, u32>){
         for (item, quantite) in recompense.iter() {
             self.add_inventaire(item.clone(), *quantite);
         }
     }
 
-
     pub fn fuir(){
-
+        //Retour à l'interface
     }
+    
+    pub fn degats_recus_net(&mut self,degats_recus_brut: &Vec<u16>) -> u16{
+        self.personnage.defense(degats_recus_brut)
+    }
+
+    pub fn application_degats(&mut self,degats_recus_net: &u16) -> bool {
+        let new_pv = self.get_pv().saturating_sub(*degats_recus_net);
+        self.set_pv(new_pv);
+        if self.get_pv() == 0 {//game over si 0
+            println!("Vous avez perdu !");
+            return true;
+            //Retour à l'interface
+        }
+        false
+    }
+
+    
+    
 
 }
 

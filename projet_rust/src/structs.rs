@@ -212,6 +212,12 @@ impl Personnage {
     pub fn defense(&mut self, degats_recus: &Vec<u16>) -> u16 {
         let degats_physiques = degats_recus[0].saturating_sub(self.calcul_resistance_physique());
         let degats_magiques = degats_recus[1].saturating_sub(self.calcul_resistance_magique());
+        /*
+        println!("degats physiques - {}",degats_physiques);
+        println!("degats magiques - {}",degats_magiques);
+        println!("resistance physique - {}",self.calcul_resistance_physique());
+        println!("resistance magiques - {}",self.calcul_resistance_magique());
+        */
         degats_physiques + degats_magiques
     }
 
