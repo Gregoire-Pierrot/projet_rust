@@ -33,7 +33,7 @@ fn main() {
     println!("Après modification :");
     println!();
 
-    let ressource = Ressource::new("epee1".to_string(), "Une épée en fer".to_string(),"epée de fer".to_string(), 100, vec!["fer".to_string()]);
+    let ressource = Ressource::new("epee1".to_string(), "Une épée en fer".to_string(),"epée de fer".to_string(), 100, 0.09, vec!["fer".to_string()]);
     let equipement = Equipement::new(ressource, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "Arme".to_string());
     joueur.add_equipement(&Categorie::Arme, &equipement.get_id().clone());
 
@@ -47,15 +47,19 @@ fn main() {
     //master_file.sauvegarder(&joueur);
 
     println!();
-    let mut degats: Vec<u16> =joueur.attaque(&"brise_glace".to_string());
+    let mut degats: Vec<u16> =joueur.get_personnage().attaque(&"brise_glace".to_string());
     println!("L'attaque brise glace fait {} de dégats brutes et {} de dégats magiques ( {} dégats totaux )",degats[0],degats[1],degats[0]+degats[1]);
-    println!("L'attaque fait {} de dégats au joueur",joueur.defense(&degats));
-    println!();
-    degats=joueur.attaque(&"tempête_feu".to_string());
+    println!("L'attaque fait {} de dégats au joueur",joueur.get_personnage().defense(&degats));
+    
+    degats=joueur.get_personnage().attaque(&"tempête_feu".to_string());
     println!("L'attaque tempête de feu fait {} de dégats brutes et {} de dégats magiques ( {} dégats totaux )",degats[0],degats[1],degats[0]+degats[1]);
-    println!("L'attaque fait {} de dégats au joueur",joueur.defense(&degats));
+    println!("L'attaque fait {} de dégats au joueur",joueur.get_personnage().defense(&degats));
 
-
+    let hit = joueur.get_personnage().defense(&degats);
+    joueur.application_degats(hit);
+    println!();
+    println!("Attaque reçu :");
+    println!("{}", joueur);
 
     /*println!();
     println!("Ennemie avant attribution de lieu :");

@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 
 use crate::structs::Personnage;
+use crate::json_manager::MasterFile;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
@@ -70,6 +71,17 @@ impl Ennemie {
     pub fn set_personnage(&mut self, personnage: Personnage) {
         self.personnage = personnage;
     }
+
+    /*pub fn application_degats(&mut self,degats: u16, joueur: Joueur){
+        self.set_pv(self.get_pv().saturating_sub(degats));
+        if self.get_pv() == 0 {
+            //système droptable
+
+            //joueur.ajout_recompense_inventaire();
+            //système de fin de combat
+        }
+    }*/
+
 }
 
 impl std::fmt::Display for Ennemie {

@@ -462,6 +462,7 @@
           "nom": "pomme"
         },
         "prix": 10,
+        "rarete": 0.99,
         "ressource": []
       },
       "effets": [
@@ -484,6 +485,7 @@
         "nom": "clé"
       },
       "prix": 5,
+      "rarete": 0.25,
       "ressource": [
         "fer"
       ]
@@ -495,6 +497,7 @@
         "nom": "fer"
       },
       "prix": 15,
+      "rarete": 0.80,
       "ressource": []
     }
   ],
@@ -507,6 +510,7 @@
           "nom": "épee du feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
@@ -540,6 +544,7 @@
           "nom": "plastron de feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
@@ -573,6 +578,7 @@
           "nom": "Gants de feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
@@ -606,6 +612,7 @@
           "nom": "Casque de feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
@@ -639,6 +646,7 @@
           "nom": "Jambieres de feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
@@ -672,6 +680,7 @@
           "nom": "Bottes de feu"
         },
         "prix": 100,
+        "rarete": 0.09,
         "ressource": [
           "fer"
         ]
