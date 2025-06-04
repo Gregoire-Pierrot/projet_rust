@@ -2,11 +2,16 @@ use serde::{Serialize, Deserialize};
 
 use crate::structs::Ressource;
 
-
 #[derive(Serialize, Deserialize, Debug, Clone)]
-enum Categorie {
-    Arme,
-    Armure
+pub enum Categorie {
+    Bottes,
+    Jambieres,
+    Casque,
+    Plastron,
+    Gants,
+    Arme_Melee,
+    Arme_Distance,
+    Arme_Magie
 }
 
 impl std::fmt::Display for Categorie {
@@ -42,36 +47,6 @@ pub struct Equipement {
 }
 
 impl Equipement {
-    pub fn new(ressource: Ressource, bonus_pv: u16, bonus_force: u16, bonus_dexterite: u16, bonus_intelligence: u16, bonus_vitesse: u16, bonus_esquive: u16, bonus_chance: u16, bonus_resistance_physique: u16, bonus_resistance_magique: u16, bonus_multiplicateur_xp: u16, pourcent_bonus_pv: u16, pourcent_bonus_force: u16, pourcent_bonus_dexterite: u16, pourcent_bonus_intelligence: u16, pourcent_bonus_vitesse: u16, pourcent_bonus_esquive: u16, pourcent_bonus_chance: u16, pourcent_bonus_resistance_physique: u16, pourcent_bonus_resistance_magique: u16, categorie: String) -> Self {
-        Self {
-            ressource: ressource.clone(),
-            bonus_pv,
-            bonus_force,
-            bonus_dexterite,
-            bonus_intelligence,
-            bonus_vitesse,
-            bonus_esquive,
-            bonus_chance,
-            bonus_resistance_physique,
-            bonus_resistance_magique,
-            bonus_multiplicateur_xp,
-            pourcent_bonus_pv,
-            pourcent_bonus_force,
-            pourcent_bonus_dexterite,
-            pourcent_bonus_intelligence,
-            pourcent_bonus_vitesse,
-            pourcent_bonus_esquive,
-            pourcent_bonus_chance,
-            pourcent_bonus_resistance_physique,
-            pourcent_bonus_resistance_magique,
-            categorie: match categorie.as_str() {
-                "Arme" => Categorie::Arme,
-                "Armure" => Categorie::Armure,
-                _ => panic!("Erreur sur l'équipement : id={}, la catégorie doit être Arme ou Armure.", ressource.entite.id)
-            }
-        }
-    }
-
     pub fn get_id(&self) -> String { self.ressource.entite.id.clone() }
 
     pub fn get_description(&self) -> String { self.ressource.entite.description.clone() }

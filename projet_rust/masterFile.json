@@ -6,9 +6,6 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "position": "pièce2",
-      "pronom": "elle",
-      "niveau": 45,
       "pv": 100,
       "force": 0,
       "dexterite": 0,
@@ -22,20 +19,28 @@
         "brise_glace",
         "tempête_feu"
       ],
-      "equipement": [
-        "epee_feu",
-        "plastron_feu"
-      ],
+      "equipement": {
+        "Jambieres": "jambieres_feu",
+        "Casque": "casque_feu",
+        "Gants": "gants_feu",
+        "Bottes": "bottes_feu",
+        "Arme": "epee_feu",
+        "Plastron": "plastron_feu"
+      },
       "inventaire": {
-        "clé": 1,
-        "pomme": 5
+        "pomme": 5,
+        "clé": 1
       }
     },
+    "position": "pièce2",
+    "pronom": "elle",
+    "niveau": 54,
     "temps": 0,
     "reputations": [
       40,
       90
     ],
+    "xp": 0,
     "multiplicateur_xp": 0,
     "quetes": [
       "principale"
@@ -49,9 +54,6 @@
           "description": "Un PNJ lambda",
           "nom": "Garrus"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
         "pv": 100,
         "force": 0,
         "dexterite": 0,
@@ -62,14 +64,22 @@
         "resistance_physique": 0,
         "resistance_magique": 0,
         "attaques": [],
-        "equipement": [],
+        "equipement": {
+          "Arme": null,
+          "Jambieres": null,
+          "Casque": null,
+          "Gants": null,
+          "Plastron": null,
+          "Bottes": null
+        },
         "inventaire": {
           "pomme": 5
         }
       },
       "dialogues": [
         "Dialogue_pnj_1"
-      ]
+      ],
+      "commerce_table": {}
     },
     {
       "personnage": {
@@ -78,9 +88,6 @@
           "description": "Un PNJ lambda",
           "nom": "Seth"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
         "pv": 100,
         "force": 0,
         "dexterite": 0,
@@ -91,14 +98,22 @@
         "resistance_physique": 0,
         "resistance_magique": 0,
         "attaques": [],
-        "equipement": [],
+        "equipement": {
+          "Bottes": null,
+          "Gants": null,
+          "Casque": null,
+          "Plastron": null,
+          "Arme": null,
+          "Jambieres": null
+        },
         "inventaire": {
           "pomme": 5
         }
       },
       "dialogues": [
         "Dialogue_pnj_1"
-      ]
+      ],
+      "commerce_table": {}
     }
   ],
   "Ennemie": [
@@ -109,9 +124,6 @@
           "description": "Un ennemie lambda",
           "nom": "Moissonneur"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
         "pv": 100,
         "force": 0,
         "dexterite": 0,
@@ -124,7 +136,14 @@
         "attaques": [
           "tempête_feu"
         ],
-        "equipement": [],
+        "equipement": {
+          "Plastron": null,
+          "Arme": null,
+          "Gants": null,
+          "Casque": null,
+          "Jambieres": null,
+          "Bottes": null
+        },
         "inventaire": {
           "pomme": 5
         }
@@ -132,10 +151,10 @@
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
-      "droptable": [
-        "pomme",
-        "epee_feu"
-      ]
+      "droptable": {
+        "pomme": 4,
+        "epee_feu": 1
+      }
     },
     {
       "personnage": {
@@ -144,9 +163,6 @@
           "description": "Un ennemie lambda",
           "nom": "Recolteur"
         },
-        "position": "pièce1",
-        "pronom": "il",
-        "niveau": 9,
         "pv": 100,
         "force": 0,
         "dexterite": 0,
@@ -159,7 +175,14 @@
         "attaques": [
           "tempête_feu"
         ],
-        "equipement": [],
+        "equipement": {
+          "Plastron": null,
+          "Gants": null,
+          "Arme": null,
+          "Bottes": null,
+          "Jambieres": null,
+          "Casque": null
+        },
         "inventaire": {
           "pomme": 5
         }
@@ -167,10 +190,10 @@
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
-      "droptable": [
-        "pomme",
-        "plastron_feu"
-      ]
+      "droptable": {
+        "pomme": 3,
+        "epee_feu": 1
+      }
     }
   ],
   "Lieu": [
@@ -184,9 +207,16 @@
         "pièce2"
       ],
       "meteo": "Interieur",
-      "contient": [
-        "pomme",
-        "ennemie_1",
+      "contient_ressources": {
+        "pomme": 5
+      },
+      "contient_ennemies": {
+        "ennemie_1": [
+          1,
+          2
+        ]
+      },
+      "contient_pnj": [
         "pnj_2"
       ]
     },
@@ -200,9 +230,17 @@
         "pièce1"
       ],
       "meteo": "Interieur",
-      "contient": [
-        "pomme",
-        "ennemie_2",
+      "contient_ressources": {
+        "pomme": 5
+      },
+      "contient_ennemies": {
+        "ennemie_2": [
+          1,
+          2,
+          3
+        ]
+      },
+      "contient_pnj": [
         "pnj_1"
       ]
     }
@@ -223,9 +261,9 @@
         "pricipale_2"
       ],
       "ajout_quete": "",
-      "statut": "encours",
+      "statut": "EnCours",
       "fin_de_quete": {
-        "obtention": "clé"
+        "Obtention": "clé"
       }
     },
     {
@@ -240,9 +278,9 @@
       },
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "interaction": "porte_1"
+        "Interaction": "porte_1"
       }
     },
     {
@@ -257,9 +295,9 @@
       },
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "combat": "ennemie_1"
+        "Combat": "ennemie_1"
       }
     },
     {
@@ -274,9 +312,9 @@
       },
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "dialogue_1_1"
+        "Dialogue": "dialogue_1_1"
       }
     },
     {
@@ -293,9 +331,9 @@
         "Dialogue_pnj_1_3"
       ],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     },
     {
@@ -310,9 +348,9 @@
         "Dialogue_pnj_1_1_1"
       ],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     },
     {
@@ -325,9 +363,9 @@
       "recompense": {},
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     },
     {
@@ -340,9 +378,9 @@
       "recompense": {},
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     },
     {
@@ -355,9 +393,9 @@
       "recompense": {},
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     },
     {
@@ -370,9 +408,9 @@
       "recompense": {},
       "quetes_suivantes": [],
       "ajout_quete": "",
-      "statut": "noncommencee",
+      "statut": "NonCommencee",
       "fin_de_quete": {
-        "dialogue": "quelque_chose"
+        "Dialogue": "quelque_chose"
       }
     }
   ],
@@ -385,10 +423,12 @@
           "nom": "pomme"
         },
         "prix": 10,
-        "ressource": []
+        "ressource": [],
+        "rarete": "Commun"
       },
       "effets": [
         10,
+        0,
         0,
         0,
         0,
@@ -409,7 +449,8 @@
       "prix": 5,
       "ressource": [
         "fer"
-      ]
+      ],
+      "rarete": "PeuCommun"
     },
     {
       "entite": {
@@ -418,7 +459,8 @@
         "nom": "fer"
       },
       "prix": 15,
-      "ressource": []
+      "ressource": [],
+      "rarete": "Commun"
     }
   ],
   "Equipement": [
@@ -432,7 +474,8 @@
         "prix": 100,
         "ressource": [
           "fer"
-        ]
+        ],
+        "rarete": "Rare"
       },
       "bonus_pv": 0,
       "bonus_force": 0,
@@ -453,7 +496,7 @@
       "pourcent_bonus_chance": 0,
       "pourcent_bonus_resistance_physique": 0,
       "pourcent_bonus_resistance_magique": 0,
-      "categorie": "Arme"
+      "categorie": "Arme_Melee"
     },
     {
       "ressource": {
@@ -465,7 +508,8 @@
         "prix": 100,
         "ressource": [
           "fer"
-        ]
+        ],
+        "rarete": "Rare"
       },
       "bonus_pv": 0,
       "bonus_force": 0,
@@ -486,7 +530,7 @@
       "pourcent_bonus_chance": 0,
       "pourcent_bonus_resistance_physique": 0,
       "pourcent_bonus_resistance_magique": 0,
-      "categorie": "Armure"
+      "categorie": "Plastron"
     }
   ],
   "Attaque": [
@@ -496,12 +540,9 @@
         "description": "Une attaque qui brise la glace",
         "nom": "Brise glace"
       },
-      "force": 10,
-      "dexterite": 0,
-      "intelligence": 0,
-      "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0
+      "degats": 10,
+      "pourcent_bonus_degats": 0,
+      "categorie": "Arme_Melee"
     },
     {
       "entite": {
@@ -509,12 +550,9 @@
         "description": "Une attaque qui déclanche une tempête de feu",
         "nom": "Tempête de feu"
       },
-      "force": 0,
-      "dexterite": 0,
-      "intelligence": 10,
-      "pourcent_bonus_force": 0,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 10
+      "degats": 15,
+      "pourcent_bonus_degats": 10,
+      "categorie": "Arme_Magie"
     }
   ]
 }

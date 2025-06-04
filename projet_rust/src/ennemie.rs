@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 use crate::structs::Personnage;
 
@@ -6,7 +7,7 @@ use crate::structs::Personnage;
 pub struct Ennemie {
     personnage: Personnage,
     dialogues: Vec<String>,
-    droptable: Vec<String>,
+    droptable: HashMap<String, u32>,
 }
 
 impl Ennemie {
@@ -15,12 +16,6 @@ impl Ennemie {
     pub fn get_description(&self) -> String { self.personnage.entite.description.clone() }
 
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
-
-    pub fn get_position(&self) -> String { self.personnage.position.clone() }
-
-    pub fn get_pronom(&self) -> String { self.personnage.pronom.clone() }
-
-    pub fn get_niveau(&self) -> u8 { self.personnage.niveau.clone() }
 
     pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
 
@@ -40,28 +35,36 @@ impl Ennemie {
 
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
 
+    pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
+
+    pub fn get_equipement(&self) -> HashMap<String, Option<String>> { self.personnage.equipement.clone() }
+
+    pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
+
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
-    pub fn get_droptable(&self) -> Vec<String> { self.droptable.clone() }
+    pub fn get_droptable(&self) -> HashMap<String, u32> { self.droptable.clone() }
 
     fn str_dialogues(&self) -> String {
-        let mut res = String::new();
+        let mut str_dialogues = String::new();
         for i in 0..self.dialogues.len()-1 {
-            res.push_str(&self.dialogues[i].to_string());
-            res.push_str(", ");
+            str_dialogues.push_str(&self.dialogues[i].to_string());
+            str_dialogues.push_str(", ");
         }
-        res.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
-        res
+        str_dialogues.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
+        str_dialogues
     }
 
     fn str_drop_table(&self) -> String {
-        let mut res = String::new();
-        for i in 0..self.droptable.len()-1 {
-            res.push_str(&self.droptable[i].to_string());
-            res.push_str(", ");
+        let mut str_drop_table = String::new();
+        for (key, value) in &self.droptable {
+            str_drop_table.push_str(&format!("{}: {}, ", key, value));
         }
-        res.push_str(&self.droptable[self.droptable.len()-1].to_string());
-        res
+        if !str_drop_table.is_empty() {
+            str_drop_table.pop(); // Remove last space
+            str_drop_table.pop(); // Remove last space
+        }
+        str_drop_table
     }
 }
 

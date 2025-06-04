@@ -1,12 +1,17 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 use crate::structs::Personnage;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
     personnage: Personnage,
+    position: String,
+    pronom: String,
+    niveau: u8,
     temps: u32,
     reputations: Vec<u16>,
+    xp: u32,
     multiplicateur_xp: u16,
     quetes: Vec<String>
 }
@@ -18,15 +23,6 @@ impl Joueur {
 
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
     pub fn set_nom(&mut self, nom: String) { self.personnage.entite.nom = nom; }
-
-    pub fn get_position(&self) -> String { self.personnage.position.clone() }
-    pub fn set_position(&mut self, lieu: String) { self.personnage.position = lieu; }
-
-    pub fn get_pronom(&self) -> String { self.personnage.pronom.clone() }
-    pub fn set_pronom(&mut self, pronom: String) { self.personnage.pronom = pronom; }
-
-    pub fn get_niveau(&self) -> u8 { self.personnage.niveau.clone() }
-    pub fn add_niveau(&mut self, niveau: u8) { self.personnage.niveau += niveau; }
 
     pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
     pub fn set_pv(&mut self, pv: u16) { self.personnage.pv = pv; }
@@ -67,27 +63,41 @@ impl Joueur {
         }
     }
 
-    pub fn get_equipement(&self) -> Vec<String> { self.personnage.equipement.clone() }
-    // fn add_equipement(&mut self, equipement: String)
-    pub fn remove_equipement(&mut self, equipement: &String) {
-        if let Some(pos) = self.personnage.equipement.iter().position(|x| x == equipement) {
-            self.personnage.equipement.remove(pos);
-            self.add_inventaire(equipement.clone(), 1);
-        }
-    }
+    pub fn get_equipement(&self) -> HashMap<String, Option<String>> { self.personnage.equipement.clone() }
+    //pub fn add_equipement(&mut self, equipement: String) {}
+    //pub fn remove_equipement(&mut self, equipement: &String) {}
 
-    pub fn get_inventaire(&self) -> std::collections::HashMap<String, u32> { self.personnage.inventaire.clone() }
+    pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
     pub fn add_inventaire(&mut self, item: String, quantite: u32) {
         let entry = self.personnage.inventaire.entry(item).or_insert(0);
         *entry += quantite;
     }
-    //pub fn remove_inventaire(&mut self, item: &String, quantite: u32) 
+    //pub fn remove_inventaire(&mut self, item: &String, quantite: u32)
+
+    pub fn get_position(&self) -> String { self.position.clone() }
+    pub fn set_position(&mut self, lieu: String) { self.position = lieu; }
+
+    pub fn get_pronom(&self) -> String { self.pronom.clone() }
+    pub fn set_pronom(&mut self, pronom: String) { self.pronom = pronom; }
+
+    pub fn get_niveau(&self) -> u8 { self.niveau.clone() }
+    pub fn add_niveau(&mut self, niveau: u8) { self.niveau += niveau; }
 
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
     pub fn set_temps(&mut self, temps: u32) { self.temps = temps; }
 
     pub fn get_reputations(&self) -> Vec<u16> { self.reputations.clone() }
     pub fn set_reputations(&mut self, reputation: Vec<u16>) { self.reputations = reputation; }
+
+    pub fn get_xp(&self) -> u32 { self.xp.clone() }
+    pub fn add_xp(&mut self, xp: u32) {
+        self.xp += xp;
+        while self.xp >= self.niveau as u32 * 150 {
+            self.xp -= self.niveau as u32 * 150;
+            self.add_niveau(1);
+        }
+    }
+    pub fn set_xp(&mut self, xp: u32) { self.xp = xp; }
 
     pub fn get_multiplicateur_xp(&self) -> u16 { self.multiplicateur_xp.clone() }
     pub fn set_multiplicateur_xp(&mut self, multiplicateur_xp: u16) { self.multiplicateur_xp = multiplicateur_xp; }
@@ -122,6 +132,6 @@ impl Joueur {
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], temps = {}, reputation = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.temps, self.str_reputations(), self.multiplicateur_xp, self.str_quetes())
+        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.position, self.pronom, self.niveau, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
     }
 }
