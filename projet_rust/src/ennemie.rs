@@ -1,13 +1,17 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
+use rand::Rng;
 
 use crate::structs::Personnage;
 use crate::json_manager::MasterFile;
+use crate::structs::Ressource;
+use crate::joueur::Joueur;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
     personnage: Personnage,
     dialogues: Vec<String>,
-    droptable: Vec<String>,
+    droptable: HashMap<String, f32>,
 }
 
 impl Ennemie {
@@ -24,6 +28,7 @@ impl Ennemie {
     pub fn get_niveau(&self) -> u8 { self.personnage.niveau.clone() }
 
     pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
+    pub fn set_pv(&mut self, pv: u16) {self.personnage.pv = pv}
 
     pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
 
@@ -43,7 +48,9 @@ impl Ennemie {
 
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
-    pub fn get_droptable(&self) -> Vec<String> { self.droptable.clone() }
+    pub fn get_droptable(&self) -> HashMap<String, f32> { self.droptable.clone() }
+
+    pub fn set_droptable(&mut self,droptable: HashMap<String, f32>) { self.droptable = droptable}
 
     fn str_dialogues(&self) -> String {
         let mut res = String::new();
@@ -56,13 +63,15 @@ impl Ennemie {
     }
 
     fn str_drop_table(&self) -> String {
-        let mut res = String::new();
-        for i in 0..self.droptable.len()-1 {
-            res.push_str(&self.droptable[i].to_string());
-            res.push_str(", ");
+        let mut str_drop_table = String::new();
+        for (key, value) in &self.droptable {
+            str_drop_table.push_str(&format!("{}: {}, ", key, value));
         }
-        res.push_str(&self.droptable[self.droptable.len()-1].to_string());
-        res
+        if !str_drop_table.is_empty() {
+            str_drop_table.pop();
+            str_drop_table.pop();
+        }
+        str_drop_table
     }
 
     pub fn get_personnage(&self) -> &Personnage {
@@ -72,16 +81,41 @@ impl Ennemie {
         self.personnage = personnage;
     }
 
-    /*pub fn application_degats(&mut self,degats: u16, joueur: Joueur){
+    pub fn lootable(&self) -> HashMap<String, u32>{
+        let master_file = MasterFile::new();
+        let mut loot: HashMap<String, u32> = HashMap::new();
+        let mut rng = rand::thread_rng();
+        for (item, quantite) in self.personnage.inventaire.iter() {
+            if let Ok(ressource) = master_file.prendre_ressource_id(item) {
+                let chance_loot: f32 = ressource.get_rarete()+self.droptable[item];
+                println!("chance d'avoir l'item : {} - {}",item,chance_loot);
+                if chance_loot>1.0 {
+                    loot.insert(item.clone(), *quantite);
+                }
+                else{ 
+                    for _ in 1..*quantite {
+                        if rng.gen::<f32>() <= chance_loot {
+                            loot.entry(item.clone()).and_modify(|e| *e += 1).or_insert(1);
+                        }
+                    }
+                }
+
+            }else {
+                println!("Ressource indispo");
+            }
+        }
+        loot
+    }
+
+    pub fn application_degats(&mut self,degats: u16, joueur: &mut Joueur){
         self.set_pv(self.get_pv().saturating_sub(degats));
         if self.get_pv() == 0 {
-            //système droptable
-
-            //joueur.ajout_recompense_inventaire();
-            //système de fin de combat
+            joueur.ajout_recompense_inventaire(self.lootable());
+            //Fin de combat -> retour à l'interface
         }
-    }*/
+    }
 
+    
 }
 
 impl std::fmt::Display for Ennemie {

@@ -156,7 +156,7 @@
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
-      "droptable": []
+      "droptable": {}
     },
     {
       "personnage": {
@@ -191,7 +191,7 @@
         "inventaire": {}
       },
       "dialogues": [],
-      "droptable": []
+      "droptable": {}
     }
   ],
   "Lieu": [
@@ -228,12 +228,15 @@
             "Plastron": null
           },
           "inventaire": {
-            "pomme": 5
+            "clé": 10,
+            "pomme": 5,
+            "epee_feu" : 1
           },
-          "droptable": [
-            "pomme",
-            "epee_feu"
-          ],
+           "droptable": {
+            "clé": 0.10,
+            "pomme"  : 0.50,
+            "epee_feu" : 0.05
+          },
           "position": "pièce1"
         },
         "pnj_2"
@@ -272,12 +275,13 @@
             "Plastron": null
           },
           "inventaire": {
-            "pomme": 5
+            "pomme": 5,
+            "epee_feu": 1
           },
-          "droptable": [
-            "pomme",
-            "epee_feu"
-          ],
+          "droptable": {
+            "pomme"  : 1.0,
+            "epee_feu" : 0.05
+          },
           "position": "pièce1"
         },
         "pnj_1"
@@ -499,7 +503,39 @@
       "prix": 15,
       "rarete": 0.80,
       "ressource": []
-    }
+    },
+    {
+      "entite": {
+        "id": "pomme",
+        "description": "Une pomme",
+        "nom": "pomme"
+      },
+      "prix": 1,
+      "rarete": 0.95,
+      "ressource": []
+    },
+    {
+      "entite": {
+        "id": "pomme",
+        "description": "Une pomme",
+        "nom": "pomme"
+      },
+      "prix": 1,
+      "rarete": 0.95,
+      "ressource": []
+    },
+    {
+        "entite": {
+          "id": "epee_feu",
+          "description": "Une épee du feu",
+          "nom": "épee du feu"
+        },
+        "prix": 100,
+        "rarete": 0.09,
+        "ressource": [
+          "fer"
+        ]
+      }
   ],
   "Equipement": [
     {

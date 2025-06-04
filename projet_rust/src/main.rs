@@ -61,7 +61,7 @@ fn main() {
     println!("Attaque reçu :");
     println!("{}", joueur);
 
-    /*println!();
+    println!();
     println!("Ennemie avant attribution de lieu :");
     let mut ennemie = master_file.prendre_ennemie_id("ennemie_1");
     println!("{:?}", ennemie);
@@ -80,16 +80,17 @@ fn main() {
         (Ok(mut en), Ok(l)) => {
             let id = en.get_id();
             if let Some(stats) = l.get_stats_ennemie(&id) {
-                let personnage_modifie = Lieu::attribuer_stats_ennemie(en.get_personnage(), &stats);
-                en.set_personnage(personnage_modifie);
+                l.synchro_ennemie(&mut en);
                 println!("Ennemie après attribution de lieu et de stats :");
                 println!("{:?}", en);
+                println!();
+                println!("{:?}", en.lootable());
             } else {
                 eprintln!("Aucune stats trouvée dans le lieu pour l'ennemi {}", id);
             }
         }
         (Err(e), _) => eprintln!("Erreur lors de la récupération de l'ennemie : {}", e),
         (_, Err(e)) => eprintln!("Erreur lors de la récupération du lieu : {}", e),
-    }*/
+    }
     
 }

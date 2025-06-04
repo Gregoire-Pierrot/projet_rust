@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use crate::structs::Entite;
 use crate::equipement::Categorie;
 use crate::structs::Personnage;
+use crate::ennemie::Ennemie;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 enum Meteo {
@@ -29,7 +30,7 @@ pub struct EnnemieStats {
     resistance_magique: u16,
     equipement: HashMap<Categorie, Option<String>>,
     inventaire: HashMap<String, u32>,
-    droptable: Vec<String>,
+    droptable: HashMap<String, f32>,
 }
 
 
@@ -119,7 +120,7 @@ impl Lieu {
         None
     }
 
-    pub fn attribuer_stats_ennemie(base: &Personnage, stats: &EnnemieStats) -> Personnage {
+    pub fn attribuer_stats_ennemie(&self, base: &Personnage, stats: &EnnemieStats) -> Personnage {
         Personnage {
             entite: base.entite.clone(),
             position: stats.position.clone(),
@@ -139,6 +140,14 @@ impl Lieu {
             inventaire: stats.inventaire.clone(),
         }
     }
+
+    pub fn synchro_ennemie(&self, ennemie: &mut Ennemie){
+        if let Some(stats_ennemie) = self.get_stats_ennemie(&ennemie.get_id()) {
+            ennemie.set_personnage(self.attribuer_stats_ennemie(ennemie.get_personnage(),&stats_ennemie));
+            ennemie.set_droptable(stats_ennemie.droptable.clone());
+        }
+    }
+
 }
 
 impl std::fmt::Display for Lieu {
