@@ -132,6 +132,20 @@ fn main() {
     println!("{:?}", &joueur);
     println!();
 
+    println!();
+    println!("Affichage Ressources :");
+    println!("{:?}", joueur.recup_ressources(&master_file));
+
+    println!();
+    println!("Affichage Equipement :");
+    println!("{:?}", joueur.recup_equipement(&master_file));
+
+
+    println!();
+    println!("Affichage Consommable :");
+    println!("{:?}", joueur.recup_consommable(&master_file));
+
+
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
     
