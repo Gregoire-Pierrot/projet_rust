@@ -17,8 +17,8 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
     let mut combat_en_cours = true;
     while combat_en_cours {
         println!("\n--- État du combat ---");
-        println!("Joueur  : {} pv", joueur.get_pv());
-        println!("{} : {} pv", ennemie.get_nom(), ennemie.get_pv());
+        println!("Joueur  : {} pv", joueur.get_pv_actuel());
+        println!("{} : {} pv", ennemie.get_nom(), ennemie.get_pv_actuel());
 
         println!("\n=== Menu de Combat ===");
         println!("1. Attaque");

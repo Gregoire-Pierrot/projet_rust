@@ -44,7 +44,8 @@ impl std::fmt::Display for EquipementType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Personnage {
     pub entite: Entite,
-    pub pv: u16,
+    pub pv_actuel: u16,
+    pub pv_max: u16,
     pub force: u16,
     pub dexterite: u16,
     pub intelligence: u16,
@@ -314,7 +315,7 @@ impl Personnage {
 
 impl std::fmt::Display for Personnage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Personnage : entite = [{}], pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
+        write!(f, "Personnage : entite = [{}],pv_max={}, pv_actuel = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv_actuel,self.pv_max, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
     }
 }
 

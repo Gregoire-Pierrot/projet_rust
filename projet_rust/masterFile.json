@@ -6,7 +6,8 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "pv": 100,
+      "pv_actuel": 100,
+      "pv_max":100,
       "force": 10,
       "dexterite": 1,
       "intelligence": 10,
@@ -58,7 +59,8 @@
           "description": "Un PNJ lambda",
           "nom": "Garrus"
         },
-        "pv": 100,
+        "pv_actuel": 100,
+        "pv_max": 100,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
@@ -92,7 +94,8 @@
           "description": "Un PNJ lambda",
           "nom": "Seth"
         },
-        "pv": 100,
+        "pv_actuel": 100,
+        "pv_max": 100,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
@@ -128,7 +131,8 @@
           "description": "Un ennemie lambda",
           "nom": "Moissonneur"
         },
-        "pv": 100,
+        "pv_actuel": 100,
+        "pv_max": 100,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
@@ -152,15 +156,15 @@
           "pomme": 5
         }
       },
-      "mod_pv": 5,
-      "mod_force": 5,
-      "mod_dexterite": 5,
-      "mod_intelligence": 5,
-      "mod_vitesse": 5,
-      "mod_esquive": 5,
-      "mod_chance": 5,
-      "mod_resistance_physique": 5,
-      "mod_resistance_magique": 5,
+      "mod_pv": 1,
+      "mod_force": 1,
+      "mod_dexterite": 1,
+      "mod_intelligence": 1,
+      "mod_vitesse": 1,
+      "mod_esquive": 1,
+      "mod_chance": 1,
+      "mod_resistance_physique": 1,
+      "mod_resistance_magique": 1,
       "xp":150,
       "dialogues": [
         "Dialogue_ennemie_1"
@@ -177,7 +181,8 @@
           "description": "Un ennemie lambda",
           "nom": "Recolteur"
         },
-        "pv": 100,
+        "pv_actuel": 100,
+        "pv_max": 100,
         "force": 0,
         "dexterite": 0,
         "intelligence": 0,
