@@ -4,6 +4,8 @@ use std::collections::HashMap;
 use crate::structs::Personnage;
 use crate::equipement::Categorie;
 use crate::json_manager::MasterFile;
+use crate::attaque::Attaque;
+use crate::equipement::Arme;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -249,6 +251,13 @@ impl Joueur {
         }
         false
     }
+
+    pub fn get_categorie_Arme(&self) -> Option<Arme> {
+        self.personnage.equipement.get(&Categorie::Arme)
+            .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::new().prendre_equipement_id(id).ok()))
+            .and_then(|e| e.get_type_arme())
+    }
+
 }
 
 impl std::fmt::Display for Joueur {

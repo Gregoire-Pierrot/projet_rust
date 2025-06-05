@@ -35,7 +35,7 @@ fn main() {
     println!("Après modification :");
     println!();
 
-    let equipement = master_file.prendre_equipement_id("arc").unwrap();
+    let equipement = master_file.prendre_equipement_id("baton").unwrap();
 
     joueur.add_equipement(&Categorie::Arme, &equipement.get_id().clone());
     joueur.remove_equipement(&Categorie::Arme);

@@ -58,14 +58,26 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                     }
                     Ok(num) if num >= 1 && num <= attaques_valides.len() => {
                         let attaque = &attaques_valides[num - 1];
-                        let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque(&attaque.get_id()));
-                        println!("\n--- Actions ---");
-                        println!("Vous lancez l'attaque : {} - {} dégâts infligés", attaque.get_nom(), degats);
-                        
-                        if !ennemie.application_degats(&degats, joueur) {
-                            combat_en_cours = !ennemie.combat(joueur);
-                        } else {
-                            combat_en_cours = false;
+                        let attaque_obj = master_file.prendre_attaque_id(&attaque.get_id()).expect("Erreur lors de la récupération de l'attaque");
+                       if let Some(categorie_joueur) = joueur.get_categorie_Arme() {
+                            if attaque_obj.get_categorie() != categorie_joueur {
+                                println!("Vous ne possédez pas d'arme nécessaire au déclenchement de cette attaque.");
+                                continue;
+                            }else{
+                                let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque(&attaque_obj));
+                                println!("\n--- Actions ---");
+                                println!("Vous lancez l'attaque : {} - {} dégâts infligés", attaque.get_nom(), degats);
+                                
+                                if !ennemie.application_degats(&degats, joueur) {
+                                    combat_en_cours = !ennemie.combat(joueur);
+                                } else {
+                                    combat_en_cours = false;
+                                }
+                            }
+                        } 
+                        else {
+                            println!("Vous ne possédez pas d'arme nécessaire au déclenchement de cette attaque.");
+                            continue;
                         }
                     }
                     Ok(_) => continue,

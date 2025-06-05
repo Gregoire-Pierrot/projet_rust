@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 
 use crate::structs::{Ressource, Rarete};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize,PartialEq, Eq)]
 pub enum Arme {
     ArmeMelee,
     ArmeDistance,

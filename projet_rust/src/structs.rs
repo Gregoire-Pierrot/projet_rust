@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use crate::equipement::Categorie;
 use crate::equipement::Arme;
 use crate::json_manager::MasterFile;
+use crate::attaque::Attaque;
 
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -191,30 +192,28 @@ impl Personnage {
         intelligence
     }
 
-    pub fn attaque(&mut self,attaque_id: &String) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
+    pub fn attaque(&mut self,attaque: &Attaque) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
         let mut master_file  = MasterFile::new();
         let mut degats: Vec<u16> = vec![0, 0]; // [dégâts physique, dégâts magique]
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
-        if let Ok(attaque) = master_file.prendre_attaque_id(&attaque_id) {
-            match attaque.get_categorie() {
-                Arme::ArmeMelee => {
-                    degats_brute= self.calcul_force()+attaque.get_degats();
-                    degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
-                }
-                Arme::ArmeDistance => {  // demander à grégoire distance = brute ou magique ?
-                    degats_brute = self.calcul_dexterite()+attaque.get_degats();
-                    degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;
-                },
-                Arme::ArmeMagie => {
-                    degats_magique = self.calcul_intelligence()+attaque.get_degats();
-                    degats_magique += (degats_magique * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
-                },
-                _ => {}
+        match attaque.get_categorie() {
+            Arme::ArmeMelee => {
+                degats_brute= self.calcul_force()+attaque.get_degats();
+                degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
             }
-            degats[0] = degats_brute;
-            degats[1] = degats_magique;
+            Arme::ArmeDistance => {  // demander à grégoire distance = brute ou magique ?
+                degats_brute = self.calcul_dexterite()+attaque.get_degats();
+                degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;
+            },
+            Arme::ArmeMagie => {
+                degats_magique = self.calcul_intelligence()+attaque.get_degats();
+                degats_magique += (degats_magique * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
+            },
+            _ => {}
         }
+        degats[0] = degats_brute;
+        degats[1] = degats_magique;
         degats
     }
 

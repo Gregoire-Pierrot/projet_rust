@@ -144,7 +144,8 @@ impl Ennemie {
                     return false;
                 }
             };
-            let attaque = self.personnage.attaque(&attaques[index]);
+
+            let attaque = self.personnage.attaque(&attaque_obj);
             let degats = self.degats_recus_net(&attaque);
             println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
             return joueur.application_degats(&degats);
