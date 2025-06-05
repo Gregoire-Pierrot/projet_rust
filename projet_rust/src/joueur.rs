@@ -29,6 +29,9 @@ impl Joueur {
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
     pub fn set_nom(&mut self, nom: String) { self.personnage.entite.nom = nom; }
 
+    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
+    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
+
     pub fn get_pv_actuel(&self) -> u16 { self.personnage.pv_actuel.clone() }
     pub fn set_pv_actuel(&mut self, pv_actuel: u16) { self.personnage.pv_actuel = pv_actuel; }
 
@@ -55,6 +58,9 @@ impl Joueur {
 
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
     pub fn set_resistance_magique(&mut self, resistance_magique: u16) { self.personnage.resistance_magique = resistance_magique; }
+
+    pub fn get_points_competence(&self) -> u8 { self.points_competence }
+    pub fn set_points_competence(&mut self, points_competence: u8) { self.points_competence = points_competence; }
 
     pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
     pub fn add_attaque(&mut self, attaque: String) {
@@ -184,6 +190,43 @@ impl Joueur {
         }
         quetes.push_str(&self.quetes[self.quetes.len()-1].to_string());
         quetes
+    }
+
+
+    pub fn ajout_point_stat(&mut self, stat: &str) {
+        match stat {
+            "pv" => {
+                self.set_pv_max(self.get_pv_max()+10);
+                self.set_pv_actuel(self.get_pv_actuel()+10);
+            }
+            "force" => {
+                self.set_force(self.get_force()+1);
+            }
+            "dexterite" => {
+                self.set_dexterite(self.get_dexterite()+1);
+            }
+            "intelligence" => {
+                self.set_intelligence(self.get_intelligence()+1);
+            }
+            "vitesse" => {
+                self.set_vitesse(self.get_vitesse()+1);
+            }
+            "esquive" => {
+                self.set_esquive(self.get_esquive()+1);
+            }
+            "chance" => {
+                self.set_chance(self.get_chance()+1);
+            }
+            "resistance_physique" => {
+                self.set_resistance_physique(self.get_resistance_physique()+1);
+            }
+            "resistance_magique" => {
+                self.set_resistance_magique(self.get_resistance_magique()+1);
+            }
+            _ => panic!("Erreur : la stat [{}] n'est pas reconnue.", stat),
+        }
+        self.set_points_competence(self.get_points_competence()-1);
+
     }
 
     ///////////////

@@ -122,6 +122,17 @@ fn main() {
     println!("{:?}", ennemie.lootable());
     println!();
 
+
+    println!();
+    println!("Avant ajout de stats");
+    println!("{:?}", &joueur);
+    joueur.ajout_point_stat("pv");
+    println!();
+    println!("Après ajout de stats");
+    println!("{:?}", &joueur);
+    println!();
+
+
     combat(&mut master_file, &mut ennemie, &mut joueur);
     
     println!("{}", joueur);
