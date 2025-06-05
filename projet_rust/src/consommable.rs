@@ -11,7 +11,7 @@ pub struct Consommable {
 impl Consommable {
     pub fn new(ressource: Ressource, effets: Vec<u16>) -> Self {
         if effets.len() != 9 {
-            panic!("Erreur sur le consomable : id={}, le nombre d'effets doit être de 8.", ressource.entite.id);
+            panic!("Erreur sur le consomable : id={}, le nombre d'effets doit être de 9.", ressource.entite.id);
         } else {
             Self { ressource, effets }
         }

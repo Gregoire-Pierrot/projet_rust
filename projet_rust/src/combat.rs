@@ -31,6 +31,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 let attaques_ids = joueur.get_attaques();
                 let mut attaques_valides = Vec::new();
 
+                println!("{}. {}",0,"Attaque basique");
                 for (i, id) in attaques_ids.iter().enumerate() {
                     match master_file.prendre_attaque_id(id) {
                         Ok(attaque) => {
@@ -44,6 +45,17 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 let choix = saisir_choix(">");
 
                 match choix.parse::<usize>() {
+                    Ok(0) => {
+                        let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque_base(master_file));
+                        println!("\n--- Actions ---");
+                        println!("Vous lancez l'attaque basique - {} dégâts infligés", degats);
+                        
+                        if !ennemie.application_degats(&degats, joueur) {
+                            combat_en_cours = !ennemie.combat(joueur);
+                        } else {
+                            combat_en_cours = false;
+                        }
+                    }
                     Ok(num) if num >= 1 && num <= attaques_valides.len() => {
                         let attaque = &attaques_valides[num - 1];
                         let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque(&attaque.get_id()));

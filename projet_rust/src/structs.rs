@@ -220,7 +220,7 @@ impl Personnage {
 
     ///////////////
     /// Fonction qui calcul les dégâts de l'attaque de base.
-    pub fn attaque_base(&mut self,attaque_id: &String,master_file: &MasterFile) -> Vec<u16> {  // à opti
+    pub fn attaque_base(&mut self,master_file: &MasterFile) -> Vec<u16> {  // à opti
         let mut degats: Vec<u16> = vec![0, 0];
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
