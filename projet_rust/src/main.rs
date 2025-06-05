@@ -45,6 +45,8 @@ fn main() {
     println!();
     println!("{}", joueur);
 
+
+
     //master_file.sauvegarder(&joueur);
 
     /*
@@ -64,7 +66,7 @@ fn main() {
     println!("{}", joueur);
 */
 
-    let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1") {
+    let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1").clone() {
         Ok(e) => e,
         Err(e) => {
             eprintln!("Erreur : {}", e);
@@ -72,7 +74,7 @@ fn main() {
         }
     };
 
-/*    let lieu = match master_file.prendre_lieu_id("pièce1") {
+    let lieu = match master_file.prendre_lieu_id("pièce1") {
         Ok(l) => l,
         Err(e) => {
             eprintln!("Erreur : {}", e);
@@ -80,17 +82,19 @@ fn main() {
         }
     };
 
+    println!();
+    println!("Ennemie avant attribution des stats de lieu  :");
+    println!("{:?}", ennemie);
     let id = ennemie.get_id();
-    if let Some(stats) = lieu.get_stats_ennemie(&id) {
-        lieu.synchro_ennemie(&mut ennemie);
-        println!("Ennemie après attribution de lieu et de stats :");
-        println!("{:?}", ennemie);
-        println!();
-        println!("{:?}", ennemie.lootable());
-    } else {
-        eprintln!("Aucune stats trouvée dans le lieu pour l'ennemi {}", id);
-    }*/
+    lieu.synchro_ennemie(&mut ennemie);
+    println!();
+    println!("Ennemie après attribution des stats de lieu :");
+    println!("{:?}", ennemie);
+    println!();
+    println!("{:?}", ennemie.lootable());
+    println!();
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
-
+    
+    master_file.sauvegarder(&joueur);
 }

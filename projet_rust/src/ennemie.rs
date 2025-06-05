@@ -13,6 +13,15 @@ use crate::equipement::Categorie;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
     personnage: Personnage,
+    mod_pv: u16,
+    mod_force: u16,
+    mod_dexterite: u16,
+    mod_intelligence: u16,
+    mod_vitesse: u16,
+    mod_esquive: u16,
+    mod_chance: u16,
+    mod_resistance_physique: u16,
+    mod_resistance_magique: u16,
     dialogues: Vec<String>,
     droptable: HashMap<String, u32>,
 }
@@ -28,20 +37,29 @@ impl Ennemie {
     pub fn set_pv(&mut self, pv: u16) {self.personnage.pv = pv}
 
     pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
+    pub fn set_force(&mut self, force: u16) {self.personnage.force = force}
 
     pub fn get_dexterite(&self) -> u16 { self.personnage.dexterite.clone() }
+    pub fn set_dexterite(&mut self, dexterite: u16) {self.personnage.dexterite = dexterite}
 
     pub fn get_intelligence(&self) -> u16 { self.personnage.intelligence.clone() }
+    pub fn set_intelligence(&mut self,intelligence: u16) {self.personnage.intelligence = intelligence}
 
     pub fn get_vitesse(&self) -> u16 { self.personnage.vitesse.clone() }
+    pub fn set_vitesse(&mut self, vitesse: u16) {self.personnage.vitesse = vitesse}
 
     pub fn get_esquive(&self) -> u16 { self.personnage.esquive.clone() }
+    pub fn set_esquive(&mut self, esquive: u16) {self.personnage.esquive = esquive}
 
     pub fn get_chance(&self) -> u16 { self.personnage.chance.clone() }
+    pub fn set_chance(&mut self, chance: u16) {self.personnage.chance = chance}
 
     pub fn get_resistance_physique(&self) -> u16 { self.personnage.resistance_physique.clone() }
+    pub fn set_resistance_physique(&mut self, resistance_physique: u16) {self.personnage.resistance_physique = resistance_physique}
 
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
+    pub fn set_resistance_magique(&mut self, resistance_magique: u16) {self.personnage.resistance_magique = resistance_magique}
+
 
     pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
 
@@ -53,6 +71,34 @@ impl Ennemie {
 
     pub fn get_droptable(&self) -> HashMap<String, u32> { self.droptable.clone() }
     
+    pub fn get_mod_pv(&self) -> u16 { self.mod_pv.clone() }
+    pub fn set_mod_pv(&mut self, mod_pv: u16) { self.mod_pv = mod_pv }
+
+    pub fn get_mod_force(&self) -> u16 { self.mod_force.clone() }
+    pub fn set_mod_force(&mut self, mod_force: u16) { self.mod_force = mod_force }
+
+    pub fn get_mod_dexterite(&self) -> u16 { self.mod_dexterite.clone() }
+    pub fn set_mod_dexterite(&mut self, mod_dexterite: u16) { self.mod_dexterite = mod_dexterite }
+
+    pub fn get_mod_intelligence(&self) -> u16 { self.mod_intelligence.clone() }
+    pub fn set_mod_intelligence(&mut self, mod_intelligence: u16) { self.mod_intelligence = mod_intelligence }
+
+    pub fn get_mod_vitesse(&self) -> u16 { self.mod_vitesse.clone() }
+    pub fn set_mod_vitesse(&mut self, mod_vitesse: u16) { self.mod_vitesse = mod_vitesse }
+
+    pub fn get_mod_esquive(&self) -> u16 { self.mod_esquive.clone() }
+    pub fn set_mod_esquive(&mut self, mod_esquive: u16) { self.mod_esquive = mod_esquive }
+
+    pub fn get_mod_chance(&self) -> u16 { self.mod_chance.clone() }
+    pub fn set_mod_chance(&mut self, mod_chance: u16) { self.mod_chance = mod_chance }
+
+    pub fn get_mod_resistance_physique(&self) -> u16 { self.mod_resistance_physique.clone() }
+    pub fn set_mod_resistance_physique(&mut self, mod_resistance_physique: u16 ) { self.mod_resistance_physique = mod_resistance_physique }
+
+    pub fn get_mod_resistance_magique(&self) -> u16 { self.mod_resistance_magique.clone() }
+    pub fn set_mod_resistance_magique(&mut self, mod_resistance_magique: u16 ) { self.mod_resistance_magique = mod_resistance_magique }
+
+
     pub fn get_personnage(&self) -> &Personnage {&self.personnage}//////////////////////////////////////à enlever ?
 
     pub fn set_personnage(&mut self, personnage: Personnage) {self.personnage = personnage;}//////////////////////////////////////à enlever ?
