@@ -338,8 +338,7 @@
       "ajout_quete": "",
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Dialogue": "dialogue_1_1"
-      }
+        "Dialogue": "dialogue_1_1"      }
     },
     {
       "entite": {
@@ -486,6 +485,7 @@
       "ressource": [],
       "rarete": "Commun"
     }
+    
   ],
   "Equipement": [
     {

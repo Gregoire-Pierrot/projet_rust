@@ -297,6 +297,20 @@ impl Personnage {
 
 }
 
+impl Personnage {
+    pub fn str_inventaire(&self) -> String {
+        let mut str_inventaire = String::new();
+        for (item, quantite) in &self.inventaire {
+            str_inventaire.push_str(&format!("{}: {}, ", item, quantite));
+        }
+        if !str_inventaire.is_empty() {
+            str_inventaire.pop();
+            str_inventaire.pop();
+        }
+        str_inventaire
+    }
+}
+
 impl std::fmt::Display for Personnage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "Personnage : entite = [{}], pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())

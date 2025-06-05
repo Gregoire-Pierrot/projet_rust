@@ -169,8 +169,38 @@ impl Joueur {
         res.push_str(&self.reputations[self.reputations.len()-1].to_string());
         res
     }
+////Fonctions pour quetes
+   /* pub fn get_quetes(&self) -> Vec<String> { self.quetes.clone()}
+    pub fn set_quetes(&mut self, quetes: Vec<String>) { self.quetes = quetes}
 
     fn str_quetes(&self) -> String {
+        let mut quetes = String::new();
+        for i in 0..self.quetes.len()-1 {
+            quetes.push_str(&self.quetes[i].to_string());
+            quetes.push_str(", ");
+        }
+        quetes.push_str(&self.quetes[self.quetes.len()-1].to_string());
+        quetes
+    }
+
+    pub fn add_quete(&mut self, quetes: String){
+        self.quetes.push(quetes);
+    }
+
+    pub fn remove_quete(&mut self, quete: String){
+        if let Some(pos) = self.quetes.iter().position(|x| *x == quete){ self.quetes.remove(pos); }
+        else { panic!("Erreur : la quete [{}] n'existe pas dans la quete [{}]", quete, self.str_quetes());}
+    }
+
+    pub fn add_item_inventaire(&mut self, item: String, quantite: u32) {
+        if let Some(quantite_inventaire) = self.personnage.inventaire.get_mut(&item) {
+            *quantite_inventaire += quantite;
+        } else {
+            self.personnage.inventaire.insert(item, quantite);
+        }
+    }*/
+
+  fn str_quetes(&self) -> String {
         let mut res = String::new();
         for i in 0..self.quetes.len()-1 {
             res.push_str(&self.quetes[i]);
@@ -261,7 +291,6 @@ impl Joueur {
             .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::new().prendre_equipement_id(id).ok()))
             .and_then(|e| e.get_type_arme())
     }
-
 }
 
 impl std::fmt::Display for Joueur {
