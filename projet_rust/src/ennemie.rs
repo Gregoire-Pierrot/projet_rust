@@ -32,8 +32,10 @@ impl Ennemie {
 
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
 
-    pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
-    pub fn set_pv(&mut self, pv: u16) {self.personnage.pv = pv}
+    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
+    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
+    pub fn get_pv_actuel(&self) -> u16 { self.personnage.pv_actuel.clone() }
+    pub fn set_pv_actuel(&mut self, pv_actuel: u16) {self.personnage.pv_actuel = pv_actuel}
 
     pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
     pub fn set_force(&mut self, force: u16) {self.personnage.force = force}
@@ -158,16 +160,9 @@ impl Ennemie {
     }
 
     pub fn application_degats(&mut self,degats_recus_net: &u16, joueur: &mut Joueur) -> bool{
-                let new_pv = self.get_pv().saturating_sub(*degats_recus_net);
-
-        self.set_pv(new_pv);
-        /*
-        println!("degats reçus {:?}",degats_recus);
-        println!("get pv {}",self.get_pv());
-        println!("new_pv {}",new_pv);
-        println!("defense {}",defense);
-        */
-        if self.get_pv() == 0 {
+        let new_pv = self.get_pv_actuel().saturating_sub(*degats_recus_net);
+        self.set_pv_actuel(new_pv);
+        if self.get_pv_actuel() == 0 {
             let mut loot = self.lootable();
             joueur.ajout_recompense_inventaire(loot.clone());
             joueur.add_xp(self.xp);

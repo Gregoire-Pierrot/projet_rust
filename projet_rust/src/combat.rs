@@ -13,12 +13,14 @@ pub fn saisir_choix(prompt: &str) -> String {
     choix.trim().to_string()
 }
 
+
 pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut Joueur){
+    let reset = joueur.clone();
     let mut combat_en_cours = true;
     while combat_en_cours {
         println!("\n--- État du combat ---");
-        println!("Joueur  : {} pv", joueur.get_pv());
-        println!("{} : {} pv", ennemie.get_nom(), ennemie.get_pv());
+        println!("Joueur  : {} pv", joueur.get_pv_actuel());
+        println!("{} : {} pv", ennemie.get_nom(), ennemie.get_pv_actuel());
 
         println!("\n=== Menu de Combat ===");
         println!("1. Attaque");
@@ -105,7 +107,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 match choix.parse::<usize>() {
                     Ok(num) if num >= 1 && num <= items_valides.len() => {
                         let item = &items_valides[num - 1];
-                        joueur.utiliser_item(&master_file,&item.get_id());
+                        joueur.utiliser_item(&master_file,&item.get_id(),&true);
                         println!("\n--- Actions ---");
                         println!("Vous utilisez l'objet : {}", item.get_nom());
                         combat_en_cours = !ennemie.combat(joueur);
@@ -123,4 +125,6 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
             _ => println!("Choix invalide, réessayez."),
         }
     }
+    println!("{}",&joueur);
+    joueur.reset_stats(reset);
 }
