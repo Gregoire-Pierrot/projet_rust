@@ -125,6 +125,5 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
             _ => println!("Choix invalide, réessayez."),
         }
     }
-    println!("{}",&joueur);
     joueur.reset_stats(reset);
 }
