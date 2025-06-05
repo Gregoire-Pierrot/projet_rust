@@ -2,6 +2,7 @@ use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 use rand::Rng;
 
+
 use crate::structs::Personnage;
 use crate::json_manager::MasterFile;
 use crate::structs::Ressource;
@@ -11,7 +12,7 @@ use crate::joueur::Joueur;
 pub struct Ennemie {
     personnage: Personnage,
     dialogues: Vec<String>,
-    droptable: HashMap<String, f32>,
+    droptable: HashMap<String, u32>,
 }
 
 impl Ennemie {
@@ -20,12 +21,6 @@ impl Ennemie {
     pub fn get_description(&self) -> String { self.personnage.entite.description.clone() }
 
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
-
-    pub fn get_position(&self) -> String { self.personnage.position.clone() }
-
-    pub fn get_pronom(&self) -> String { self.personnage.pronom.clone() }
-
-    pub fn get_niveau(&self) -> u8 { self.personnage.niveau.clone() }
 
     pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
     pub fn set_pv(&mut self, pv: u16) {self.personnage.pv = pv}
@@ -46,22 +41,28 @@ impl Ennemie {
 
     pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
 
-    pub fn get_attaques(&self) -> Vec<String> {self.personnage.attaques.clone()}
+    pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
+
+    pub fn get_equipement(&self) -> HashMap<String, Option<String>> { self.personnage.equipement.clone() }
+
+    pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
 
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
-    pub fn get_droptable(&self) -> HashMap<String, f32> { self.droptable.clone() }
+    pub fn get_droptable(&self) -> HashMap<String, u32> { self.droptable.clone() }
+    
+    pub fn get_personnage(&self) -> &Personnage {&self.personnage}//////////////////////////////////////à enlever ?
 
-    pub fn set_droptable(&mut self,droptable: HashMap<String, f32>) { self.droptable = droptable}
+    pub fn set_personnage(&mut self, personnage: Personnage) {self.personnage = personnage;}//////////////////////////////////////à enlever ?
 
     fn str_dialogues(&self) -> String {
-        let mut res = String::new();
+        let mut str_dialogues = String::new();
         for i in 0..self.dialogues.len()-1 {
-            res.push_str(&self.dialogues[i].to_string());
-            res.push_str(", ");
+            str_dialogues.push_str(&self.dialogues[i].to_string());
+            str_dialogues.push_str(", ");
         }
-        res.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
-        res
+        str_dialogues.push_str(&self.dialogues[self.dialogues.len()-1].to_string());
+        str_dialogues
     }
 
     fn str_drop_table(&self) -> String {
@@ -76,16 +77,8 @@ impl Ennemie {
         str_drop_table
     }
 
-    pub fn get_personnage(&self) -> &Personnage {
-        &self.personnage
-    }
-
-    
-    pub fn set_personnage(&mut self, personnage: Personnage) {
-        self.personnage = personnage;
-    }
-
-    pub fn lootable(&self) -> HashMap<String, u32>{
+    //////////////////////////////////// à modifier
+    pub fn lootable(&self) -> HashMap<String, u32>{ 
         let master_file = MasterFile::new();
         let mut loot: HashMap<String, u32> = HashMap::new();
         let mut rng = rand::thread_rng();
@@ -135,8 +128,8 @@ impl Ennemie {
         false
     }
 
+    ///////////////////////////////////////Mettre la possiblilité de défense pour l'ennemi et l'attaque de base ?
     pub fn combat(&mut self,joueur: &mut Joueur) -> bool {
-        //attaque
         let master_file = MasterFile::new();
         let mut rng = rand::thread_rng();
         let attaques = self.get_attaques();
@@ -155,7 +148,6 @@ impl Ennemie {
             return joueur.application_degats(&degats);
         }
         false
-        //item à faire
     }
 
     

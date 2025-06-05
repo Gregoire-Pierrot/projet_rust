@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-use crate::structs::Ressource;
+use crate::structs::{Ressource, Rarete};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Consommable {
@@ -10,7 +10,7 @@ pub struct Consommable {
 
 impl Consommable {
     pub fn new(ressource: Ressource, effets: Vec<u16>) -> Self {
-        if effets.len() != 8 {
+        if effets.len() != 9 {
             panic!("Erreur sur le consomable : id={}, le nombre d'effets doit être de 8.", ressource.entite.id);
         } else {
             Self { ressource, effets }
@@ -24,6 +24,8 @@ impl Consommable {
     pub fn get_nom(&self) -> String { self.ressource.entite.nom.clone() }
 
     pub fn get_prix(&self) -> u32 { self.ressource.prix.clone() }
+
+    pub fn get_rarete(&self) -> Rarete { self.ressource.rarete.clone() }
 
     pub fn get_effets(&self) -> Vec<u16> { self.effets.clone() }
 

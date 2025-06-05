@@ -20,9 +20,6 @@ impl std::fmt::Display for Entite {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Personnage {
     pub entite: Entite,
-    pub position: String,
-    pub pronom: String,
-    pub niveau: u8,
     pub pv: u16,
     pub force: u16,
     pub dexterite: u16,
@@ -59,7 +56,7 @@ impl Personnage {
         }
         if !str_equipement.is_empty() {
             str_equipement.pop(); 
-            str_equipement.pop(); 
+            str_equipement.pop();
         }
         str_equipement
     }
@@ -225,53 +222,63 @@ impl Personnage {
 
 impl std::fmt::Display for Personnage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Personnage : entite = [{}], pronom = {}, niveau = {}, position = {}, pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = {}, inventaire = {}",self.entite, self.pronom, self.niveau, self.position, self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
+        write!(f, "Personnage : entite = [{}], pv = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum Rarete {
+    Commun,          // 0.4 => 40%
+    PeuCommun,       // 0.3 => 30%
+    Rare,            // 0.2 => 20%
+    TresRare,        // 0.1 => 10%
+    Epique,          // 0.01 => 1%
+    Legendaire,      // 0.005 => 0.5%
+    Mythique,        // 0.0001 => 0.01%
+    Divin            // 0.00001 => 0.001%
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ressource {
     pub entite: Entite,
     pub prix: u32,
-    pub rarete: f32,
-    pub ressource: Vec<String>
+    pub ressource: Vec<String>,
+    pub rarete: Rarete
+}
+
+impl std::fmt::Display for Rarete {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 impl Ressource {
-    pub fn new(id: String, description: String, nom: String, prix: u32, rarete: f32, ressource: Vec<String>) -> Self {
+    pub fn new(entite: Entite, prix: u32, ressource: Vec<String>, rarete: String) -> Self {
         Self {
-            entite: Entite {
-                id,
-                description,
-                nom,
-            },
+            entite: entite.clone(),
             prix,
-            rarete,
             ressource,
+            rarete: match rarete.as_str() {
+                "Commun" => Rarete::Commun,             
+                "PeuCommun" => Rarete::PeuCommun,
+                "Rare" => Rarete::Rare,
+                "TresRare" => Rarete::TresRare,
+                "Epique" => Rarete::Epique,
+                "Legendaire" => Rarete::Legendaire,
+                "Mythique" => Rarete::Mythique,
+                "Divin" => Rarete::Divin,
+                _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", entite.id)
+            }
         }
     }
 
-    pub fn get_id(&self) -> String {
-        self.entite.id.clone()
-    }
-    pub fn get_description(&self) -> String {
-        self.entite.description.clone()
-    }
-    pub fn get_nom(&self) -> String {
-        self.entite.nom.clone()
-    }
+    pub fn get_id(&self) -> String { self.entite.id.clone() }
+    pub fn get_description(&self) -> String { self.entite.description.clone() }
+    pub fn get_nom(&self) -> String { self.entite.nom.clone() }
 
-    pub fn get_prix(&self) -> u32 {
-        self.prix
-    }
-
-    pub fn get_rarete(&self) -> f32 {
-        self.rarete
-    }
-
-    pub fn get_ressource(&self) -> Vec<String> {
-        self.ressource.clone()
-    }
+    pub fn get_prix(&self) -> u32 { self.prix }
+    pub fn get_ressource(&self) -> Vec<String> { self.ressource.clone() }
+    pub fn get_rarete(&self) -> Rarete { self.rarete.clone() }
 
     fn str_ressource(&self) -> String {
         let mut str_ressource = String::new();
@@ -286,6 +293,6 @@ impl Ressource {
 
 impl std::fmt::Display for Ressource {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "ressource : entite = [{}], prix = {}, rarete = {}, ressource = {}",self.entite, self.prix, self.rarete,self.str_ressource())
+        write!(f, "ressource : entite = [{}], prix = {}, ressource = {}",self.entite , self.prix, self.str_ressource())
     }
 }
