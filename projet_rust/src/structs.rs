@@ -284,14 +284,14 @@ impl Personnage {
     }
 
     pub fn defense(&mut self, degats_recus: &Vec<u16>) -> u16 {
+        let mut rng = rand::thread_rng();
+        let esquive = (0.5_f32).min(0.001 * self.calcul_esquive() as f32);
+        if rng.gen::<f32>() <= esquive {
+            println!("Dégâts esquiver !");
+            return 0;
+        }
         let degats_physiques = degats_recus[0].saturating_sub(self.calcul_resistance_physique());
         let degats_magiques = degats_recus[1].saturating_sub(self.calcul_resistance_magique());
-        /*
-        println!("degats physiques - {}",degats_physiques);
-        println!("degats magiques - {}",degats_magiques);
-        println!("resistance physique - {}",self.calcul_resistance_physique());
-        println!("resistance magiques - {}",self.calcul_resistance_magique());
-        */
         degats_physiques + degats_magiques
     }
 

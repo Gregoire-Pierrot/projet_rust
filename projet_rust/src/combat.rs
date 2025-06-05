@@ -46,7 +46,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
 
                 match choix.parse::<usize>() {
                     Ok(0) => {
-                        let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque_base(master_file));
+                        let degats = ennemie.degats_recus_net(&joueur.get_personnage().attaque_base(master_file));
                         println!("\n--- Actions ---");
                         println!("Vous lancez l'attaque basique - {} dégâts infligés", degats);
                         
@@ -64,7 +64,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                                 println!("Vous ne possédez pas d'arme nécessaire au déclenchement de cette attaque.");
                                 continue;
                             }else{
-                                let degats = joueur.degats_recus_net(&joueur.get_personnage().attaque(&attaque_obj));
+                                let degats = ennemie.degats_recus_net(&joueur.get_personnage().attaque(&attaque_obj));
                                 println!("\n--- Actions ---");
                                 println!("Vous lancez l'attaque : {} - {} dégâts infligés", attaque.get_nom(), degats);
                                 
