@@ -4,7 +4,14 @@ use crate::equipement::Categorie;
 use crate::equipement::Arme;
 use crate::json_manager::MasterFile;
 use crate::attaque::Attaque;
+use rand::Rng;
+use std::sync::Mutex;
+use lazy_static::lazy_static;
 
+
+lazy_static! {
+    static ref CHANCE_CRITIQUE: Mutex<f32> = Mutex::new(1.0);
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Entite {
@@ -194,6 +201,7 @@ impl Personnage {
 
     pub fn attaque(&mut self,attaque: &Attaque) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
         let mut master_file  = MasterFile::new();
+        let mut rng = rand::thread_rng();
         let mut degats: Vec<u16> = vec![0, 0]; // [dégâts physique, dégâts magique]
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
@@ -212,6 +220,13 @@ impl Personnage {
             },
             _ => {}
         }
+
+        let chance_critique = *CHANCE_CRITIQUE.lock().unwrap()   * (0.1*self.calcul_chance() as f32)/100.0;
+        if rng.gen::<f32>() <= chance_critique {
+            degats_brute = (degats_brute as f32 * 1.5) as u16;
+            degats_magique = (degats_magique as f32 * 1.5) as u16;
+            println!("Coup critique !");
+        }
         degats[0] = degats_brute;
         degats[1] = degats_magique;
         degats
@@ -220,6 +235,7 @@ impl Personnage {
     ///////////////
     /// Fonction qui calcul les dégâts de l'attaque de base.
     pub fn attaque_base(&mut self,master_file: &MasterFile) -> Vec<u16> {  // à opti
+        let mut rng = rand::thread_rng();
         let mut degats: Vec<u16> = vec![0, 0];
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
@@ -235,22 +251,35 @@ impl Personnage {
                         degats_brute += (degats_brute * equipement.get_pourcent_bonus_dexterite()) / 100;
                     },
                     Some(Arme::ArmeMagie) => {
-                        degats_brute = self.calcul_intelligence()+equipement.get_bonus_intelligence();
-                        degats_brute += (degats_brute * equipement.get_pourcent_bonus_intelligence()) / 100;
+                        degats_magique = self.calcul_intelligence()+equipement.get_bonus_intelligence();
+                        degats_magique += (degats_magique * equipement.get_pourcent_bonus_intelligence()) / 100;
                     },
-                    _ => {}
+                    _ => {
+
+                    }
                 }
+
             }
             else {
                 degats_brute = self.calcul_force();
+
             }
         }
         else {
             degats_brute = self.calcul_force();
+
+        }
+
+        let chance_critique = *CHANCE_CRITIQUE.lock().unwrap() * (0.1*self.calcul_chance() as f32)/100.0;
+        if rng.gen::<f32>() <= chance_critique {
+            degats_brute = (degats_brute as f32 * 1.5) as u16;
+            degats_magique = (degats_magique as f32 * 1.5) as u16;
+            println!("Coup critique !");
         }
 
         degats[0] = degats_brute;
         degats[1] = degats_magique;
+
         degats
     }
 

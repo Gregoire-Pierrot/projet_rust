@@ -7,14 +7,14 @@
         "nom": "Jane"
       },
       "pv": 100,
-      "force": 100,
-      "dexterite": 0,
+      "force": 10,
+      "dexterite": 1,
       "intelligence": 100,
-      "vitesse": 0,
-      "esquive": 0,
-      "chance": 0,
-      "resistance_physique": 0,
-      "resistance_magique": 0,
+      "vitesse": 1,
+      "esquive": 1,
+      "chance": 10000,
+      "resistance_physique": 1,
+      "resistance_magique": 1,
       "attaques": [
         "brise_glace",
         "tempête_feu"
@@ -24,7 +24,7 @@
         "Casque": "casque_feu",
         "Gants": "gants_feu",
         "Bottes": "bottes_feu",
-        "Arme": "epee_feu",
+        "Arme": null,
         "Plastron": "plastron_feu"
       },
       "inventaire": {
