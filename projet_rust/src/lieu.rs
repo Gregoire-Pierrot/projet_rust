@@ -3,8 +3,6 @@ use std::collections::HashMap;
 use rand::Rng;
 
 use crate::structs::Entite;
-use crate::equipement::Categorie;
-use crate::structs::Personnage;
 use crate::ennemie::Ennemie;
 use crate::joueur::Joueur;
 

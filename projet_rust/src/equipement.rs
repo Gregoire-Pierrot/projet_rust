@@ -2,7 +2,20 @@ use serde::{Serialize, Deserialize};
 
 use crate::structs::{Ressource, Rarete};
 
-#[derive(Debug, Clone, Serialize, Deserialize,PartialEq, Eq)]
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub enum Categorie {
+    Arme(Arme),
+    Armure(Armure)
+}
+
+impl std::fmt::Display for Categorie {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum Arme {
     ArmeMelee,
     ArmeDistance,
@@ -16,17 +29,15 @@ impl std::fmt::Display for Arme {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub enum Categorie {
-    Bottes,
-    Jambieres,
+pub enum Armure {
     Casque,
     Plastron,
     Gants,
-    Arme
+    Jambieres,
+    Bottes
 }
 
-
-impl std::fmt::Display for Categorie {
+impl std::fmt::Display for Armure {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{:?}", self)
     }
@@ -55,8 +66,7 @@ pub struct Equipement {
     pourcent_bonus_chance: u16,
     pourcent_bonus_resistance_physique: u16,
     pourcent_bonus_resistance_magique: u16,
-    categorie: Categorie,
-    type_arme: Option<Arme>
+    categorie: Categorie
 }
 
 impl Equipement {
@@ -109,9 +119,6 @@ impl Equipement {
     pub fn get_pourcent_bonus_resistance_magique(&self) -> u16 { self.pourcent_bonus_resistance_magique.clone() }
 
     pub fn get_categorie(&self) -> Categorie { self.categorie.clone() }
-
-    pub fn get_type_arme(&self) -> Option<Arme> { self.type_arme.clone() }
-
 
     pub fn get_rarete(&self) -> Rarete { self.ressource.rarete.clone() }
 

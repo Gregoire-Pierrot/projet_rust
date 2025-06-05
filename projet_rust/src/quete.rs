@@ -18,10 +18,10 @@ impl std::fmt::Display for StatutQuete {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum FinDeQuete {
-    Combat,
-    Dialogue,
-    Obtention,
-    Interaction
+    Combat(String),
+    Dialogue(String),
+    Obtention(String),
+    Interaction(String)
 }
 
 impl std::fmt::Display for FinDeQuete {
@@ -38,11 +38,11 @@ pub struct Quete {
     quetes_suivantes: Vec<String>,
     ajout_quete: String,
     statut: StatutQuete,
-    fin_de_quete: HashMap<FinDeQuete, String>
+    fin_de_quete: FinDeQuete
 }
 
 impl Quete {
-    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, ajout_quete: String, statut: String, fin_de_quete: HashMap<String, String>) -> Self {
+    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, ajout_quete: String, statut: String, fin_de_quete: FinDeQuete) -> Self {
         Self {
             entite,
             lieu,
@@ -55,16 +55,7 @@ impl Quete {
                 "Terminee" => StatutQuete::Terminee,
                 _ => panic!("Statut de quête inconnu : {}", statut)
             },
-            fin_de_quete: fin_de_quete.into_iter().map(|(k, v)| {
-                let key = match k.as_str() {
-                    "Combat" => FinDeQuete::Combat,
-                    "Dialogue" => FinDeQuete::Dialogue,
-                    "Obtention" => FinDeQuete::Obtention,
-                    "Interaction" => FinDeQuete::Interaction,
-                    _ => panic!("Type de fin de quête inconnu : {}", k)
-                };
-                (key, v)
-            }).collect()
+            fin_de_quete
         }
     }
 
@@ -82,7 +73,7 @@ impl Quete {
     
     pub fn get_statut(&self) -> StatutQuete { self.statut.clone() }
     
-    pub fn get_fin_de_quete(&self) -> HashMap<FinDeQuete, String> { self.fin_de_quete.clone() }
+    pub fn get_fin_de_quete(&self) -> FinDeQuete { self.fin_de_quete.clone() }
 
     fn str_recompense(&self) -> String {
         let mut recompense_str = String::new();
@@ -104,18 +95,6 @@ impl Quete {
         }
         quetes_str.push_str(&self.quetes_suivantes[self.quetes_suivantes.len()-1]);
         quetes_str
-    }
-
-    fn str_fin_de_quete(&self) -> String {
-        let mut fin_de_quete_str = String::new();
-        for (key, value) in &self.fin_de_quete {
-            fin_de_quete_str.push_str(&format!("{:?}: {}, ", key, value));
-        }
-        if !fin_de_quete_str.is_empty() {
-            fin_de_quete_str.pop();
-            fin_de_quete_str.pop();
-        }
-        fin_de_quete_str
     }
     
     pub fn find_fin_de_quete(&self, id_fin_de_quete: String) -> bool {
@@ -144,7 +123,7 @@ impl Quete {
     }
   
   
-  pub fn set_description(&mut self, description: String) { self.entite.description = description}
+    pub fn set_description(&mut self, description: String) { self.entite.description = description}
     pub fn set_nom(&mut self, nom: String) {self.entite.nom = nom}
     pub fn set_lieu(&mut self, lieu: String) {self.lieu = lieu}
     pub fn set_quete_suivante(&mut self, quetes_suivantes: Vec<String>) {self.quetes_suivantes = quetes_suivantes}
@@ -192,12 +171,11 @@ impl Quete {
         let details:Vec<String> = vec![self.entite.nom.clone(), self.entite.description.clone(), self.lieu.clone(), self.get_str_recompense(),self.get_str_fin_de_quete(),];
         details
   }
-    }
 }
 
 impl std::fmt::Display for Quete {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "Quete : entite = [{}], lieu = {}, recompense = {}, quetes_suivantes = {}, ajout_quete = {}, statut = {}, fin_de_quete = {}", 
-               self.entite, self.lieu, self.str_recompense(), self.str_quetes_suivantes(), self.ajout_quete, self.statut, self.str_fin_de_quete())
+               self.entite, self.lieu, self.str_recompense(), self.str_quetes_suivantes(), self.ajout_quete, self.statut, self.fin_de_quete)
     }
 }

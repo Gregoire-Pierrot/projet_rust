@@ -1,7 +1,6 @@
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
-use crate::equipement::Categorie;
-use crate::equipement::Arme;
+use crate::equipement::{Categorie, Arme};
 use crate::json_manager::MasterFile;
 use crate::attaque::Attaque;
 use rand::Rng;
@@ -26,6 +25,22 @@ impl std::fmt::Display for Entite {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub enum EquipementType {
+    Arme,
+    Casque,
+    Plastron,
+    Gants,
+    Jambieres,
+    Bottes
+}
+
+impl std::fmt::Display for EquipementType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Personnage {
     pub entite: Entite,
@@ -39,7 +54,7 @@ pub struct Personnage {
     pub resistance_physique: u16,
     pub resistance_magique: u16,
     pub attaques: Vec<String>,
-    pub equipement: HashMap<Categorie, Option<String>>,
+    pub equipement: HashMap<EquipementType, Option<String>>,
     pub inventaire: HashMap<String, u32>,
 }
 
@@ -83,7 +98,7 @@ impl Personnage {
     }
 
 
-    pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.equipement.clone() }
+    pub fn get_equipement(&self) -> HashMap<EquipementType, Option<String>> { self.equipement.clone() }
 
     pub fn get_inventaire(&self) -> std::collections::HashMap<String, u32> { self.inventaire.clone() }
 
@@ -210,7 +225,7 @@ impl Personnage {
                 degats_brute= self.calcul_force()+attaque.get_degats();
                 degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
             }
-            Arme::ArmeDistance => {  // demander à grégoire distance = brute ou magique ?
+            Arme::ArmeDistance => {
                 degats_brute = self.calcul_dexterite()+attaque.get_degats();
                 degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;
             },
@@ -239,18 +254,18 @@ impl Personnage {
         let mut degats: Vec<u16> = vec![0, 0];
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
-        if let Some(Some(id)) = self.equipement.get(&Categorie::Arme) {
+        if let Some(Some(id)) = self.equipement.get(&EquipementType::Arme) {
             if let Ok(equipement) = master_file.prendre_equipement_id(id) {
-                match equipement.get_type_arme() {
-                    Some(Arme::ArmeMelee) => {
+                match equipement.get_categorie() {
+                    Categorie::Arme(Arme::ArmeMelee) => {
                         degats_brute = self.calcul_force()+equipement.get_bonus_force();
                         degats_brute += (degats_brute * equipement.get_pourcent_bonus_force()) / 100;
                     },
-                    Some(Arme::ArmeDistance) => {  // demander à grégoire distance = brute ou magique ?
+                    Categorie::Arme(Arme::ArmeDistance) => {
                         degats_brute = self.calcul_dexterite()+equipement.get_bonus_dexterite();
                         degats_brute += (degats_brute * equipement.get_pourcent_bonus_dexterite()) / 100;
                     },
-                    Some(Arme::ArmeMagie) => {
+                    Categorie::Arme(Arme::ArmeMagie) => {
                         degats_magique = self.calcul_intelligence()+equipement.get_bonus_intelligence();
                         degats_magique += (degats_magique * equipement.get_pourcent_bonus_intelligence()) / 100;
                     },
@@ -295,20 +310,6 @@ impl Personnage {
         degats_physiques + degats_magiques
     }
 
-}
-
-impl Personnage {
-    pub fn str_inventaire(&self) -> String {
-        let mut str_inventaire = String::new();
-        for (item, quantite) in &self.inventaire {
-            str_inventaire.push_str(&format!("{}: {}, ", item, quantite));
-        }
-        if !str_inventaire.is_empty() {
-            str_inventaire.pop();
-            str_inventaire.pop();
-        }
-        str_inventaire
-    }
 }
 
 impl std::fmt::Display for Personnage {

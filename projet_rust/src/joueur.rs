@@ -1,11 +1,9 @@
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
-use crate::structs::Personnage;
-use crate::equipement::Categorie;
+use crate::structs::{Personnage, EquipementType};
 use crate::json_manager::MasterFile;
-use crate::attaque::Attaque;
-use crate::equipement::Arme;
+use crate::equipement::{Categorie, Arme};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -70,9 +68,9 @@ impl Joueur {
         }
     }
 
-    pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone() }
+    pub fn get_equipement(&self) -> HashMap<EquipementType, Option<String>> { self.personnage.equipement.clone() }
   
-    pub fn add_equipement(&mut self, categorie: &Categorie, equipement: &String) {
+    pub fn add_equipement(&mut self, categorie: &EquipementType, equipement: &String) {
         let eq = self.personnage.equipement.entry(categorie.clone()).or_insert(None);
         if eq.is_some() {
             println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
@@ -83,7 +81,7 @@ impl Joueur {
         }
     }
 
-    pub fn remove_equipement(&mut self, categorie: &Categorie) {
+    pub fn remove_equipement(&mut self, categorie: &EquipementType) {
         match self.personnage.equipement.get_mut(categorie) {
             Some(equipement) => {
                 if let Some(eq) = equipement.take() {
@@ -159,6 +157,14 @@ impl Joueur {
             self.quetes.push(quete);
         }
     }
+    pub fn set_quetes(&mut self, quetes: Vec<String>) { self.quetes = quetes}
+
+    pub fn remove_quete(&mut self, quete: String){
+        if self.quetes.contains(&quete) {
+            self.quetes.retain(|q| q != &quete);
+        }
+        else { panic!("Erreur : la quete [{}] n'est pas dans la liste des quetes du joueur : [{}].", quete, self.str_quetes()); }
+    }
     
     fn str_reputations(&self) -> String {
         let mut res = String::new();
@@ -169,9 +175,6 @@ impl Joueur {
         res.push_str(&self.reputations[self.reputations.len()-1].to_string());
         res
     }
-////Fonctions pour quetes
-   /* pub fn get_quetes(&self) -> Vec<String> { self.quetes.clone()}
-    pub fn set_quetes(&mut self, quetes: Vec<String>) { self.quetes = quetes}
 
     fn str_quetes(&self) -> String {
         let mut quetes = String::new();
@@ -181,33 +184,6 @@ impl Joueur {
         }
         quetes.push_str(&self.quetes[self.quetes.len()-1].to_string());
         quetes
-    }
-
-    pub fn add_quete(&mut self, quetes: String){
-        self.quetes.push(quetes);
-    }
-
-    pub fn remove_quete(&mut self, quete: String){
-        if let Some(pos) = self.quetes.iter().position(|x| *x == quete){ self.quetes.remove(pos); }
-        else { panic!("Erreur : la quete [{}] n'existe pas dans la quete [{}]", quete, self.str_quetes());}
-    }
-
-    pub fn add_item_inventaire(&mut self, item: String, quantite: u32) {
-        if let Some(quantite_inventaire) = self.personnage.inventaire.get_mut(&item) {
-            *quantite_inventaire += quantite;
-        } else {
-            self.personnage.inventaire.insert(item, quantite);
-        }
-    }*/
-
-  fn str_quetes(&self) -> String {
-        let mut res = String::new();
-        for i in 0..self.quetes.len()-1 {
-            res.push_str(&self.quetes[i]);
-            res.push_str(", ");
-        }
-        res.push_str(&self.quetes[self.quetes.len()-1]);
-        res
     }
 
     ///////////////
@@ -287,9 +263,15 @@ impl Joueur {
     }
 
     pub fn get_categorie_Arme(&self) -> Option<Arme> {
-        self.personnage.equipement.get(&Categorie::Arme)
+        let categorie = self.personnage.equipement.get(&EquipementType::Arme)
             .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::new().prendre_equipement_id(id).ok()))
-            .and_then(|e| e.get_type_arme())
+            .and_then(|e| Some(e.get_categorie()));
+        match categorie {
+            Some(Categorie::Arme(Arme::ArmeMelee)) => Some(Arme::ArmeMelee),
+            Some(Categorie::Arme(Arme::ArmeDistance)) => Some(Arme::ArmeDistance),
+            Some(Categorie::Arme(Arme::ArmeMagie)) => Some(Arme::ArmeMagie),
+            _ => None
+        }
     }
 }
 

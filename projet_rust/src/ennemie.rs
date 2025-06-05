@@ -3,12 +3,10 @@ use std::collections::HashMap;
 use rand::Rng;
 
 
-use crate::structs::Personnage;
+use crate::structs::{Personnage, EquipementType};
 use crate::json_manager::Item;
 use crate::json_manager::MasterFile;
-use crate::structs::Ressource;
 use crate::joueur::Joueur;
-use crate::equipement::Categorie;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
@@ -64,7 +62,7 @@ impl Ennemie {
 
     pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
 
-    pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone()}
+    pub fn get_equipement(&self) -> HashMap<EquipementType, Option<String>> { self.personnage.equipement.clone()}
 
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
 
