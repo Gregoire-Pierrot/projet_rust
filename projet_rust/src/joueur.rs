@@ -4,6 +4,9 @@ use std::collections::HashMap;
 use crate::structs::{Personnage, EquipementType};
 use crate::json_manager::MasterFile;
 use crate::equipement::{Categorie, Arme};
+use crate::structs::Ressource;
+use crate::equipement::Equipement;
+use crate::consommable::Consommable;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -124,6 +127,52 @@ impl Joueur {
             println!("L'item {} n'est pas dans l'inventaire.", item);
         }
     }
+
+    pub fn recup_ressources(&mut self, master_file: &MasterFile) -> Vec<Ressource>{
+        let inventaire = self.get_inventaire();
+        let mut ressources = Vec::new();
+
+        for (i, (id, _)) in inventaire.iter().enumerate() {
+            match master_file.prendre_ressource_id(id) {
+                Ok(item) => {
+                    ressources.push(item);
+                }
+                Err(_) => {}
+            }
+        }
+        ressources
+    }
+
+    pub fn recup_consommable(&mut self, master_file: &MasterFile) -> Vec<Consommable>{
+        let inventaire = self.get_inventaire();
+        let mut consommable = Vec::new();
+
+        for (i, (id, _)) in inventaire.iter().enumerate() {
+            match master_file.prendre_consommable_id(id) {
+                Ok(item) => {
+                    consommable.push(item);
+                }
+                Err(_) => {}
+            }
+        }
+        consommable
+    }
+
+    pub fn recup_equipement(&mut self, master_file: &MasterFile) -> Vec<Equipement>{
+        let inventaire = self.get_inventaire();
+        let mut equipement = Vec::new();
+
+        for (i, (id, _)) in inventaire.iter().enumerate() {
+            match master_file.prendre_equipement_id(id) {
+                Ok(item) => {
+                    equipement.push(item);
+                }
+                Err(_) => {}
+            }
+        }
+        equipement
+    }
+
 
     pub fn get_position(&self) -> String { self.position.clone() }
     pub fn set_position(&mut self, lieu: String) { self.position = lieu; }
