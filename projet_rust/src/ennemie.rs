@@ -22,6 +22,7 @@ pub struct Ennemie {
     mod_chance: u16,
     mod_resistance_physique: u16,
     mod_resistance_magique: u16,
+    xp: u32,
     dialogues: Vec<String>,
     droptable: HashMap<String, u32>,
 }
@@ -98,6 +99,8 @@ impl Ennemie {
     pub fn get_mod_resistance_magique(&self) -> u16 { self.mod_resistance_magique.clone() }
     pub fn set_mod_resistance_magique(&mut self, mod_resistance_magique: u16 ) { self.mod_resistance_magique = mod_resistance_magique }
 
+    pub fn get_xp(&self) -> u32 { self.xp.clone() }
+    pub fn set_xp(&mut self, xp: u32) { self.xp = xp }
 
     pub fn get_personnage(&self) -> &Personnage {&self.personnage}//////////////////////////////////////à enlever ?
 
@@ -169,6 +172,7 @@ impl Ennemie {
         if self.get_pv() == 0 {
             let mut loot = self.lootable();
             joueur.ajout_recompense_inventaire(loot.clone());
+            joueur.add_xp(self.xp);
             println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
             return true;
             //Fin de combat -> retour à l'interface
@@ -204,6 +208,6 @@ impl Ennemie {
 
 impl std::fmt::Display for Ennemie {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Ennemie : personnage = [{}], dialogues = [{}], droptable = [{}]", self.personnage, self.str_dialogues(), self.str_drop_table())
+        write!(f, "Ennemie : personnage = [{}], xp = [{}], dialogues = [{}], droptable = [{}]", self.personnage, self.xp, self.str_dialogues(), self.str_drop_table())
     }
 }

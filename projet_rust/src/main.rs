@@ -86,7 +86,7 @@ fn main() {
     println!("Ennemie avant attribution des stats de lieu  :");
     println!("{:?}", ennemie);
     let id = ennemie.get_id();
-    lieu.synchro_ennemie(&mut ennemie);
+    lieu.synchro_ennemie(&mut ennemie, &mut joueur);
     println!();
     println!("Ennemie après attribution des stats de lieu :");
     println!("{:?}", ennemie);
@@ -96,5 +96,7 @@ fn main() {
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
     
-    master_file.sauvegarder(&joueur);
+    println!("{}", joueur);
+
+    //master_file.sauvegarder(&joueur);
 }

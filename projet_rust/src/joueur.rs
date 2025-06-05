@@ -17,6 +17,7 @@ pub struct Joueur {
     reputations: Vec<u16>,
     xp: u32,
     multiplicateur_xp: u16,
+    points_competence: u8,
     quetes: Vec<String>
 }
 
@@ -127,7 +128,10 @@ impl Joueur {
     pub fn set_pronom(&mut self, pronom: String) { self.pronom = pronom; }
 
     pub fn get_niveau(&self) -> u8 { self.niveau.clone() }
-    pub fn add_niveau(&mut self, niveau: u8) { self.niveau += niveau; }
+    pub fn add_niveau(&mut self, niveau: u8) { 
+        self.niveau += niveau; 
+        self.points_competence+=5;
+    }
 
 
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
@@ -262,6 +266,6 @@ impl Joueur {
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.position, self.pronom, self.niveau, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
+        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {},  points de compétences = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.position, self.pronom, self.niveau, self.points_competence, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
     }
 }

@@ -37,14 +37,15 @@
     },
     "position": "pièce2",
     "pronom": "elle",
-    "niveau": 54,
+    "niveau": 1,
     "temps": 0,
     "reputations": [
       40,
       90
     ],
     "xp": 0,
-    "multiplicateur_xp": 0,
+    "multiplicateur_xp": 1,
+    "points_competence": 0,
     "quetes": [
       "principale"
     ]
@@ -160,6 +161,7 @@
       "mod_chance": 5,
       "mod_resistance_physique": 5,
       "mod_resistance_magique": 5,
+      "xp":150,
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
@@ -208,6 +210,7 @@
       "mod_chance": 5,
       "mod_resistance_physique": 5,
       "mod_resistance_magique": 5,
+      "xp":10,
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
