@@ -1,4 +1,4 @@
-use crate::{Joueur, Pnj, Ennemie, Lieu, Consommable, Equipement, Quete};
+use crate::{Joueur, Pnj, Ennemie, Lieu, Quete, Consommable, Equipement, Attaque};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
@@ -6,16 +6,24 @@ use std::fs;
 
 use crate::structs::Ressource;
 
+pub enum Item {
+    Ressource(Ressource),
+    Consommable(Consommable),
+    Equipement(Equipement),
+}
+
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MasterFile {
     Joueur: Joueur,
     Pnj : Vec<Pnj>,
     Ennemie : Vec<Ennemie>,
-    Lieux: Vec<Lieu>,
+    Lieu: Vec<Lieu>,
+    Quete: Vec<Quete>,
     Consommable: Vec<Consommable>,
     Ressource: Vec<Ressource>,
     Equipement: Vec<Equipement>,
-    Quete: Vec<Quete>
+    Attaque: Vec<Attaque>
 }
 
 impl MasterFile {
@@ -27,18 +35,19 @@ impl MasterFile {
             Joueur: master_file.Joueur,
             Pnj: master_file.Pnj,
             Ennemie: master_file.Ennemie,
-            Lieux: master_file.Lieux,
+            Lieu: master_file.Lieu,
+            Quete: master_file.Quete,
             Consommable: master_file.Consommable,
             Ressource: master_file.Ressource,
             Equipement: master_file.Equipement,
-            Quete: master_file.Quete
+            Attaque: master_file.Attaque
         }
     }
 
     ////Lieu////
 
     pub fn prendre_lieu_id(&self, id: &str) -> Result<Lieu, String> {
-        for lieu in self.Lieux.clone() {
+        for lieu in self.Lieu.clone() {
             if lieu.get_id() == id {
                 return Ok(lieu);
             }
@@ -94,7 +103,7 @@ impl MasterFile {
         }
         return Err("Consommable introuvable".to_string());
     }
-
+/*
     ////Quete////
 
     pub fn prendre_quete_id(&self, id: String) -> Quete {
@@ -117,5 +126,64 @@ impl MasterFile {
         panic!("Ressource introuvable avec l'id : {}", id);
     }
 }
+*/
 
 
+    ////Ressource////
+
+    pub fn prendre_ressource_id(&self, id: &str) -> Result<Ressource, String> {
+        for ressource in self.Ressource.clone() {
+            if ressource.get_id() == id {
+                return Ok(ressource);
+            }
+        }
+        return Err("Ressource introuvable".to_string());
+    }
+
+    ////Equipement////
+
+    pub fn prendre_equipement_id(&self, id: &str) -> Result<Equipement, String> {
+        for equipement in self.Equipement.clone() {
+            if equipement.get_id() == id {
+                return Ok(equipement);
+            }
+        }
+        return Err("Equipement introuvable".to_string());
+    }
+
+    ////Quete////
+
+    pub fn prendre_quete_id(&self, id: &str) -> Result<Quete, String> {
+        for quete in self.Quete.clone() {
+            if quete.get_id() == id {
+                return Ok(quete);
+            }
+        }
+        return Err("Quête introuvable".to_string());
+    }
+
+    ////Attaque////
+
+    pub fn prendre_attaque_id(&self, id: &str) -> Result<Attaque, String> {
+        for attaque in self.Attaque.clone() {
+            if attaque.get_id() == id {
+                return Ok(attaque);
+            }
+        }
+        return Err("Attaque introuvable".to_string());
+    }
+
+
+    ///item///
+    pub fn prendre_item_id(&self, id: &str) -> Result<Item, String> {
+        if let Ok(consommable) = self.prendre_consommable_id(id) {
+            Ok(Item::Consommable(consommable))
+        } else if let Ok(equipement) = self.prendre_equipement_id(id) {
+            Ok(Item::Equipement(equipement))
+        } else if let Ok(ressource) = self.prendre_ressource_id(id) {
+            Ok(Item::Ressource(ressource))
+        } else {
+            Err(format!("Item avec id '{}' introuvable", id))
+        }
+    }
+}

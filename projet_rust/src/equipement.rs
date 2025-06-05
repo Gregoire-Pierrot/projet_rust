@@ -1,13 +1,30 @@
 use serde::{Serialize, Deserialize};
 
-use crate::structs::Ressource;
+use crate::structs::{Ressource, Rarete};
 
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-enum Categorie {
-    Arme,
-    Armure
+#[derive(Debug, Clone, Serialize, Deserialize,PartialEq, Eq)]
+pub enum Arme {
+    ArmeMelee,
+    ArmeDistance,
+    ArmeMagie
 }
+
+impl std::fmt::Display for Arme {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub enum Categorie {
+    Bottes,
+    Jambieres,
+    Casque,
+    Plastron,
+    Gants,
+    Arme
+}
+
 
 impl std::fmt::Display for Categorie {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -38,7 +55,8 @@ pub struct Equipement {
     pourcent_bonus_chance: u16,
     pourcent_bonus_resistance_physique: u16,
     pourcent_bonus_resistance_magique: u16,
-    categorie: Categorie 
+    categorie: Categorie,
+    type_arme: Option<Arme>
 }
 
 impl Equipement {
@@ -89,11 +107,33 @@ impl Equipement {
     pub fn get_pourcent_bonus_resistance_physique(&self) -> u16 { self.pourcent_bonus_resistance_physique.clone() }
 
     pub fn get_pourcent_bonus_resistance_magique(&self) -> u16 { self.pourcent_bonus_resistance_magique.clone() }
+
+    pub fn get_categorie(&self) -> Categorie { self.categorie.clone() }
+
+    pub fn get_type_arme(&self) -> Option<Arme> { self.type_arme.clone() }
+
+
+    pub fn get_rarete(&self) -> Rarete { self.ressource.rarete.clone() }
+
+
+    pub fn get_value_rarete(&self) -> f32{
+        match self.get_rarete(){
+            Rarete::Commun => 0.4,             
+            Rarete::PeuCommun => 0.3,
+            Rarete::Rare => 0.2,
+            Rarete::TresRare => 0.1,
+            Rarete::Epique => 0.01,
+            Rarete::Legendaire => 0.005,
+            Rarete::Mythique => 0.0001,
+            Rarete::Divin => 0.00001,
+            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
+        }
+    }
 }
 
 impl std::fmt::Display for Equipement {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Equipement : ressource = [{}], bonus_pv : {}, bonus_force : {}, bonus_dexterite : {}, bonus_intelligence : {}, bonus_vitesse : {}, bonus_esquive : {}, bonus_chance : {}, bonus_resistance_physique : {}, bonus_resistance_magique : {}, bonus_multiplicateur_xp : {}, pourcent_bonus_pv : {}, pourcent_bonus_force : {}, pourcent_bonus_dexterite : {}, pourcent_bonus_intelligence : {}, pourcent_bonus_vitesse : {}, pourcent_bonus_esquive : {}, pourcent_bonus_chance : {}, pourcent_bonus_resistance_physique : {}, pourcent_bonus_resistance_magique : {}",
-            self.ressource, self.bonus_pv, self.bonus_force, self.bonus_dexterite, self.bonus_intelligence, self.bonus_vitesse, self.bonus_esquive, self.bonus_chance, self.bonus_resistance_physique, self.bonus_resistance_magique, self.bonus_multiplicateur_xp, self.pourcent_bonus_pv, self.pourcent_bonus_force, self.pourcent_bonus_dexterite, self.pourcent_bonus_intelligence, self.pourcent_bonus_vitesse, self.pourcent_bonus_esquive, self.pourcent_bonus_chance, self.pourcent_bonus_resistance_physique, self.pourcent_bonus_resistance_magique)
+        write!(f, "Equipement : ressource = [{}], bonus_pv : {}, bonus_force : {}, bonus_dexterite : {}, bonus_intelligence : {}, bonus_vitesse : {}, bonus_esquive : {}, bonus_chance : {}, bonus_resistance_physique : {}, bonus_resistance_magique : {}, bonus_multiplicateur_xp : {}, pourcent_bonus_pv : {}, pourcent_bonus_force : {}, pourcent_bonus_dexterite : {}, pourcent_bonus_intelligence : {}, pourcent_bonus_vitesse : {}, pourcent_bonus_esquive : {}, pourcent_bonus_chance : {}, pourcent_bonus_resistance_physique : {}, pourcent_bonus_resistance_magique : {}, categorie = {}",
+            self.ressource, self.bonus_pv, self.bonus_force, self.bonus_dexterite, self.bonus_intelligence, self.bonus_vitesse, self.bonus_esquive, self.bonus_chance, self.bonus_resistance_physique, self.bonus_resistance_magique, self.bonus_multiplicateur_xp, self.pourcent_bonus_pv, self.pourcent_bonus_force, self.pourcent_bonus_dexterite, self.pourcent_bonus_intelligence, self.pourcent_bonus_vitesse, self.pourcent_bonus_esquive, self.pourcent_bonus_chance, self.pourcent_bonus_resistance_physique, self.pourcent_bonus_resistance_magique, self.categorie)
     }
 }
