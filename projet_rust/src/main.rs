@@ -10,6 +10,7 @@ mod equipement;
 mod action_quetes;
 mod attaque;
 mod combat;
+mod action_pnj;
 
 use joueur::Joueur;
 use pnj::Pnj;
@@ -23,6 +24,7 @@ use attaque::Attaque;
 use json_manager::MasterFile;
 use crate::action_quetes::{completion_quete};
 use combat::combat;
+use crate::action_pnj::{get_dialogue_primaire,afficher_dialogue,get_id_dialogues_joueur,get_reponse_dialogue_pnj};
 
 fn main() {
     println!();
@@ -59,6 +61,19 @@ fn main() {
     println!("{}", joueur);
 
 
+    let mut pnj = master_file.prendre_pnj_id_string(String::from("pnj_1"));
+    println!("{:?}", pnj);
+    let mut dialogue_primaire: Quete = get_dialogue_primaire(&mut master_file,&mut pnj);
+    println!("{:?}", afficher_dialogue(&mut dialogue_primaire));
+    for vector in get_id_dialogues_joueur(&mut master_file, &mut dialogue_primaire) {
+        let mut quete = master_file.prendre_quete_id(&vector.clone()).expect("Failed to get quete");
+        println!("{:?}", afficher_dialogue(&mut quete));
+        let reponse_id = get_reponse_dialogue_pnj(&mut master_file, vector.clone());
+        if reponse_id != String::new(){
+            let mut dialogue_reponse = master_file.prendre_quete_id(&reponse_id).expect("Failed to get dialogue response");
+            println!("{:?}", afficher_dialogue(&mut dialogue_reponse));
+        }
+    }
 
     //master_file.sauvegarder(&joueur);
 

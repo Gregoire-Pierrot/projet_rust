@@ -80,6 +80,14 @@ impl MasterFile {
         return Err("PNJ introuvable".to_string());
     }
 
+    pub fn prendre_pnj_id_string(&self, id: String) -> Pnj {
+        for pnj in self.Pnj.clone() {
+            if pnj.get_id() == id {
+                return pnj;
+            }
+        }
+        panic!("PNJ introuvable {}",id);
+    }
 
     ////Ennemie////
 
@@ -103,30 +111,7 @@ impl MasterFile {
         }
         return Err("Consommable introuvable".to_string());
     }
-/*
-    ////Quete////
 
-    pub fn prendre_quete_id(&self, id: String) -> Quete {
-        for quete in self.Quete.clone() {
-            if quete.get_id() == id {
-                return quete;
-            }
-        }
-        panic!("Quête introuvable avec l'id : {}", id);
-    }
-
-
-    ////Ressource////
-    pub fn prendre_ressource_id(&self, id: String) -> Ressource {
-        for ressource in self.Ressource.clone() {
-            if ressource.get_id() == id {
-                return ressource;
-            }
-        }
-        panic!("Ressource introuvable avec l'id : {}", id);
-    }
-}
-*/
 
 
     ////Ressource////
