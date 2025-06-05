@@ -120,12 +120,12 @@ voir le fichier des [armes](Weapons.md).
 |:-------------------------------------:|:-----------------:|:-----------------------------------------------------------------------:|:--------:|
 | Modélisation                          | Ylies & Grégoire  | Modélisation du jeu                                                     | ✅      |
 | Json de test                          | Ylies             | Json réprésentant les différentes entités du jeu                        | ✅      |
-| Modélisation code                     | Grégoire          | Modélisation des entités du jeu                                         | 🕐      |
+| Modélisation code                     | Grégoire          | Modélisation des entités du jeu                                         | ✅      |
 | Systeme d'interface en mode terminal  | Grégoire          | Interface graphique pour jouer                                          | ❌      |
 | Systeme de choix (d'intéraction)      | Grégoire          | Ensemble de tout les choix possible au joueur à un moment donné         | ❌      |
 | Systeme de déplacement                | Ylies             | Possibilité de déplacement entre les différentes zones                  | ❌      |
 | Systeme d'interaction avec les pnj    | Ylies             | Intéraction avec les pnj (dialogue, quêtes, commerce, ...)              | ❌      |
-| Systeme de combat                     | Ylies             | -                                                                       | ❌      |
+| Systeme de combat                     | Ylies             | -                                                                       | ✅      |
 | Systeme de loot                       | Ylies             | -                                                                       | ❌      |
 | Systeme de commerce                   | Grégoire          | -                                                                       | ❌      |
 | Gestion du joueur                     | Ylies             | Possibilité de modifié les stats du joueur                              | ❌      |
