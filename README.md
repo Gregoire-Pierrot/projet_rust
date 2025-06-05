@@ -126,7 +126,7 @@ voir le fichier des [armes](Weapons.md).
 | Systeme de déplacement                | Ylies             | Possibilité de déplacement entre les différentes zones                  | ❌      |
 | Systeme d'interaction avec les pnj    | Ylies             | Intéraction avec les pnj (dialogue, quêtes, commerce, ...)              | ❌      |
 | Systeme de combat                     | Ylies             | -                                                                       | ✅      |
-| Systeme de loot                       | Ylies             | -                                                                       | ❌      |
+| Systeme de loot                       | Ylies             | -                                                                       | ✅      |
 | Systeme de commerce                   | Grégoire          | -                                                                       | ❌      |
 | Gestion du joueur                     | Ylies             | Possibilité de modifié les stats du joueur                              | ❌      |
 | Gestion de l'équipement               | Ylies             | Possiblité de modifié l'équipement actif du joueur                      | ✅      |
