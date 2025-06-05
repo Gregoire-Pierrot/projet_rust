@@ -188,25 +188,27 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui applique les effets d'un consommable au joueur.
-    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>) {
+    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>,combat: &bool) {
         self.personnage.pv_actuel = if self.personnage.pv_actuel + effets[0] > self.personnage.pv_max {
             self.personnage.pv_max
         } else {
             self.personnage.pv_actuel + effets[0]
         };
-        self.personnage.force += effets[1];
-        self.personnage.dexterite += effets[2];
-        self.personnage.intelligence += effets[3];
-        self.personnage.vitesse += effets[4];
-        self.personnage.esquive += effets[5];
-        self.personnage.chance += effets[6];
-        self.personnage.resistance_physique += effets[7];
-        self.personnage.resistance_magique += effets[8];
+        if *combat{
+            self.personnage.force += effets[1];
+            self.personnage.dexterite += effets[2];
+            self.personnage.intelligence += effets[3];
+            self.personnage.vitesse += effets[4];
+            self.personnage.esquive += effets[5];
+            self.personnage.chance += effets[6];
+            self.personnage.resistance_physique += effets[7];
+            self.personnage.resistance_magique += effets[8];
+        }
     }
 
     ///////////////
     /// Fonction qui permet d'utiliser un consommable.
-    pub fn utiliser_item(&mut self, master_file: &MasterFile,item: &String) {
+    pub fn utiliser_item(&mut self, master_file: &MasterFile,item: &String,combat: &bool) {
         match master_file.prendre_consommable_id(item) {
             Ok(consommable) => {
                 let effets = consommable.get_effets().clone();
@@ -230,7 +232,7 @@ impl Joueur {
                 };
 
                 if should_apply {
-                    self.appliquer_effets_items(effets);
+                    self.appliquer_effets_items(effets,&combat);
                 }
             }
             _ => {
@@ -264,6 +266,17 @@ impl Joueur {
             //Retour à l'interface
         }
         false
+    }
+
+    pub fn reset_stats(&mut self,joueur: Joueur){
+        self.set_force(joueur.get_force());
+        self.set_dexterite(joueur.get_dexterite());
+        self.set_intelligence(joueur.get_intelligence());
+        self.set_vitesse(joueur.get_vitesse());
+        self.set_esquive(joueur.get_esquive());
+        self.set_chance(joueur.get_chance());
+        self.set_resistance_physique(joueur.get_resistance_physique());
+        self.set_resistance_magique(joueur.get_resistance_magique());
     }
 
     pub fn get_categorie_Arme(&self) -> Option<Arme> {
