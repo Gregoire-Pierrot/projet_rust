@@ -67,12 +67,12 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 let mut items_valides = Vec::new();
 
                 for (i, (id, _)) in inventaire.iter().enumerate() {
-                    match master_file.prendre_ressource_id(id) {
+                    match master_file.prendre_consommable_id(id) {
                         Ok(item) => {
                             println!("{}. {}", i + 1, item.get_nom());
                             items_valides.push(item);
                         }
-                        Err(e) => println!("{}. Erreur: {}", i + 1, e),
+                        Err(_) => {}
                     }
                 }
 
@@ -81,13 +81,10 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 match choix.parse::<usize>() {
                     Ok(num) if num >= 1 && num <= items_valides.len() => {
                         let item = &items_valides[num - 1];
-                        if joueur.utiliser_item(&item.get_id()) {
-                            println!("\n--- Actions ---");
-                            println!("Vous utilisez l'objet : {}", item.get_nom());
-                            combat_en_cours = !ennemie.combat(joueur);
-                        } else {
-                            println!("L'objet {} est inutilisable", item.get_nom());
-                        }
+                        joueur.utiliser_item(&master_file,&item.get_id());
+                        println!("\n--- Actions ---");
+                        println!("Vous utilisez l'objet : {}", item.get_nom());
+                        combat_en_cours = !ennemie.combat(joueur);
                     }
                     Ok(_) => continue,
                     _ => println!("Choix d'objet invalide."),

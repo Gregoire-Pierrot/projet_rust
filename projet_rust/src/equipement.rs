@@ -1,18 +1,30 @@
 use serde::{Serialize, Deserialize};
 
-use crate::structs::Ressource;
+use crate::structs::{Ressource, Rarete};
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum Arme {
+    ArmeMelee,
+    ArmeDistance,
+    ArmeMagie
+}
+
+impl std::fmt::Display for Arme {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum Categorie {
     Bottes,
     Jambieres,
     Casque,
     Plastron,
     Gants,
-    Arme_Melee,
-    Arme_Distance,
-    Arme_Magie
+    Arme
 }
+
 
 impl std::fmt::Display for Categorie {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -43,7 +55,8 @@ pub struct Equipement {
     pourcent_bonus_chance: u16,
     pourcent_bonus_resistance_physique: u16,
     pourcent_bonus_resistance_magique: u16,
-    categorie: Categorie 
+    categorie: Categorie,
+    type_arme: Option<Arme>
 }
 
 impl Equipement {
@@ -96,6 +109,26 @@ impl Equipement {
     pub fn get_pourcent_bonus_resistance_magique(&self) -> u16 { self.pourcent_bonus_resistance_magique.clone() }
 
     pub fn get_categorie(&self) -> Categorie { self.categorie.clone() }
+
+    pub fn get_type_arme(&self) -> Option<Arme> { self.type_arme.clone() }
+
+
+    pub fn get_rarete(&self) -> Rarete { self.ressource.rarete.clone() }
+
+
+    pub fn get_value_rarete(&self) -> f32{
+        match self.get_rarete(){
+            Rarete::Commun => 0.4,             
+            Rarete::PeuCommun => 0.3,
+            Rarete::Rare => 0.2,
+            Rarete::TresRare => 0.1,
+            Rarete::Epique => 0.01,
+            Rarete::Legendaire => 0.005,
+            Rarete::Mythique => 0.0001,
+            Rarete::Divin => 0.00001,
+            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
+        }
+    }
 }
 
 impl std::fmt::Display for Equipement {

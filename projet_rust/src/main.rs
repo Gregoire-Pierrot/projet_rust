@@ -27,7 +27,7 @@ fn main() {
     let mut master_file = MasterFile::new();
     let mut joueur = master_file.get_joueur();
 
-    println!("Avant modification :");
+   /* println!("Avant modification :");
     println!();
     println!("{}", joueur);
 
@@ -45,7 +45,7 @@ fn main() {
     
     println!();
     println!("{}", joueur);
-
+*/
     //master_file.sauvegarder(&joueur);
 
     /*
@@ -64,6 +64,7 @@ fn main() {
     println!("Attaque reçu :");
     println!("{}", joueur);
 */
+
     let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1") {
         Ok(e) => e,
         Err(e) => {
@@ -72,7 +73,7 @@ fn main() {
         }
     };
 
-    let lieu = match master_file.prendre_lieu_id("pièce1") {
+/*    let lieu = match master_file.prendre_lieu_id("pièce1") {
         Ok(l) => l,
         Err(e) => {
             eprintln!("Erreur : {}", e);
@@ -89,7 +90,7 @@ fn main() {
         println!("{:?}", ennemie.lootable());
     } else {
         eprintln!("Aucune stats trouvée dans le lieu pour l'ennemi {}", id);
-    }
+    }*/
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
 

@@ -17,28 +17,6 @@ impl Pnj {
 
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
 
-    pub fn get_pv(&self) -> u16 { self.personnage.pv.clone() }
-
-    pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
-
-    pub fn get_dexterite(&self) -> u16 { self.personnage.dexterite.clone() }
-
-    pub fn get_intelligence(&self) -> u16 { self.personnage.intelligence.clone() }
-
-    pub fn get_vitesse(&self) -> u16 { self.personnage.vitesse.clone() }
-
-    pub fn get_esquive(&self) -> u16 { self.personnage.esquive.clone() }
-
-    pub fn get_chance(&self) -> u16 { self.personnage.chance.clone() }
-
-    pub fn get_resistance_physique(&self) -> u16 { self.personnage.resistance_physique.clone() }
-
-    pub fn get_resistance_magique(&self) -> u16 { self.personnage.resistance_magique.clone() }
-
-    pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
-
-    pub fn get_equipement(&self) -> HashMap<String, Option<String>> { self.personnage.equipement.clone() }
-
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
 
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }

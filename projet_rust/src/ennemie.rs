@@ -4,9 +4,11 @@ use rand::Rng;
 
 
 use crate::structs::Personnage;
+use crate::json_manager::Item;
 use crate::json_manager::MasterFile;
 use crate::structs::Ressource;
 use crate::joueur::Joueur;
+use crate::equipement::Categorie;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
@@ -43,7 +45,7 @@ impl Ennemie {
 
     pub fn get_attaques(&self) -> Vec<String> { self.personnage.attaques.clone() }
 
-    pub fn get_equipement(&self) -> HashMap<String, Option<String>> { self.personnage.equipement.clone() }
+    pub fn get_equipement(&self) -> HashMap<Categorie, Option<String>> { self.personnage.equipement.clone()}
 
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
 
@@ -77,28 +79,28 @@ impl Ennemie {
         str_drop_table
     }
 
-    //////////////////////////////////// à modifier
+    ///////////////
+    /// Fonction qui permet de calculer la chance de récupérer les récompenses de fin de combat
     pub fn lootable(&self) -> HashMap<String, u32>{ 
         let master_file = MasterFile::new();
         let mut loot: HashMap<String, u32> = HashMap::new();
         let mut rng = rand::thread_rng();
-        for (item, quantite) in self.personnage.inventaire.iter() {
-            if let Ok(ressource) = master_file.prendre_ressource_id(item) {
-                let chance_loot: f32 = ressource.get_rarete()+self.droptable[item];
-                //println!("chance d'avoir l'item : {} - {}",item,chance_loot);
-                if chance_loot>1.0 {
-                    loot.insert(item.clone(), *quantite);
-                }
-                else{ 
-                    for _ in 1..*quantite {
+        for (objet, quantite) in self.personnage.inventaire.iter() {
+            match master_file.prendre_item_id(objet) {
+                Ok(item) => {
+                    let chance_loot = match &item {
+                        Item::Ressource(r) => r.get_value_rarete(),
+                        Item::Consommable(c) => c.get_value_rarete(),
+                        Item::Equipement(e) => e.get_value_rarete(),
+                    };
+                    println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
+                    for _ in 1..self.droptable[objet.as_str()] {
                         if rng.gen::<f32>() <= chance_loot {
-                            loot.entry(item.clone()).and_modify(|e| *e += 1).or_insert(1);
+                            loot.entry(objet.clone()).and_modify(|e| *e += 1).or_insert(1);
                         }
                     }
                 }
-
-            }else {
-                println!("Ressource indispo");
+                Err(e) => println!("Item indisponible: {}", e),
             }
         }
         loot

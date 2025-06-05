@@ -1,6 +1,7 @@
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 use crate::equipement::Categorie;
+use crate::equipement::Arme;
 use crate::json_manager::MasterFile;
 
 
@@ -193,16 +194,64 @@ impl Personnage {
     pub fn attaque(&mut self,attaque_id: &String) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
         let mut master_file  = MasterFile::new();
         let mut degats: Vec<u16> = vec![0, 0]; // [dégâts physique, dégâts magique]
+        let mut degats_brute: u16 = 0;
+        let mut degats_magique: u16 = 0;
         if let Ok(attaque) = master_file.prendre_attaque_id(&attaque_id) {
-            let mut degats_brute: u16 = self.calcul_force()+attaque.get_force();
-            degats_brute += (degats_brute * attaque.get_pourcent_bonus_force()) / 100;// base + attaque + %base+attaque
-
-            let mut degats_magique: u16 = self.calcul_intelligence()+attaque.get_intelligence();
-            degats_magique += (degats_magique * attaque.get_pourcent_bonus_intelligence()) / 100;// base + attaque + %base+attaque
-
+            match attaque.get_categorie() {
+                Arme::ArmeMelee => {
+                    degats_brute= self.calcul_force()+attaque.get_degats();
+                    degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
+                }
+                Arme::ArmeDistance => {  // demander à grégoire distance = brute ou magique ?
+                    degats_brute = self.calcul_dexterite()+attaque.get_degats();
+                    degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;
+                },
+                Arme::ArmeMagie => {
+                    degats_magique = self.calcul_intelligence()+attaque.get_degats();
+                    degats_magique += (degats_magique * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
+                },
+                _ => {}
+            }
             degats[0] = degats_brute;
             degats[1] = degats_magique;
         }
+        degats
+    }
+
+    ///////////////
+    /// Fonction qui calcul les dégâts de l'attaque de base.
+    pub fn attaque_base(&mut self,attaque_id: &String,master_file: &MasterFile) -> Vec<u16> {  // à opti
+        let mut degats: Vec<u16> = vec![0, 0];
+        let mut degats_brute: u16 = 0;
+        let mut degats_magique: u16 = 0;
+        if let Some(Some(id)) = self.equipement.get(&Categorie::Arme) {
+            if let Ok(equipement) = master_file.prendre_equipement_id(id) {
+                match equipement.get_type_arme() {
+                    Some(Arme::ArmeMelee) => {
+                        degats_brute = self.calcul_force()+equipement.get_bonus_force();
+                        degats_brute += (degats_brute * equipement.get_pourcent_bonus_force()) / 100;
+                    },
+                    Some(Arme::ArmeDistance) => {  // demander à grégoire distance = brute ou magique ?
+                        degats_brute = self.calcul_dexterite()+equipement.get_bonus_dexterite();
+                        degats_brute += (degats_brute * equipement.get_pourcent_bonus_dexterite()) / 100;
+                    },
+                    Some(Arme::ArmeMagie) => {
+                        degats_brute = self.calcul_intelligence()+equipement.get_bonus_intelligence();
+                        degats_brute += (degats_brute * equipement.get_pourcent_bonus_intelligence()) / 100;
+                    },
+                    _ => {}
+                }
+            }
+            else {
+                degats_brute = self.calcul_force();
+            }
+        }
+        else {
+            degats_brute = self.calcul_force();
+        }
+
+        degats[0] = degats_brute;
+        degats[1] = degats_magique;
         degats
     }
 
@@ -288,6 +337,20 @@ impl Ressource {
         }
         str_ressource.push_str(&self.ressource[self.ressource.len()-1]);
         str_ressource
+    }
+
+    pub fn get_value_rarete(&self) -> f32{
+        match self.get_rarete(){
+            Rarete::Commun => 0.4,             
+            Rarete::PeuCommun => 0.3,
+            Rarete::Rare => 0.2,
+            Rarete::TresRare => 0.1,
+            Rarete::Epique => 0.01,
+            Rarete::Legendaire => 0.005,
+            Rarete::Mythique => 0.0001,
+            Rarete::Divin => 0.00001,
+            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.entite.id)
+        }
     }
 }
 

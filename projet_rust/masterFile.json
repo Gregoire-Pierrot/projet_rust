@@ -7,9 +7,9 @@
         "nom": "Jane"
       },
       "pv": 100,
-      "force": 0,
+      "force": 100,
       "dexterite": 0,
-      "intelligence": 0,
+      "intelligence": 100,
       "vitesse": 0,
       "esquive": 0,
       "chance": 0,
@@ -496,7 +496,8 @@
       "pourcent_bonus_chance": 0,
       "pourcent_bonus_resistance_physique": 0,
       "pourcent_bonus_resistance_magique": 0,
-      "categorie": "Arme_Melee"
+      "categorie": "Arme",
+      "type_arme": "ArmeMelee"
     },
     {
       "ressource": {
@@ -530,7 +531,8 @@
       "pourcent_bonus_chance": 0,
       "pourcent_bonus_resistance_physique": 0,
       "pourcent_bonus_resistance_magique": 0,
-      "categorie": "Plastron"
+      "categorie": "Plastron",
+      "type_arme": null
     }
   ],
   "Attaque": [
@@ -542,7 +544,7 @@
       },
       "degats": 10,
       "pourcent_bonus_degats": 0,
-      "categorie": "Arme_Melee"
+      "categorie": "ArmeMelee"
     },
     {
       "entite": {
@@ -552,7 +554,7 @@
       },
       "degats": 15,
       "pourcent_bonus_degats": 10,
-      "categorie": "Arme_Magie"
+      "categorie": "ArmeMagie"
     }
   ]
 }

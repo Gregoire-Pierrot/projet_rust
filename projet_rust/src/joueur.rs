@@ -2,7 +2,6 @@ use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
 use crate::structs::Personnage;
-use std::collections::HashMap;
 use crate::equipement::Categorie;
 use crate::json_manager::MasterFile;
 
@@ -175,19 +174,23 @@ impl Joueur {
         res
     }
 
+    ///////////////
+    /// Fonction qui applique les effets d'un consommable au joueur.
     pub fn appliquer_effets_items(&mut self, effets: Vec<u16>) {
         self.personnage.pv += effets[0];
         self.personnage.force += effets[1];
-        self.personnage.intelligence += effets[2];
-        self.personnage.vitesse += effets[3];
-        self.personnage.esquive += effets[4];
-        self.personnage.chance += effets[5];
-        self.personnage.resistance_physique += effets[6];
-        self.personnage.resistance_magique += effets[7];
+        self.personnage.dexterite += effets[2];
+        self.personnage.intelligence += effets[3];
+        self.personnage.vitesse += effets[4];
+        self.personnage.esquive += effets[5];
+        self.personnage.chance += effets[6];
+        self.personnage.resistance_physique += effets[7];
+        self.personnage.resistance_magique += effets[8];
     }
 
-    pub fn utiliser_item(&mut self, item: &String) -> bool {
-        let master_file = MasterFile::new();
+    ///////////////
+    /// Fonction qui permet d'utiliser un consommable.
+    pub fn utiliser_item(&mut self, master_file: &MasterFile,item: &String) {
         match master_file.prendre_consommable_id(item) {
             Ok(consommable) => {
                 let effets = consommable.get_effets().clone();
@@ -212,31 +215,30 @@ impl Joueur {
 
                 if should_apply {
                     self.appliquer_effets_items(effets);
-                    return true;
-                    //println!("Item {} utilisé.", item);
                 }
             }
             _ => {
-                //println!("L'item {} n'est pas utilisable", item);
+                println!("L'item {} n'est pas utilisable", item);
             }
         }
-        false
     }
 
+    ///////////////
+    /// Fonction qui permet d'ajouter les récompenses d'un combat dans l'inventaire du joueur.
     pub fn ajout_recompense_inventaire(&mut self,recompense: HashMap<String, u32>){
         for (item, quantite) in recompense.iter() {
             self.add_inventaire(item.clone(), *quantite);
         }
     }
-
-    pub fn fuir(){
-        //Retour à l'interface
-    }
     
+    ///////////////
+    /// Fonction qui retourne les dégâts reçus après que la résistance physique/magique ait été prise en compte.
     pub fn degats_recus_net(&mut self,degats_recus_brut: &Vec<u16>) -> u16{
         self.personnage.defense(degats_recus_brut)
     }
 
+    ///////////////
+    /// Fonction qui applique les dégâts infligés au joueur et peut amener à des conséquences en cas de PV tombant à 0.
     pub fn application_degats(&mut self,degats_recus_net: &u16) -> bool {
         let new_pv = self.get_pv().saturating_sub(*degats_recus_net);
         self.set_pv(new_pv);
@@ -247,10 +249,6 @@ impl Joueur {
         }
         false
     }
-
-    
-    
-
 }
 
 impl std::fmt::Display for Joueur {

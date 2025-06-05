@@ -6,6 +6,13 @@ use std::fs;
 
 use crate::structs::Ressource;
 
+pub enum Item {
+    Ressource(Ressource),
+    Consommable(Consommable),
+    Equipement(Equipement),
+}
+
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MasterFile {
     Joueur: Joueur,
@@ -139,5 +146,19 @@ impl MasterFile {
             }
         }
         return Err("Attaque introuvable".to_string());
+    }
+
+
+    ///item///
+    pub fn prendre_item_id(&self, id: &str) -> Result<Item, String> {
+        if let Ok(consommable) = self.prendre_consommable_id(id) {
+            Ok(Item::Consommable(consommable))
+        } else if let Ok(equipement) = self.prendre_equipement_id(id) {
+            Ok(Item::Equipement(equipement))
+        } else if let Ok(ressource) = self.prendre_ressource_id(id) {
+            Ok(Item::Ressource(ressource))
+        } else {
+            Err(format!("Item avec id '{}' introuvable", id))
+        }
     }
 }

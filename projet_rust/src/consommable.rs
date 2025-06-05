@@ -27,6 +27,20 @@ impl Consommable {
 
     pub fn get_rarete(&self) -> Rarete { self.ressource.rarete.clone() }
 
+    pub fn get_value_rarete(&self) -> f32{
+        match self.get_rarete(){
+            Rarete::Commun => 0.4,             
+            Rarete::PeuCommun => 0.3,
+            Rarete::Rare => 0.2,
+            Rarete::TresRare => 0.1,
+            Rarete::Epique => 0.01,
+            Rarete::Legendaire => 0.005,
+            Rarete::Mythique => 0.0001,
+            Rarete::Divin => 0.00001,
+            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
+        }
+    }
+
     pub fn get_effets(&self) -> Vec<u16> { self.effets.clone() }
 
     fn str_effets(&self) -> String {
