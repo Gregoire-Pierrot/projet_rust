@@ -289,7 +289,7 @@
       "quetes_suivantes": [
         "principale_2"
       ],
-      "ajout_quete": "",
+      "quete_joueur": true,
       "statut": "EnCours",
       "fin_de_quete": {
         "Obtention": "clé"
@@ -306,7 +306,7 @@
         "pomme": 5
       },
       "quetes_suivantes": [],
-      "ajout_quete": "",
+      "quete_joueur": true,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Interaction": "porte_1"
@@ -323,7 +323,7 @@
         "pomme": 5
       },
       "quetes_suivantes": [],
-      "ajout_quete": "",
+      "quete_joueur": true,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Combat": "ennemie_1"
@@ -340,7 +340,7 @@
         "pomme": 5
       },
       "quetes_suivantes": [],
-      "ajout_quete": "",
+      "quete_joueur": true,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "dialogue_1_1"
@@ -359,8 +359,8 @@
         "Dialogue_pnj_1_2",
         "Dialogue_pnj_1_3"
       ],
-      "ajout_quete": "",
-      "statut": "NonCommencee",
+      "quete_joueur": true,
+      "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
       }
@@ -368,60 +368,30 @@
     {
       "entite": {
         "id": "Dialogue_pnj_1_1",
-        "description": "Qui êtes vous ?",
+        "description": "Aide moi à détruire le marais",
         "nom": "joueur dialogue"
       },
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [
-        "Dialogue_pnj_1_1_1"
+        "secondaire_3"
       ],
-      "ajout_quete": "",
-      "statut": "NonCommencee",
+      "quete_joueur": false,
+      "statut": "EnCours",
       "fin_de_quete": {
-        "Dialogue": "quelque_chose"
+        "Dialogue": ""
       }
     },
     {
       "entite": {
-        "id": "Dialogue_pnj_1_1_1",
-        "description": "Je suis un PNJ ?!",
-        "nom": "pnj dialogue"
+        "id": "secondaire_3",
+        "description": "Détruire le marais",
+        "nom": "Destruction du marais"
       },
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [],
-      "ajout_quete": "",
-      "statut": "NonCommencee",
-      "fin_de_quete": {
-        "Dialogue": "quelque_chose"
-      }
-    },
-    {
-      "entite": {
-        "id": "Dialogue_pnj_1_2",
-        "description": "Avez vous quelque chose à me vendre ?",
-        "nom": "joueur dialogue"
-      },
-      "lieu": "pièce3",
-      "recompense": {},
-      "quetes_suivantes": [],
-      "ajout_quete": "",
-      "statut": "NonCommencee",
-      "fin_de_quete": {
-        "Dialogue": "quelque_chose"
-      }
-    },
-    {
-      "entite": {
-        "id": "Dialogue_pnj_1_3",
-        "description": "Vous êtes disponible ?",
-        "nom": "joueur dialogue"
-      },
-      "lieu": "pièce3",
-      "recompense": {},
-      "quetes_suivantes": [],
-      "ajout_quete": "",
+      "quete_joueur": true,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
@@ -436,7 +406,7 @@
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [],
-      "ajout_quete": "",
+      "quete_joueur": false,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"

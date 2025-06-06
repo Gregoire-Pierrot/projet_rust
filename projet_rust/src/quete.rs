@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 use crate::structs::Entite;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub enum StatutQuete {
     NonCommencee,
     EnCours,
@@ -36,19 +36,19 @@ pub struct Quete {
     lieu: String,
     recompense: HashMap<String, u32>,
     quetes_suivantes: Vec<String>,
-    ajout_quete: String,
+    quete_joueur: bool,
     statut: StatutQuete,
     fin_de_quete: FinDeQuete
 }
 
 impl Quete {
-    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, ajout_quete: String, statut: String, fin_de_quete: FinDeQuete) -> Self {
+    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, quete_joueur: bool, statut: String, fin_de_quete: FinDeQuete) -> Self {
         Self {
             entite,
             lieu,
             recompense,
             quetes_suivantes,
-            ajout_quete,
+            quete_joueur,
             statut: match statut.as_str() {
                 "NonCommencee" => StatutQuete::NonCommencee,
                 "EnCours" => StatutQuete::EnCours,
@@ -73,10 +73,10 @@ impl Quete {
     pub fn get_recompense(&self) -> HashMap<String, u32> { self.recompense.clone() }
     pub fn set_recompense(&mut self, recompense: HashMap<String, u32>) {self.recompense = recompense}
 
-    pub fn get_quete_suivantes(&self) -> Vec<String> { self.quetes_suivantes.clone() }
-    pub fn set_quete_suivante(&mut self, quetes_suivantes: Vec<String>) {self.quetes_suivantes = quetes_suivantes}
+    pub fn get_quetes_suivantes(&self) -> Vec<String> { self.quetes_suivantes.clone() }
+    pub fn set_quetes_suivantes(&mut self, quetes_suivantes: Vec<String>) {self.quetes_suivantes = quetes_suivantes}
 
-    pub fn get_ajout_quete(&self) -> String { self.ajout_quete.clone() }
+    pub fn get_quete_joueur(&self) -> bool { self.quete_joueur.clone() }
 
     pub fn get_statut(&self) -> StatutQuete { self.statut.clone() }
     pub fn set_statut(&mut self, statut: StatutQuete) {self.statut = statut;}
@@ -157,7 +157,7 @@ impl Quete {
 
 impl std::fmt::Display for Quete {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Quete : entite = [{}], lieu = {}, recompense = {}, quetes_suivantes = {}, ajout_quete = {}, statut = {}, fin_de_quete = {}", 
-               self.entite, self.lieu, self.str_recompense(), self.str_quetes_suivantes(), self.ajout_quete, self.statut, self.fin_de_quete)
+        write!(f, "Quete : entite = [{}], lieu = {}, recompense = {}, quetes_suivantes = {}, quete_joueur = {}, statut = {}, fin_de_quete = {}", 
+               self.entite, self.lieu, self.str_recompense(), self.str_quetes_suivantes(), self.quete_joueur, self.statut, self.fin_de_quete)
     }
 }
