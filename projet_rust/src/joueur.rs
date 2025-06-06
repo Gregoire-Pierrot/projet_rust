@@ -436,6 +436,13 @@ impl Joueur {
         }
     }
 
+    ///////////////
+    ///Fonction qui permet de se déplacer
+    pub fn deplacement(&mut self,destination: &str) {
+        self.set_position(destination.to_string());
+        println!("Vous vous êtes déplacé vers {} ",destination);
+    }
+
 }
 
 impl std::fmt::Display for Joueur {

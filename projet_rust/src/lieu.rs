@@ -87,6 +87,21 @@ impl Lieu {
         str_contient_ressources
     }
 
+    pub fn remove_contient_ressources(&mut self, item: &String, quantite: u32){
+        if let Some(entry) = self.contient_ressources.get_mut(item) {
+            if *entry >= quantite {
+                *entry -= quantite;
+                if *entry == 0 {
+                    self.contient_ressources.remove(item);
+                }
+            } else {
+                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+            }
+        } else {
+            println!("L'item {} n'est pas dans le lieu.", item);
+        }
+    }
+
     fn str_contient_ennemies(&self) -> String {
         let mut str_contient_ennemies = String::new();
         for (key, value) in &self.contient_ennemies {
@@ -110,7 +125,6 @@ impl Lieu {
     }
 
     pub fn synchro_ennemie(&self, ennemie: &mut Ennemie, joueur: &Joueur) {
-
         let mut rng = rand::thread_rng();
         let ennemie_stats = &self.contient_ennemies[&ennemie.get_id()];
         let length_stats = ennemie_stats.len();
@@ -126,7 +140,6 @@ impl Lieu {
 
             let stat_rand_force:u16  = rng.gen_range(0..ennemie.get_mod_force());
             ennemie.set_force(ennemie.get_force() + stat_rand_force * niveau);
-    
 
             let stat_rand_force:u16  = rng.gen_range(0..ennemie.get_mod_force());
             ennemie.set_force(ennemie.get_force() + stat_rand_force * niveau);
@@ -153,7 +166,6 @@ impl Lieu {
             ennemie.set_resistance_magique(ennemie.get_resistance_magique() + stat_rand_resistance_magique * niveau);
         }
 
-
         let mut somme_stats_random: u16 = 0;
         somme_stats_random += ennemie.get_force() - ennemie_base.get_force();
         somme_stats_random += ennemie.get_dexterite() - ennemie_base.get_dexterite();
@@ -165,10 +177,13 @@ impl Lieu {
         somme_stats_random += ennemie.get_resistance_magique()- ennemie_base.get_resistance_magique();
 
         let xp = (niveau as u32 * (somme_stats_random as u32 +ennemie.get_xp())) * (niveau as u32 / joueur.get_niveau() as u32) * joueur.get_multiplicateur_xp() as u32;
-        
         ennemie.set_xp(xp);
     }
 
+    pub fn recolter_item(&mut self,item: String, quantite: u32, joueur: &mut Joueur) {
+        joueur.add_inventaire(item.clone(),quantite);
+        self.remove_contient_ressources(&item, quantite);
+    }
 
 }
 
