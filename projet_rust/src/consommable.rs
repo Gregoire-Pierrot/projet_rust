@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 use crate::structs::{Ressource, Rarete};
 
@@ -40,6 +41,8 @@ impl Consommable {
             _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
         }
     }
+
+    pub fn get_ressource(&self) -> Ressource { self.ressource.clone() }
 
     pub fn get_effets(&self) -> Vec<u16> { self.effets.clone() }
 

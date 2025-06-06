@@ -146,6 +146,16 @@ fn main() {
     println!("{:?}", joueur.recup_consommable(&master_file));
 
 
+    println!();
+    println!("Avant Demantelement");
+    println!("{:?}", &joueur);
+    joueur.demantelement(&"clé".to_string(),&master_file);
+    joueur.demantelement(&"pomme".to_string(),&master_file);
+    joueur.demantelement(&"arc".to_string(),&master_file);
+    println!();
+    println!("Après Demantelement :");
+    println!("{:?}", &joueur);
+
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
     
