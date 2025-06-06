@@ -149,6 +149,16 @@ fn main() {
     println!("{:?}", &lieu);
 
 
+    println!();
+    println!("Avant Déplacement");
+    println!("{:?}", &joueur);
+    joueur.deplacement(&lieu.get_id());
+
+    println!();
+    println!("Après Déplacement :");
+    println!("{:?}", &joueur);
+
+
     combat(&mut master_file, &mut ennemie, &mut joueur);
     
     println!("{}", joueur);
