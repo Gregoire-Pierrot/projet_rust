@@ -82,7 +82,7 @@ fn main() {
         }
     };
 
-    let lieu = match master_file.prendre_lieu_id("pièce1") {
+    let mut lieu = match master_file.prendre_lieu_id("pièce1") {
         Ok(l) => l,
         Err(e) => {
             eprintln!("Erreur : {}", e);
@@ -135,6 +135,18 @@ fn main() {
     println!();
     println!("Après Demantelement :");
     println!("{:?}", &joueur);
+
+
+    println!();
+    println!("Avant Récupération item");
+    println!("{:?}", &joueur);
+    println!("{:?}", &lieu);
+    lieu.recolter_item(("pomme").to_string(), 3, &mut joueur);
+
+    println!();
+    println!("Après Récupération item :");
+    println!("{:?}", &joueur);
+    println!("{:?}", &lieu);
 
 
     combat(&mut master_file, &mut ennemie, &mut joueur);
