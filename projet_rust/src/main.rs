@@ -22,7 +22,6 @@ use equipement::Equipement;
 use structs::EquipementType;
 use attaque::Attaque;
 use json_manager::MasterFile;
-use crate::action_quetes::{completion_quete};
 use combat::combat;
 use crate::action_pnj::{get_dialogue_primaire,afficher_dialogue,get_id_dialogues_joueur,get_reponse_dialogue_pnj};
 
@@ -36,7 +35,7 @@ fn main() {
 
 
     let mut ressource = master_file.prendre_ressource_id(&String::from("clé")).expect("Ressource introuvable");
-    completion_quete(&mut master_file,&mut joueur, ressource.get_id());
+    joueur.completion_quete(&mut master_file,ressource.get_id());
 
     println!();
     println!("Affichage de la fin d'une quête :");

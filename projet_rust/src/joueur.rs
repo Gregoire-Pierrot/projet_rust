@@ -7,6 +7,7 @@ use crate::equipement::{Categorie, Arme};
 use crate::structs::Ressource;
 use crate::equipement::Equipement;
 use crate::consommable::Consommable;
+use crate::quete::Quete;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -393,6 +394,40 @@ impl Joueur {
             _ => None
         }
     }
+
+    ///////////////
+    ///Fonction pour mettre la suite d'une quête dans la liste des quêtes du joueur
+    pub fn ajout_quete_joueur(&mut self,master_file: &mut MasterFile, quete: &mut Quete){
+        let mut new_quete: Quete =  master_file.prendre_quete_id(&quete.get_ajout_quete()).expect("Quête introuvable");
+        self.add_quete(new_quete.get_id());
+        new_quete.set_statut(crate::quete::StatutQuete::EnCours);
+    }
+
+    ///////////////
+    ///Fonction pour mettre la suite d'une quête dans la liste des quêtes du joueur 
+    pub fn suivi_quete(&mut self, master_file: &mut MasterFile, quete: &mut Quete){
+        let quete_suivante = quete.get_quete_suivantes();
+        self.remove_quete(quete.get_id());
+        quete.set_statut(crate::quete::StatutQuete::Terminee);
+        self.add_quete(quete_suivante[0].clone());
+        self.ajout_recompense_inventaire(quete.get_recompense());
+        println!("Quête terminée : [{:?}]", quete.get_statut());
+    }
+
+    ///////////////
+    ///Fonction qui permet de vérifier si l'une des quêtes du joueur est fini
+    pub fn completion_quete(&mut self, master_file: &mut MasterFile, id_condition: String){
+        let quetes: Vec<String> = self.get_quetes();
+        for quete_id in quetes {
+            let mut quete: Quete = master_file.prendre_quete_id(&quete_id).expect("Quête introuvable");
+            if quete.find_fin_de_quete(id_condition.clone()) {
+                println!("quete fini");
+                self.suivi_quete(master_file, &mut quete);
+                break;
+            }
+        }
+    }
+
 }
 
 impl std::fmt::Display for Joueur {
