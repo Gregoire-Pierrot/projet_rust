@@ -173,6 +173,17 @@ impl Joueur {
         equipement
     }
 
+    pub fn demantelement(&mut self, item: &String, master_file: &MasterFile) {
+        self.remove_inventaire(item, 1);
+        if let Ok(item_obj) = master_file.prendre_item_id(item) {
+            for (composant, quantite) in item_obj.get_ressources() {
+                self.add_inventaire(composant, quantite);
+            }
+        } else {
+            eprintln!("Item '{}' introuvable dans le master_file", item);
+        }
+    }
+
 
     pub fn get_position(&self) -> String { self.position.clone() }
     pub fn set_position(&mut self, lieu: String) { self.position = lieu; }

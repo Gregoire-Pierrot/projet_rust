@@ -3,6 +3,7 @@ use crate::{Joueur, Pnj, Ennemie, Lieu, Quete, Consommable, Equipement, Attaque}
 use serde::{Serialize, Deserialize};
 use serde_json;
 use std::fs;
+use std::collections::HashMap;
 
 use crate::structs::Ressource;
 
@@ -10,6 +11,17 @@ pub enum Item {
     Ressource(Ressource),
     Consommable(Consommable),
     Equipement(Equipement),
+}
+
+impl Item {
+
+    pub fn get_ressources(&self) -> HashMap<String, u32> {
+        match self {
+            Item::Ressource(r) => r.get_ressource(),
+            Item::Consommable(c) => c.get_ressource().get_ressource(),
+            Item::Equipement(e) => e.get_ressource().get_ressource(),
+        }
+    }
 }
 
 

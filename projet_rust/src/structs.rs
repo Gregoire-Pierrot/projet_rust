@@ -335,7 +335,7 @@ pub enum Rarete {
 pub struct Ressource {
     pub entite: Entite,
     pub prix: u32,
-    pub ressource: Vec<String>,
+    pub ressource: HashMap<String, u32>,
     pub rarete: Rarete
 }
 
@@ -346,7 +346,7 @@ impl std::fmt::Display for Rarete {
 }
 
 impl Ressource {
-    pub fn new(entite: Entite, prix: u32, ressource: Vec<String>, rarete: String) -> Self {
+    pub fn new(entite: Entite, prix: u32, ressource: HashMap<String, u32>, rarete: String) -> Self {
         Self {
             entite: entite.clone(),
             prix,
@@ -370,16 +370,18 @@ impl Ressource {
     pub fn get_nom(&self) -> String { self.entite.nom.clone() }
 
     pub fn get_prix(&self) -> u32 { self.prix }
-    pub fn get_ressource(&self) -> Vec<String> { self.ressource.clone() }
+    pub fn get_ressource(&self) -> HashMap<String, u32> { self.ressource.clone() }
     pub fn get_rarete(&self) -> Rarete { self.rarete.clone() }
 
     fn str_ressource(&self) -> String {
         let mut str_ressource = String::new();
-        for i in 0..self.ressource.len()-1 {
-            str_ressource.push_str(&self.ressource[i]);
-            str_ressource.push_str(", ");
+        for (key, value) in &self.ressource {
+            str_ressource.push_str(&format!("{}: {}, ", key, value));
         }
-        str_ressource.push_str(&self.ressource[self.ressource.len()-1]);
+        if !str_ressource.is_empty() {
+            str_ressource.pop();
+            str_ressource.pop();
+        }
         str_ressource
     }
 

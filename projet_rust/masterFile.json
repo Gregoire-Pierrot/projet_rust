@@ -452,7 +452,7 @@
           "nom": "pomme"
         },
         "prix": 10,
-        "ressource": [],
+        "ressource": {},
         "rarete": "Commun"
       },
       "effets": [
@@ -476,9 +476,9 @@
         "nom": "clé"
       },
       "prix": 5,
-      "ressource": [
-        "fer"
-      ],
+      "ressource": {
+        "fer": 2
+      },
       "rarete": "PeuCommun"
     },
     {
@@ -488,7 +488,7 @@
         "nom": "fer"
       },
       "prix": 15,
-      "ressource": [],
+      "ressource": {},
       "rarete": "Commun"
     }
   ],
@@ -501,9 +501,9 @@
           "nom": "épee de feu"
         },
         "prix": 100,
-        "ressource": [
-          "fer"
-        ],
+        "ressource": {
+        "fer": 2
+        },
         "rarete": "Rare"
       },
       "bonus_pv": 0,
@@ -537,9 +537,9 @@
           "nom": "épee de fer"
         },
         "prix": 100,
-        "ressource": [
-          "fer"
-        ],
+        "ressource": {
+        "fer": 2
+        },
         "rarete": "Rare"
       },
       "bonus_pv": 0,
@@ -573,9 +573,9 @@
           "nom": "Arc"
         },
         "prix": 100,
-        "ressource": [
-          "fer"
-        ],
+        "ressource": {
+          "fer": 2
+        },
         "rarete": "Rare"
       },
       "bonus_pv": 0,
@@ -609,9 +609,9 @@
           "nom": "Baton"
         },
         "prix": 100,
-        "ressource": [
-          "fer"
-        ],
+        "ressource": {
+          "fer": 2
+        },
         "rarete": "Rare"
       },
       "bonus_pv": 0,
@@ -645,9 +645,9 @@
           "nom": "plastron de feu"
         },
         "prix": 100,
-        "ressource": [
-          "fer"
-        ],
+        "ressource": {
+          "fer": 2
+        },
         "rarete": "Rare"
       },
       "bonus_pv": 0,
