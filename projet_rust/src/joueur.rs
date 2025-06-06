@@ -7,6 +7,7 @@ use crate::equipement::{Categorie, Arme};
 use crate::structs::Ressource;
 use crate::equipement::Equipement;
 use crate::consommable::Consommable;
+use crate::quete::Quete;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Joueur {
@@ -371,6 +372,8 @@ impl Joueur {
         false
     }
 
+    ///////////////
+    ///Fonction qui permet de reset les stats du joueur à la fin d'un combat
     pub fn reset_stats(&mut self,joueur: Joueur){
         self.set_force(joueur.get_force());
         self.set_dexterite(joueur.get_dexterite());
@@ -393,6 +396,46 @@ impl Joueur {
             _ => None
         }
     }
+
+    ///////////////
+    ///Fonction pour ajouter une quête dans la liste des quêtes du joueur
+    pub fn ajout_quete_joueur(&mut self, quete: &mut Quete){
+        self.add_quete(quete.get_id());
+        quete.set_statut(crate::quete::StatutQuete::EnCours);
+    }
+
+    ///////////////
+    ///Fonction pour mettre la suite d'une quête dans la liste des quêtes du joueur 
+    pub fn suivi_quete(&mut self, master_file: &mut MasterFile, quete: &mut Quete) {
+        let quetes_suivantes = quete.get_quetes_suivantes();
+        self.remove_quete(quete.get_id());
+        quete.set_statut(crate::quete::StatutQuete::Terminee);
+        self.ajout_recompense_inventaire(quete.get_recompense());
+        println!("Quête terminée : [{}]", quete.get_statut());
+
+        if let Some(suivante_id) = quetes_suivantes.get(0) {
+            let mut quete_suivante = master_file.prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
+            if quete_suivante.get_quete_joueur() { //si la quête suivante n'est pas un dialogue alors on l'ajoute
+                self.add_quete(suivante_id.clone());
+            } else {
+                quete_suivante.set_statut(crate::quete::StatutQuete::Terminee);
+            }
+        }
+    }
+
+    ///////////////
+    ///Fonction qui permet de vérifier si l'une des quêtes du joueur est fini
+    pub fn completion_quete(&mut self, master_file: &mut MasterFile, id_condition: String){
+        let quetes = self.get_quetes();
+        for quete_id in quetes {
+            let mut quete: Quete = master_file.prendre_quete_id(&quete_id).expect("Quête introuvable");
+            if quete.find_fin_de_quete(id_condition.clone()) {
+                self.suivi_quete(master_file, &mut quete);
+                break;
+            }
+        }
+    }
+
 }
 
 impl std::fmt::Display for Joueur {

@@ -2,6 +2,9 @@ use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
 use crate::structs::Personnage;
+use crate::Quete;
+use crate::Joueur;
+use crate::json_manager::MasterFile;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Pnj {
@@ -44,6 +47,30 @@ impl Pnj {
         }
         str_commerce_table
     }
+
+    ///////////////
+    ///Fonction pour récupérer le texte d'un dialogue 
+    pub fn afficher_dialogue(&self,dialogue: &mut Quete) -> String {
+        dialogue.get_description().clone()
+    }
+
+    ///////////////
+    ///Fonction pour récupérer le premier dialogue qui sera jouer avec le statut EnCours et ajoute une quête à un joueur
+    pub fn get_dialogue_a_jouer(&mut self, master_file: &MasterFile, dialogues: Vec<String>, joueur: &mut Joueur) -> Option<Quete> {
+        for dialogue_id in dialogues {
+            if let Ok(mut quete) = master_file.prendre_quete_id(&dialogue_id) {
+                if quete.get_statut() == crate::quete::StatutQuete::EnCours {
+                    return Some(quete);
+                }
+                else if quete.get_statut() == crate::quete::StatutQuete::NonCommencee && quete.get_quete_joueur() {
+                    joueur.ajout_quete_joueur(&mut quete);
+                    return None;  // Si c'est None alors faire un retour au menu
+                }
+            }
+        }
+        None // Si c'est None alors faire un retour au menu
+    }
+    
 }
 
 impl std::fmt::Display for Pnj {
