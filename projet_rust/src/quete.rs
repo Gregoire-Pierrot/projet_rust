@@ -37,18 +37,20 @@ pub struct Quete {
     recompense: HashMap<String, u32>,
     quetes_suivantes: Vec<String>,
     quete_joueur: bool,
+    dialogue_a_enlever: Option<String>,
     statut: StatutQuete,
     fin_de_quete: FinDeQuete
 }
 
 impl Quete {
-    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, quete_joueur: bool, statut: String, fin_de_quete: FinDeQuete) -> Self {
+    pub fn new(entite: Entite, lieu: String, recompense: HashMap<String, u32>, quetes_suivantes: Vec<String>, quete_joueur: bool,dialogue_a_enlever: Option<String>, statut: String, fin_de_quete: FinDeQuete) -> Self {
         Self {
             entite,
             lieu,
             recompense,
             quetes_suivantes,
             quete_joueur,
+            dialogue_a_enlever,
             statut: match statut.as_str() {
                 "NonCommencee" => StatutQuete::NonCommencee,
                 "EnCours" => StatutQuete::EnCours,
@@ -77,6 +79,8 @@ impl Quete {
     pub fn set_quetes_suivantes(&mut self, quetes_suivantes: Vec<String>) {self.quetes_suivantes = quetes_suivantes}
 
     pub fn get_quete_joueur(&self) -> bool { self.quete_joueur.clone() }
+
+    pub fn get_dialogue_a_enlever(&self) -> Option<String> {self.dialogue_a_enlever.clone()}
 
     pub fn get_statut(&self) -> StatutQuete { self.statut.clone() }
     pub fn set_statut(&mut self, statut: StatutQuete) {self.statut = statut;}

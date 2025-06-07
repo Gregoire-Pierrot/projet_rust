@@ -290,9 +290,10 @@
         "principale_2"
       ],
       "quete_joueur": true,
+      "dialogue_a_enlever":null,
       "statut": "EnCours",
       "fin_de_quete": {
-        "Obtention": "clé"
+        "Obtention": "pomme"
       }
     },
     {
@@ -307,6 +308,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
+      "dialogue_a_enlever":null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Interaction": "porte_1"
@@ -324,6 +326,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
+      "dialogue_a_enlever":null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Combat": "ennemie_1"
@@ -341,6 +344,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
+      "dialogue_a_enlever":null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "dialogue_1_1"
@@ -357,9 +361,11 @@
       "quetes_suivantes": [
         "Dialogue_pnj_1_1",
         "Dialogue_pnj_1_2",
-        "Dialogue_pnj_1_3"
+        "Dialogue_pnj_1_3",
+        "Dialogue_pnj_1_4"
       ],
       "quete_joueur": true,
+      "dialogue_a_enlever":null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
@@ -369,7 +375,7 @@
       "entite": {
         "id": "Dialogue_pnj_1_1",
         "description": "Aide moi à détruire le marais",
-        "nom": "joueur dialogue"
+        "nom": "dialogue quete"
       },
       "lieu": "pièce3",
       "recompense": {},
@@ -377,6 +383,54 @@
         "secondaire_3"
       ],
       "quete_joueur": false,
+      "dialogue_a_enlever":"Dialogue_pnj_1_1",
+      "statut": "EnCours",
+      "fin_de_quete": {
+        "Dialogue": ""
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_2",
+        "description": "Es que tu as détruit le marais ?",
+        "nom": "dialogue Mi-quete"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "quete_joueur": false,
+      "dialogue_a_enlever":null,
+      "statut": "EnCours",
+      "fin_de_quete": {
+        "Dialogue": ""
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_3",
+        "description": "Merci d'avoir détruit le marais",
+        "nom": "dialogue fin de quete"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "quete_joueur": false,
+      "dialogue_a_enlever":"Dialogue_pnj_1_3",
+      "statut": "EnCours",
+      "fin_de_quete": {
+        "Dialogue": ""
+      }
+    },{
+      "entite": {
+        "id": "Dialogue_pnj_1_4",
+        "description": "Depuis que tu as détruit le marais je suis devenu riche !",
+        "nom": "dialogue défaut"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "quete_joueur": false,
+      "dialogue_a_enlever":null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": ""
@@ -392,9 +446,10 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": true,
+      "dialogue_a_enlever":"Dialogue_pnj_1_2",
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Dialogue": "quelque_chose"
+        "Obtention": "clé"
       }
     },
     {
@@ -407,6 +462,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
+      "dialogue_a_enlever":null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
@@ -462,7 +518,7 @@
       "rarete": "Commun"
     }
   ],
-  "Equipement": [
+ "Equipement": [
     {
       "ressource": {
         "entite": {

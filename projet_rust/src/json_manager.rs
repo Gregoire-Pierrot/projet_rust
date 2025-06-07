@@ -159,6 +159,15 @@ impl MasterFile {
         return Err("Quête introuvable".to_string());
     }
 
+    pub fn prendre_quete_mut(&mut self, id: &str) -> Result<&mut Quete, String> {
+        for quete in self.Quete.iter_mut() {
+            if quete.get_id() == id {
+                return Ok(quete);
+            }
+        }
+        Err("Quête introuvable".to_string())
+    }
+
     ////Attaque////
 
     pub fn prendre_attaque_id(&self, id: &str) -> Result<Attaque, String> {
