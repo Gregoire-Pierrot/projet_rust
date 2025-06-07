@@ -56,9 +56,9 @@ impl Pnj {
 
     ///////////////
     /// Fonction pour mettre à jour le statut de la quête à enlever (si présente)
-    fn terminer_quete_a_enlever(&self, master_file: &MasterFile, quete: &mut Quete) {
+    fn terminer_quete_a_enlever(&self, master_file: &mut MasterFile, quete: &mut Quete) {
         if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-            if let Ok(mut quete_a_enlever) = master_file.prendre_quete_id(&dialogue_id) {
+            if let Ok(mut quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                 quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
             }
         }
@@ -71,14 +71,11 @@ impl Pnj {
         if let Ok(mut quete) = master_file.prendre_quete_id(&dialogue_id) {
             match quete.get_statut() {
                 crate::quete::StatutQuete::EnCours => {
-                    if quete.get_quetes_suivantes().is_empty() {// Si la quête suivante est vide, on termine la quête liée au dialogue si l'option est dispo
-                        self.terminer_quete_a_enlever(master_file, &mut quete);
-                    }
+                    self.terminer_quete_a_enlever(master_file, &mut quete);
                     return Some(quete);
                 }
                 crate::quete::StatutQuete::NonCommencee if quete.get_quete_joueur() => {
                     joueur.ajout_quete_joueur(&mut quete);
-                    self.terminer_quete_a_enlever(master_file, &mut quete);
                     return None; // Retour au menu si la quête est non commencée
                 }
                 _ => continue, // On continue avec le prochain dialogue

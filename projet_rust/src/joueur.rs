@@ -433,10 +433,8 @@ impl Joueur {
                 self.suivi_quete(master_file, &mut quete);
 
                 if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-                    println!("{}",dialogue_id);
-                    if let Ok(mut quete_a_enlever) = master_file.prendre_quete_id(&dialogue_id) {
+                    if let Ok(mut quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                         quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
-                        println!("{:?} -> {:?}",quete_a_enlever.get_id(),quete_a_enlever.get_statut());
                     }
                 }
 

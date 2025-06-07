@@ -59,33 +59,58 @@ fn main() {
 
     let mut pnj = master_file.prendre_pnj_id_string(String::from("pnj_1"));
     println!("{:?}", pnj);
-    let mut dialogue_primaire: Quete = pnj.get_dialogue_a_jouer(&mut master_file, pnj.get_dialogues(), &mut joueur).expect("Aucun dialogue trouvé");
+
+    // Étape 1 : Dialogue primaire
+    let dialogue_primaire_id = pnj.get_dialogue_a_jouer(&mut master_file, pnj.get_dialogues(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+
+    let mut dialogue_primaire = master_file.prendre_quete_id(&dialogue_primaire_id).expect("Dialogue primaire introuvable");
     println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
-    let mut dialogue_secondaire: Quete = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé");
+
+    // Étape 2 : Dialogue secondaire
+    let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+    let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
     println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
     
-    
-    if let Some(mut dialogue_donne_quete) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_secondaire.get_quetes_suivantes(), &mut joueur) {
+    // Étape 3 : Dernier dialogue (optionnel)
+    if let Some(dq) = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_secondaire.get_quetes_suivantes(),&mut joueur) {
         println!("{}", joueur);
-    } else {  // IMPORTANT le dialogue sera ajouter à NONE donc la suite sera dans le else si le dialogue est le dernier du pnj
-        println!();
-        println!("Après avoir eu un dialogue qui donne une quête : ");
+    } else {
+        println!("\nAprès avoir eu un dialogue qui donne une quête : ");
         println!("{}", joueur);
     }
-    println!();
-    println!();
-    joueur.completion_quete(&mut master_file,ressource.get_id());
-    //master_file.sauvegarder(&joueur);
-    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
-    println!("{:?} -> {:?}",dialogue_secondaire.get_id(),dialogue_secondaire.get_statut());
-    println!();
-    let mut autres_dialogue_secondaire: Quete = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé");
-    println!("{:?} -> {:?}",autres_dialogue_secondaire.get_id(),autres_dialogue_secondaire.get_statut());
 
-    println!("{:?}", pnj.afficher_dialogue(&mut autres_dialogue_secondaire));
+    //Étape 4 dialogue mi quete
+    let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+    let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
+    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
+
+    println!("\n--- FIN DES DIALOGUES ---\n");
+
+    // Étape 4 : Fin de quête
+    joueur.completion_quete(&mut master_file, ressource.get_id());
+
+    // Rechargement du dialogue primaire mis à jour
+    //let mut dialogue_primaire = master_file.prendre_quete_id(&dialogue_primaire_id).expect("Dialogue primaire introuvable après completion");
+    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
+
+    // Étape 5 : Dialogue alternatif sur les quêtes suivantes de primaire
+    if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
+        let autres_id = autres_dialogue_secondaire.get_id();
+        let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
+        println!("{:?}", pnj.afficher_dialogue(&mut autres));
+    } else {
+        println!("Aucun autre dialogue secondaire trouvé.");
+    }
     println!("{}", joueur);
-    println!();
-    println!();
+
+
+    if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
+        let autres_id = autres_dialogue_secondaire.get_id();
+        let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
+        println!("{:?}", pnj.afficher_dialogue(&mut autres));
+    } else {
+        println!("Aucun autre dialogue secondaire trouvé.");
+    }
 
     let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1").clone() {
         Ok(e) => e,

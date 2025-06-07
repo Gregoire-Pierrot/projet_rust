@@ -360,7 +360,9 @@
       "recompense": {},
       "quetes_suivantes": [
         "Dialogue_pnj_1_1",
-        "Dialogue_pnj_1_2"
+        "Dialogue_pnj_1_2",
+        "Dialogue_pnj_1_3",
+        "Dialogue_pnj_1_4"
       ],
       "quete_joueur": true,
       "dialogue_a_enlever":null,
@@ -373,13 +375,29 @@
       "entite": {
         "id": "Dialogue_pnj_1_1",
         "description": "Aide moi à détruire le marais",
-        "nom": "joueur dialogue"
+        "nom": "dialogue quete"
       },
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [
         "secondaire_3"
       ],
+      "quete_joueur": false,
+      "dialogue_a_enlever":"Dialogue_pnj_1_1",
+      "statut": "EnCours",
+      "fin_de_quete": {
+        "Dialogue": ""
+      }
+    },
+    {
+      "entite": {
+        "id": "Dialogue_pnj_1_2",
+        "description": "Es que tu as détruit le marais ?",
+        "nom": "dialogue Mi-quete"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
       "quete_joueur": false,
       "dialogue_a_enlever":null,
       "statut": "EnCours",
@@ -389,9 +407,24 @@
     },
     {
       "entite": {
-        "id": "Dialogue_pnj_1_2",
+        "id": "Dialogue_pnj_1_3",
         "description": "Merci d'avoir détruit le marais",
-        "nom": "joueur dialogue"
+        "nom": "dialogue fin de quete"
+      },
+      "lieu": "pièce3",
+      "recompense": {},
+      "quetes_suivantes": [],
+      "quete_joueur": false,
+      "dialogue_a_enlever":"Dialogue_pnj_1_3",
+      "statut": "EnCours",
+      "fin_de_quete": {
+        "Dialogue": ""
+      }
+    },{
+      "entite": {
+        "id": "Dialogue_pnj_1_4",
+        "description": "Depuis que tu as détruit le marais je suis devenu riche !",
+        "nom": "dialogue défaut"
       },
       "lieu": "pièce3",
       "recompense": {},
@@ -413,7 +446,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever":"Dialogue_pnj_1_1",
+      "dialogue_a_enlever":"Dialogue_pnj_1_2",
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Obtention": "clé"
