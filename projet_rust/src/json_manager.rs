@@ -180,7 +180,7 @@ impl MasterFile {
     }
 
 
-    ///item///
+    ////item////
     pub fn prendre_item_id(&self, id: &str) -> Result<Item, String> {
         if let Ok(consommable) = self.prendre_consommable_id(id) {
             Ok(Item::Consommable(consommable))

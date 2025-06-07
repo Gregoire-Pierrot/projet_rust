@@ -130,11 +130,14 @@ impl Ennemie {
 
     ///////////////
     /// Fonction qui permet de calculer la chance de récupérer les récompenses de fin de combat
-    pub fn lootable(&self) -> HashMap<String, u32>{ 
+    pub fn lootable(&self) -> HashMap<String, u32>{
         let master_file = MasterFile::new();
         let mut loot: HashMap<String, u32> = HashMap::new();
-        let mut rng = rand::thread_rng();
         for (objet, quantite) in self.personnage.inventaire.iter() {
+            loot.entry(objet.clone()).and_modify(|e| *e += quantite).or_insert(*quantite);
+        }
+        let mut rng = rand::thread_rng();
+        for (objet, quantite) in self.droptable.iter() {
             match master_file.prendre_item_id(objet) {
                 Ok(item) => {
                     let chance_loot = match &item {
@@ -143,13 +146,13 @@ impl Ennemie {
                         Item::Equipement(e) => e.get_value_rarete(),
                     };
                     println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
-                    for _ in 1..self.droptable[objet.as_str()] {
+                    for _ in 0..*quantite {
                         if rng.gen::<f32>() <= chance_loot {
                             loot.entry(objet.clone()).and_modify(|e| *e += 1).or_insert(1);
                         }
                     }
                 }
-                Err(e) => println!("Item indisponible: {}", e),
+                Err(e) => println!("Item indisponible: {}", e)
             }
         }
         loot

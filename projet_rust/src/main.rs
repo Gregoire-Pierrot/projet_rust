@@ -32,7 +32,7 @@ fn main() {
     let mut ressource = master_file.prendre_ressource_id(&String::from("clé")).expect("Ressource introuvable");
     let mut pnj = master_file.prendre_pnj_id_string(String::from("pnj_1"));
     let equipement = master_file.prendre_equipement_id("baton").unwrap();
-    println!("{:?}", joueur);
+    println!("{}", joueur);
 
 
     println!("\n--- TEST DES QUETES ---\n");
@@ -67,6 +67,7 @@ fn main() {
     // Étape 5 : Fin de quête
     println!("\nÉtape 5 : Fin de quête :");
     joueur.completion_quete(&mut master_file, ressource.get_id());
+    println!("{}", joueur);
 
     // Rechargement du dialogue primaire mis à jour
     // Étape 6 :Reparler au pnj après avoir fini la quête

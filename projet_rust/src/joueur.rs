@@ -416,7 +416,11 @@ impl Joueur {
         if let Some(suivante_id) = quetes_suivantes.get(0) {
             let mut quete_suivante = master_file.prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
             if quete_suivante.get_quete_joueur() { //si la quête suivante n'est pas un dialogue alors on l'ajoute
-                self.add_quete(suivante_id.clone());
+                //self.add_quete(suivante_id.clone());
+                match master_file.prendre_quete_id(suivante_id) {
+                    Ok(mut quete_suivante) => self.ajout_quete_joueur(&mut quete_suivante),
+                    Err(_) => println!("Quête suivante introuvable")
+                }
             } else {
                 quete_suivante.set_statut(crate::quete::StatutQuete::Terminee);
             }
@@ -454,6 +458,6 @@ impl Joueur {
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {},  points de compétences = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.position, self.pronom, self.niveau, self.points_competence, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
+        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {},  points de compétences = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = [{}]", self.personnage, self.position, self.pronom, self.niveau, self.points_competence, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
     }
 }
