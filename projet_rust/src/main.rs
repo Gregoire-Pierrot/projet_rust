@@ -72,7 +72,20 @@ fn main() {
         println!("Après avoir eu un dialogue qui donne une quête : ");
         println!("{}", joueur);
     }
+    println!();
+    println!();
+    joueur.completion_quete(&mut master_file,ressource.get_id());
+    //master_file.sauvegarder(&joueur);
+    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
+    println!("{:?} -> {:?}",dialogue_secondaire.get_id(),dialogue_secondaire.get_statut());
+    println!();
+    let mut autres_dialogue_secondaire: Quete = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé");
+    println!("{:?} -> {:?}",autres_dialogue_secondaire.get_id(),autres_dialogue_secondaire.get_statut());
 
+    println!("{:?}", pnj.afficher_dialogue(&mut autres_dialogue_secondaire));
+    println!("{}", joueur);
+    println!();
+    println!();
 
     let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1").clone() {
         Ok(e) => e,

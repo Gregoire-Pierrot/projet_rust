@@ -431,6 +431,15 @@ impl Joueur {
             let mut quete: Quete = master_file.prendre_quete_id(&quete_id).expect("Quête introuvable");
             if quete.find_fin_de_quete(id_condition.clone()) {
                 self.suivi_quete(master_file, &mut quete);
+
+                if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
+                    println!("{}",dialogue_id);
+                    if let Ok(mut quete_a_enlever) = master_file.prendre_quete_id(&dialogue_id) {
+                        quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
+                        println!("{:?} -> {:?}",quete_a_enlever.get_id(),quete_a_enlever.get_statut());
+                    }
+                }
+
                 break;
             }
         }
