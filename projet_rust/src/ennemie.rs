@@ -166,7 +166,7 @@ impl Ennemie {
         let new_pv = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv);
         if self.get_pv_actuel() == 0 {
-            let mut loot = self.lootable();
+            let loot = self.lootable();
             joueur.ajout_recompense_inventaire(loot.clone());
             joueur.add_xp(self.xp);
             println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);

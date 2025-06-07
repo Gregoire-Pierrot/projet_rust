@@ -105,7 +105,7 @@ impl Personnage {
 
     pub fn calcul_dexterite(&mut self) -> u16 {
         let mut dexterite: u16 = self.dexterite;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -119,7 +119,7 @@ impl Personnage {
 
     pub fn calcul_vitesse(&mut self) -> u16 {
         let mut vitesse: u16 = self.vitesse;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -133,7 +133,7 @@ impl Personnage {
 
     pub fn calcul_esquive(&mut self) -> u16 {
         let mut esquive: u16 = self.esquive;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -147,7 +147,7 @@ impl Personnage {
 
     pub fn calcul_chance(&mut self) -> u16 {
         let mut chance: u16 = self.chance;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -161,7 +161,7 @@ impl Personnage {
 
     pub fn calcul_resistance_physique(&mut self) -> u16 {
         let mut resistance_physique: u16 = self.resistance_physique;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -175,7 +175,7 @@ impl Personnage {
 
      pub fn calcul_resistance_magique(&mut self) -> u16 {
         let mut resistance_magique: u16 = self.resistance_magique;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -189,7 +189,7 @@ impl Personnage {
 
     pub fn calcul_force(&mut self) -> u16 { // Dégats physique
         let mut force: u16 = self.force;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -203,7 +203,7 @@ impl Personnage {
 
     pub fn calcul_intelligence(&mut self) -> u16 { // Dégats magique
         let mut intelligence: u16 = self.intelligence;
-        let mut master_file  = MasterFile::new();
+        let master_file  = MasterFile::new();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -216,7 +216,6 @@ impl Personnage {
     }
 
     pub fn attaque(&mut self,attaque: &Attaque) -> Vec<u16> {// base + equipement + %base+equipement + attaque + %total
-        let mut master_file  = MasterFile::new();
         let mut rng = rand::thread_rng();
         let mut degats: Vec<u16> = vec![0, 0]; // [dégâts physique, dégâts magique]
         let mut degats_brute: u16 = 0;
@@ -233,8 +232,7 @@ impl Personnage {
             Arme::ArmeMagie => {
                 degats_magique = self.calcul_intelligence()+attaque.get_degats();
                 degats_magique += (degats_magique * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
-            },
-            _ => {}
+            }
         }
 
         let chance_critique = *CHANCE_CRITIQUE.lock().unwrap()   * (0.1*self.calcul_chance() as f32)/100.0;
@@ -394,8 +392,7 @@ impl Ressource {
             Rarete::Epique => 0.01,
             Rarete::Legendaire => 0.005,
             Rarete::Mythique => 0.0001,
-            Rarete::Divin => 0.00001,
-            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.entite.id)
+            Rarete::Divin => 0.00001
         }
     }
 }

@@ -58,7 +58,7 @@ impl Pnj {
     /// Fonction pour mettre à jour le statut de la quête à enlever (si présente)
     fn terminer_quete_a_enlever(&self, master_file: &mut MasterFile, quete: &mut Quete) {
         if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-            if let Ok(mut quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
+            if let Ok(quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                 quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
             }
         }

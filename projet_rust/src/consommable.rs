@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-use std::collections::HashMap;
 
 use crate::structs::{Ressource, Rarete};
 
@@ -37,8 +36,7 @@ impl Consommable {
             Rarete::Epique => 0.01,
             Rarete::Legendaire => 0.005,
             Rarete::Mythique => 0.0001,
-            Rarete::Divin => 0.00001,
-            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
+            Rarete::Divin => 0.00001
         }
     }
 

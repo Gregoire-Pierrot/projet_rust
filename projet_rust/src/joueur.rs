@@ -133,7 +133,7 @@ impl Joueur {
         let inventaire = self.get_inventaire();
         let mut ressources = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_ressource_id(id) {
                 Ok(item) => {
                     ressources.push(item);
@@ -148,7 +148,7 @@ impl Joueur {
         let inventaire = self.get_inventaire();
         let mut consommable = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_consommable_id(id) {
                 Ok(item) => {
                     consommable.push(item);
@@ -163,7 +163,7 @@ impl Joueur {
         let inventaire = self.get_inventaire();
         let mut equipement = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_equipement_id(id) {
                 Ok(item) => {
                     equipement.push(item);
@@ -437,7 +437,7 @@ impl Joueur {
                 self.suivi_quete(master_file, &mut quete);
 
                 if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-                    if let Ok(mut quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
+                    if let Ok(quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                         quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
                     }
                 }
