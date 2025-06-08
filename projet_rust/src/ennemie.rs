@@ -131,7 +131,7 @@ impl Ennemie {
     ///////////////
     /// Fonction qui permet de calculer la chance de récupérer les récompenses de fin de combat
     pub fn lootable(&self) -> HashMap<String, u32>{
-        let master_file = MasterFile::new();
+        let master_file = MasterFile::get_instance().lock().unwrap();
         let mut loot: HashMap<String, u32> = HashMap::new();
         for (objet, quantite) in self.personnage.inventaire.iter() {
             loot.entry(objet.clone()).and_modify(|e| *e += quantite).or_insert(*quantite);
@@ -178,7 +178,7 @@ impl Ennemie {
 
     ///////////////////////////////////////Mettre la possiblilité de défense pour l'ennemi et l'attaque de base ?
     pub fn combat(&mut self,joueur: &mut Joueur) -> bool {
-        let master_file = MasterFile::new();
+        let master_file = MasterFile::get_instance().lock().unwrap();
         let mut rng = rand::thread_rng();
         let attaques = self.get_attaques();
         if !attaques.is_empty() {

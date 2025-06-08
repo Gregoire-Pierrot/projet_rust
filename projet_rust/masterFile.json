@@ -21,19 +21,19 @@
         "tempête_feu"
       ],
       "equipement": {
-        "Arme": null,
         "Casque": "casque_feu",
-        "Bottes": "bottes_feu",
+        "Plastron": "plastron_feu",
+        "Arme": null,
         "Gants": "gants_feu",
-        "Jambieres": "jambieres_feu",
-        "Plastron": "plastron_feu"
+        "Bottes": "bottes_feu",
+        "Jambieres": "jambieres_feu"
       },
       "inventaire": {
-        "baton": 1,
         "clé": 1,
-        "epee_fer": 1,
+        "arc": 1,
         "pomme": 5,
-        "arc": 1
+        "baton": 1,
+        "epee_fer": 1
       }
     },
     "position": "pièce2",
@@ -71,12 +71,12 @@
         "resistance_magique": 0,
         "attaques": [],
         "equipement": {
-          "Arme": null,
-          "Plastron": null,
           "Jambieres": null,
-          "Gants": null,
+          "Bottes": null,
           "Casque": null,
-          "Bottes": null
+          "Gants": null,
+          "Plastron": null,
+          "Arme": null
         },
         "inventaire": {
           "pomme": 5
@@ -106,12 +106,12 @@
         "resistance_magique": 0,
         "attaques": [],
         "equipement": {
-          "Plastron": null,
-          "Casque": null,
           "Bottes": null,
+          "Casque": null,
           "Jambieres": null,
-          "Arme": null,
-          "Gants": null
+          "Plastron": null,
+          "Gants": null,
+          "Arme": null
         },
         "inventaire": {
           "pomme": 5
@@ -145,12 +145,12 @@
           "tempête_feu"
         ],
         "equipement": {
-          "Jambieres": null,
-          "Gants": null,
-          "Plastron": null,
           "Arme": null,
           "Bottes": null,
-          "Casque": null
+          "Plastron": null,
+          "Gants": null,
+          "Casque": null,
+          "Jambieres": null
         },
         "inventaire": {
           "pomme": 5
@@ -195,12 +195,12 @@
           "tempête_feu"
         ],
         "equipement": {
-          "Arme": null,
-          "Jambieres": null,
-          "Gants": null,
-          "Casque": null,
           "Bottes": null,
-          "Plastron": null
+          "Arme": null,
+          "Gants": null,
+          "Plastron": null,
+          "Jambieres": null,
+          "Casque": null
         },
         "inventaire": {
           "pomme": 5
@@ -220,8 +220,8 @@
         "Dialogue_ennemie_1"
       ],
       "droptable": {
-        "pomme": 3,
-        "epee_feu": 1
+        "epee_feu": 1,
+        "pomme": 3
       }
     }
   ],
@@ -668,8 +668,8 @@
       "ressource": {
         "entite": {
           "id": "plastron_feu",
-          "description": "Un plastron du feu",
-          "nom": "plastron de feu"
+          "description": "Un plastron de feu",
+          "nom": "Plastron de feu"
         },
         "prix": 100,
         "ressource": {
@@ -698,6 +698,150 @@
       "pourcent_bonus_resistance_magique": 0,
       "categorie": {
         "Armure": "Plastron"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "gants_feu",
+          "description": "des gants de feu",
+          "nom": "Gants de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Gants"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "bottes_feu",
+          "description": "Des bottes de feu",
+          "nom": "Bottes de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Bottes"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "casque_feu",
+          "description": "Un casque de feu",
+          "nom": "Casque de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Casque"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "jambieres_feu",
+          "description": "Des jambières de feu",
+          "nom": "Jambières de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Jambieres"
       }
     }
   ],

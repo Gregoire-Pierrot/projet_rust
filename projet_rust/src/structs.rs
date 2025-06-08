@@ -105,7 +105,7 @@ impl Personnage {
 
     pub fn calcul_dexterite(&mut self) -> u16 {
         let mut dexterite: u16 = self.dexterite;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -119,7 +119,7 @@ impl Personnage {
 
     pub fn calcul_vitesse(&mut self) -> u16 {
         let mut vitesse: u16 = self.vitesse;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -133,7 +133,7 @@ impl Personnage {
 
     pub fn calcul_esquive(&mut self) -> u16 {
         let mut esquive: u16 = self.esquive;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -147,7 +147,7 @@ impl Personnage {
 
     pub fn calcul_chance(&mut self) -> u16 {
         let mut chance: u16 = self.chance;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -161,7 +161,7 @@ impl Personnage {
 
     pub fn calcul_resistance_physique(&mut self) -> u16 {
         let mut resistance_physique: u16 = self.resistance_physique;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -175,7 +175,7 @@ impl Personnage {
 
      pub fn calcul_resistance_magique(&mut self) -> u16 {
         let mut resistance_magique: u16 = self.resistance_magique;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -189,7 +189,7 @@ impl Personnage {
 
     pub fn calcul_force(&mut self) -> u16 { // Dégats physique
         let mut force: u16 = self.force;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -203,7 +203,7 @@ impl Personnage {
 
     pub fn calcul_intelligence(&mut self) -> u16 { // Dégats magique
         let mut intelligence: u16 = self.intelligence;
-        let master_file  = MasterFile::new();
+        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
@@ -313,7 +313,7 @@ impl Personnage {
 
 impl std::fmt::Display for Personnage {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Personnage : entite = [{}],pv_max={}, pv_actuel = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv_actuel,self.pv_max, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
+        write!(f, "Personnage : entite = [{}], pv_max={}, pv_actuel = {}, force = {}, dextérité = {}, intelligence = {}, vitesse = {}, esquive = {}, resistance physique = {}, resistance magique = {}, attaques = {}, equipement = [{}], inventaire = [{}]",self.entite, self.pv_actuel,self.pv_max, self.force, self.dexterite, self.intelligence, self.vitesse, self.esquive, self.resistance_physique, self.resistance_magique, self.str_attaques(), self.str_equipement(), self.str_inventaire())
     }
 }
 

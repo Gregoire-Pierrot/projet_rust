@@ -33,11 +33,11 @@ impl Joueur {
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
     pub fn set_nom(&mut self, nom: String) { self.personnage.entite.nom = nom; }
 
-    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
-    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
-
     pub fn get_pv_actuel(&self) -> u16 { self.personnage.pv_actuel.clone() }
     pub fn set_pv_actuel(&mut self, pv_actuel: u16) { self.personnage.pv_actuel = pv_actuel; }
+
+    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
+    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
 
     pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
     pub fn set_force(&mut self, force: u16) { self.personnage.force = force; }
@@ -144,7 +144,7 @@ impl Joueur {
         ressources
     }
 
-    pub fn recup_consommable(&mut self, master_file: &MasterFile) -> Vec<Consommable>{
+    pub fn recup_consommables(&mut self, master_file: &MasterFile) -> Vec<Consommable>{
         let inventaire = self.get_inventaire();
         let mut consommable = Vec::new();
 
@@ -159,7 +159,7 @@ impl Joueur {
         consommable
     }
 
-    pub fn recup_equipement(&mut self, master_file: &MasterFile) -> Vec<Equipement>{
+    pub fn recup_equipements(&mut self, master_file: &MasterFile) -> Vec<Equipement>{
         let inventaire = self.get_inventaire();
         let mut equipement = Vec::new();
 
@@ -387,7 +387,7 @@ impl Joueur {
 
     pub fn get_categorie_Arme(&self) -> Option<Arme> {
         let categorie = self.personnage.equipement.get(&EquipementType::Arme)
-            .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::new().prendre_equipement_id(id).ok()))
+            .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::get_instance().lock().unwrap().prendre_equipement_id(id).ok()))
             .and_then(|e| Some(e.get_categorie()));
         match categorie {
             Some(Categorie::Arme(Arme::ArmeMelee)) => Some(Arme::ArmeMelee),

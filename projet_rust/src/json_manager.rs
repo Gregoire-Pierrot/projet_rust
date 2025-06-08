@@ -7,6 +7,8 @@ use std::collections::HashMap;
 
 use crate::structs::Ressource;
 
+use std::sync::{OnceLock, Mutex};
+
 pub enum Item {
     Ressource(Ressource),
     Consommable(Consommable),
@@ -38,23 +40,52 @@ pub struct MasterFile {
     Attaque: Vec<Attaque>
 }
 
+static INSTANCE: OnceLock<Mutex<MasterFile>> = OnceLock::new();
+
 impl MasterFile {
     ////MasterFile////
-    pub fn new() -> Self {
+    pub fn get_instance() -> &'static Mutex<MasterFile> {
+        INSTANCE.get_or_init(|| {
+            let data = fs::read_to_string("masterFile.json").unwrap();
+            let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+            Mutex::new(master_file)
+        })
+    }
+
+    pub fn sauvegarder(&mut self) {
+        let updated_data = serde_json::to_string_pretty(&self).unwrap(); // Serialiser les données
+        fs::write("masterFile.json", updated_data).unwrap(); // Sauvegarder les données dans le fichier
+    }
+
+    pub fn recharger(&mut self) {
         let data = fs::read_to_string("masterFile.json").unwrap();
         let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-        Self {
-            Joueur: master_file.Joueur,
-            Pnj: master_file.Pnj,
-            Ennemie: master_file.Ennemie,
-            Lieu: master_file.Lieu,
-            Quete: master_file.Quete,
-            Consommable: master_file.Consommable,
-            Ressource: master_file.Ressource,
-            Equipement: master_file.Equipement,
-            Attaque: master_file.Attaque
-        }
+        self.Joueur = master_file.Joueur;
+        self.Pnj = master_file.Pnj;
+        self.Ennemie = master_file.Ennemie;
+        self.Lieu = master_file.Lieu;
+        self.Quete = master_file.Quete;
+        self.Consommable = master_file.Consommable;
+        self.Ressource = master_file.Ressource;
+        self.Equipement = master_file.Equipement;
+        self.Attaque = master_file.Attaque;
     }
+
+    //pub fn new() -> Self {
+    //    let data = fs::read_to_string("masterFile.json").unwrap();
+    //    let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+    //    Self {
+    //        Joueur: master_file.Joueur,
+    //        Pnj: master_file.Pnj,
+    //        Ennemie: master_file.Ennemie,
+    //        Lieu: master_file.Lieu,
+    //        Quete: master_file.Quete,
+    //        Consommable: master_file.Consommable,
+    //        Ressource: master_file.Ressource,
+    //        Equipement: master_file.Equipement,
+    //        Attaque: master_file.Attaque
+    //    }
+    //}
 
     ////Lieu////
 
@@ -74,10 +105,8 @@ impl MasterFile {
         self.Joueur.clone()
     }
 
-    pub fn sauvegarder(&mut self, joueur: &Joueur) {
-        self.Joueur = joueur.clone();
-        let updated_data = serde_json::to_string_pretty(&self).unwrap();// Sauvegarder les données dans le fichier
-        fs::write("masterFile.json", updated_data).unwrap();
+    pub fn get_joueur_mut(&mut self) -> &mut Joueur {
+        &mut self.Joueur
     }
 
 

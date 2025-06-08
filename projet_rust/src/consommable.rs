@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 use crate::structs::{Ressource, Rarete};
 
@@ -41,6 +42,8 @@ impl Consommable {
     }
 
     pub fn get_ressource(&self) -> Ressource { self.ressource.clone() }
+
+    pub fn get_ressources(&self) -> HashMap<String, u32> { self.ressource.get_ressource() }
 
     pub fn get_effets(&self) -> Vec<u16> { self.effets.clone() }
 

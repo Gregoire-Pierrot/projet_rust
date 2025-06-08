@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 
 use crate::structs::{Ressource, Rarete};
 
@@ -79,6 +80,8 @@ impl Equipement {
     pub fn get_prix(&self) -> u32 { self.ressource.prix.clone() }
 
     pub fn get_ressource(&self) -> Ressource { self.ressource.clone() }
+
+    pub fn get_ressources(&self) -> HashMap<String, u32> { self.ressource.get_ressource() }
 
     pub fn get_bonus_pv(&self) -> u16 { self.bonus_pv.clone() }
 
