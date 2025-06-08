@@ -368,8 +368,7 @@ fn main() {
                 }
                 else if *choice == 3 {
                     s.pop_layer();
-                    //s.add_layer(pnj_screen());
-                    s.add_layer(Dialog::text("TODO: PNJ").title("PNJ").button("Retour", |s| { s.pop_layer(); }));
+                    s.add_layer(pnj_screen());
                 }
                 else if *choice == 4 {
                     s.pop_layer();
@@ -550,6 +549,80 @@ fn main() {
             .button("Retour", |s| {
                 s.pop_layer();
                 s.add_layer(actions_screen());
+            })
+    }
+
+    // Créer un écran de pnj
+    fn pnj_screen() -> Dialog {
+        let lieu_id: String;
+        { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur_mut().get_position(); }
+        let pnjs: Vec<String>;
+        { pnjs = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&lieu_id).expect("Lieu introuvable").get_contient_pnj(); }
+        let mut select = SelectView::new();
+        for pnj_id in &pnjs {
+            let pnj: Result<Pnj, String>;
+            { pnj = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id); }
+            if pnj.is_ok() {
+                select.add_item(pnj.unwrap().get_nom().clone(), pnj_id.clone());
+            }
+        }
+        select.set_on_submit(move |s, choice: &String| {
+            let pnj_id: String = choice.clone();
+            let pnj: Result<Pnj, String>;
+            { pnj = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id); }
+            if pnj.is_ok() {
+                s.pop_layer();
+                s.add_layer(create_dialog_action_pnj(pnj.unwrap()));
+            }
+        });
+        Dialog::around(select)
+            .title("PNJ")
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(actions_screen());
+            })
+    }
+
+    fn create_dialog_action_pnj(pnj: Pnj) -> Dialog {
+        let is_commercant: bool = pnj.get_commerce_table().len() == 0;
+        let mut select = SelectView::new();
+        select.add_item("Parler", 1);
+        if is_commercant { select.add_item("Commercer", 2); }
+        select.add_item("Voler", 3);
+        select.set_on_submit(|s, choice| {
+            if *choice == 1 {
+                //s.add_layer(create_dialog_parler_pnj(pnj));
+                s.add_layer(Dialog::around(TextView::new("TODO: Parler au PNJ"))
+                    .title("Parler")
+                    .button("Retour", |s| {
+                        s.pop_layer();
+                    })
+                );
+            }
+            else if *choice == 2 {
+                //s.add_layer(create_dialog_commerce_pnj(pnj));
+                s.add_layer(Dialog::around(TextView::new("TODO: Commercer avec le PNJ"))
+                    .title("Commerce")
+                    .button("Retour", |s| {
+                        s.pop_layer();
+                    })
+                );
+            }
+            else if *choice == 3 {
+                //s.add_layer(create_dialog_voler_pnj(pnj));
+                s.add_layer(Dialog::around(TextView::new("TODO: Voler le PNJ"))
+                    .title("Vol")
+                    .button("Retour", |s| {
+                        s.pop_layer();
+                    })
+                );
+            }
+        });
+        Dialog::around(select)
+            .title(pnj.get_nom().clone())
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(pnj_screen());
             })
     }
 
