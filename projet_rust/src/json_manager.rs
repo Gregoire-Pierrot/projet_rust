@@ -20,8 +20,8 @@ impl Item {
     pub fn get_ressources(&self) -> HashMap<String, u32> {
         match self {
             Item::Ressource(r) => r.get_ressource(),
-            Item::Consommable(c) => c.get_ressource().get_ressource(),
-            Item::Equipement(e) => e.get_ressource().get_ressource(),
+            Item::Consommable(c) => c.get_ressources(),
+            Item::Equipement(e) => e.get_ressources()
         }
     }
 }

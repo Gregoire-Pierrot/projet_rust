@@ -19,7 +19,7 @@ use consommable::Consommable;
 use equipement::{Equipement, Arme};
 use structs::{EquipementType, Ressource};
 use attaque::Attaque;
-use json_manager::MasterFile;
+use json_manager::{MasterFile, Item};
 //use combat::combat;
 
 use cursive::views::{Dialog, TextView, SelectView, LinearLayout, ScrollView, DummyView};
@@ -791,11 +791,18 @@ fn main() {
                         }));
                 }
                 else if *choice == 2 {
-                    //{
-                    //    let mut joueur = MasterFile::get_instance().lock().unwrap().get_joueur();
-                    //    joueur.demantelement(&consommable.get_id(), &MasterFile::get_instance().lock().unwrap());
-                    //}
-                    // TODO: décomposer le consommable
+                    {
+                        let item: Item;
+                        { item = match MasterFile::get_instance().lock().unwrap().prendre_item_id(&consommable.get_id().to_string()) {
+                            Ok(item) => item,
+                            Err(_) => panic!("Item introuvable")
+                        }}
+                        let mut ressources: HashMap<String, u32> = item.get_ressources().clone();
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_inventaire(&consommable.get_id().to_string(), 1); }
+                        for (ressource_id, quantite) in ressources {
+                            MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id, quantite);
+                        }
+                    }
                     s.add_layer(Dialog::text("L'objet : ".to_string() + &consommable.get_nom() + " a bien été décomposer")
                         .title("Décomposer")
                         .button("Ok", |s| {
@@ -896,7 +903,18 @@ fn main() {
             .item("Décomposer", 1)
             .on_submit(move |s, choice| {
                 if *choice == 1 {
-                    //TODO: décomposer l'equipement
+                    {
+                        let item: Item;
+                        { item = match MasterFile::get_instance().lock().unwrap().prendre_item_id(&ressource.get_id().to_string()) {
+                            Ok(item) => item,
+                            Err(_) => panic!("Item introuvable")
+                        }}
+                        let mut ressources: HashMap<String, u32> = item.get_ressources().clone();
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_inventaire(&ressource.get_id().to_string(), 1); }
+                        for (ressource_id, quantite) in ressources {
+                            MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id, quantite);
+                        }
+                    }
                     s.add_layer(Dialog::text("L'objet : ".to_owned() + &ressource.get_nom() + " a bien été décomposer")
                         .title("Décomposer")
                         .button("Ok", |s| {
@@ -942,7 +960,7 @@ fn main() {
                     None => quantite = 0
                 }
             }
-            select.add_item(equipement.get_nom().clone(), i.to_string());
+            select.add_item(equipement.get_nom().clone() + " : " + &quantite.to_string(), i.to_string());
             if i % 10 == 0 {
                 let equipements_clone = equipements.clone();
                 select.set_on_submit(move |s, choice: &String| {
@@ -1009,7 +1027,14 @@ fn main() {
                         }));
                 }
                 else if *choice == 2 {
-                    //TODO: décomposer l'equipement
+                    {
+                        let ressources: HashMap<String, u32>;
+                        { ressources = MasterFile::get_instance().lock().unwrap().prendre_item_id(&equipement.get_id().clone()).expect("Ressource introuvable").get_ressources().clone(); }
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_inventaire(&equipement.get_id().clone(), 1); }
+                        for (ressource_id, quantite) in ressources {
+                            MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id, quantite);
+                        }
+                    }
                     s.add_layer(Dialog::text("L'objet : ".to_owned() + &equipement.get_nom() + " a bien été décomposer")
                         .title("Décomposer")
                         .button("Ok", |s| {
@@ -1062,6 +1087,7 @@ fn main() {
     /*
     let mut position = "".to_string();
     {
+        println!("===== Joueur initial =====");
         println!("{}", MasterFile::get_instance().lock().unwrap().get_joueur());
     }
 
@@ -1069,16 +1095,35 @@ fn main() {
         let master_file: &mut MasterFile = &mut MasterFile::get_instance().lock().unwrap();
         let joueur = master_file.get_joueur_mut();
         joueur.set_position("piece1".to_string());
+        println!("===== Joueur modifie piece1 =====");
         println!("{}", joueur);
     }
 
     {
+        println!("===== Joueur modifie vérification =====");
         println!("{}", MasterFile::get_instance().lock().unwrap().get_joueur());
         position = MasterFile::get_instance().lock().unwrap().get_joueur().get_position();
     }
 
+    {
+        let item_id = "arc";
+        let ressources: HashMap<String, u32>;
+        { ressources = MasterFile::get_instance().lock().unwrap().prendre_item_id(item_id).expect("Ressource introuvable").get_ressources().clone(); }
+        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_inventaire(&item_id.to_string(), 1); }
+        for (ressource_id, quantite) in ressources {
+            MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id, quantite);
+        }
+        println!("===== Joueur modifie dementelement arc =====");
+        println!("{}", MasterFile::get_instance().lock().unwrap().get_joueur());
+    }
+
+    {
+        println!("===== Joueur modifie vérification =====");
+        println!("{}", MasterFile::get_instance().lock().unwrap().get_joueur());
+    }
+
     println!("{}", position);
 
-    { MasterFile::get_instance().lock().unwrap().sauvegarder(); }
+    //{ MasterFile::get_instance().lock().unwrap().sauvegarder(); }
     */
 }

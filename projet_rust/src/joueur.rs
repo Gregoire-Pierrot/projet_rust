@@ -175,8 +175,9 @@ impl Joueur {
     }
 
     pub fn demantelement(&mut self, item: &String, master_file: &MasterFile) {
+        let item_id = item.clone();
         self.remove_inventaire(item, 1);
-        if let Ok(item_obj) = master_file.prendre_item_id(item) {
+        if let Ok(item_obj) = master_file.prendre_item_id(&item_id) {
             for (composant, quantite) in item_obj.get_ressources() {
                 self.add_inventaire(composant, quantite);
             }
