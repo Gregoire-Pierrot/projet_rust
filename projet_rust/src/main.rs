@@ -256,8 +256,7 @@ fn main() {
                 }
                 else if *choice == 2 {
                     s.pop_layer();
-                    //s.add_layer(interaction_screen());
-                    s.add_layer(Dialog::text("TODO: Intéragir").title("Intéragir").button("Retour", |s| { s.pop_layer(); }));
+                    s.add_layer(actions_screen());
                 }
                 else if *choice == 3 {
                     s.pop_layer();
@@ -322,7 +321,7 @@ fn main() {
             .scroll_x(true)
             .scroll_y(true)
         )
-        .title("Se déplacer")
+        .title("Carte")
         .button("Retour", |s| {
             s.pop_layer();
             s.add_layer(game_screen());
@@ -349,6 +348,209 @@ fn main() {
         .button("Retour", |s| {
             s.pop_layer();
         })
+    }
+
+    // Créer un écran d'intéraction
+    fn actions_screen() -> Dialog {
+        Dialog::around(SelectView::new()
+            .item("Analyser la zone", 1)
+            .item("Récolter", 2)
+            .item("PNJ", 3)
+            .item("Combattre", 4)
+            .on_submit(|s, choice| {
+                if *choice == 1 {
+                    s.pop_layer();
+                    s.add_layer(analyse_screen());
+                }
+                else if *choice == 2 {
+                    s.pop_layer();
+                    s.add_layer(recolter_screen());
+                }
+                else if *choice == 3 {
+                    s.pop_layer();
+                    //s.add_layer(pnj_screen());
+                    s.add_layer(Dialog::text("TODO: PNJ").title("PNJ").button("Retour", |s| { s.pop_layer(); }));
+                }
+                else if *choice == 4 {
+                    s.pop_layer();
+                    //s.add_layer(combat_screen());
+                    s.add_layer(Dialog::text("TODO: Combat").title("Combat").button("Retour", |s| { s.pop_layer(); }));
+                }
+            })
+        )
+        .title("Actions")
+        .button("Retour", |s| {
+            s.pop_layer();
+            s.add_layer(game_screen());
+        })
+    }
+
+    // Créer un écran d'analyse de zone
+    fn analyse_screen() -> Dialog {
+        let lieu: Lieu;
+        {
+            let lieu_id;
+            { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_position(); }
+            lieu = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&lieu_id).expect("Lieu introuvable");
+        }
+        let mut layout = LinearLayout::vertical();
+        layout.add_child(TextView::new(lieu.get_nom()));
+        layout.add_child(TextView::new(lieu.get_description().clone()));
+        let mut layout_ressources = LinearLayout::vertical();
+        for (ressource_id, quantite) in lieu.get_contient_ressources() {
+            let consommable: Result<Consommable, String>;
+            { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+            if consommable.is_ok() {
+                layout_ressources.add_child(TextView::new(consommable.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+            let ressource: Result<Ressource, String>;
+            { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+            if ressource.is_ok() {
+                layout_ressources.add_child(TextView::new(ressource.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+            let equipement: Result<Equipement, String>;
+            { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+            if equipement.is_ok() {
+                layout_ressources.add_child(TextView::new(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+        }
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(LinearLayout::vertical()
+            .child(TextView::new("Ressources :"))
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(layout_ressources)
+            )
+        );
+        let mut select_pnj = SelectView::new();
+        for pnj_id in lieu.get_contient_pnj() {
+            let pnj: Result<Pnj, String>;
+            { pnj = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id); }
+            if pnj.is_ok() {
+                select_pnj.add_item(pnj.clone().unwrap().get_nom().clone(), pnj.unwrap().get_id().clone());
+            }
+        }
+        select_pnj.set_inactive_highlight(false);
+        select_pnj.set_on_submit(|s, choice: &String| {
+            let pnj: Pnj;
+            { pnj = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(choice).unwrap(); }
+            s.add_layer(create_dialog_pnj(pnj))
+        });
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(LinearLayout::vertical()
+            .child(TextView::new("PNJs :"))
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(select_pnj)
+            )
+        );
+        let mut layout_ennemies = LinearLayout::vertical();
+        for (ennemie_id, nvs) in lieu.get_contient_ennemies() {
+            let ennemie: Result<Ennemie, String>;
+            { ennemie = MasterFile::get_instance().lock().unwrap().prendre_ennemie_id(&ennemie_id); }
+            if ennemie.is_ok() {
+                let mut nvs_string: String = "niveaux: [".to_string();
+                for i in 0..nvs.len() - 1 {
+                    nvs_string += &(nvs[i].to_string() + ", ");
+                }
+                nvs_string += &(nvs[nvs.len() - 1].to_string() + "]");
+                layout_ennemies.add_child(TextView::new(ennemie.unwrap().get_nom().clone() + " : " + &nvs_string));
+            }
+        }
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(LinearLayout::vertical()
+            .child(TextView::new("Ennemis :"))
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(layout_ennemies)
+            )
+        );
+        Dialog::around(layout)
+        .title("Analyse de zone")
+        .button("Retour", |s| {
+            s.pop_layer();
+            s.add_layer(actions_screen());
+        })
+    }
+
+    fn create_dialog_pnj(pnj: Pnj) -> Dialog {
+        let is_commercant: bool = pnj.get_commerce_table().len() == 0;
+        let commercant_string: String = if is_commercant { "Non".to_string() } else { "Oui".to_string() };
+        let mut layout = LinearLayout::vertical();
+        layout.add_child(TextView::new(pnj.get_description().clone()));
+        layout.add_child(TextView::new("Commercant : ".to_string() + &commercant_string));
+        Dialog::around(layout)
+            .title(pnj.get_nom().clone())
+            .button("Retour", |s| {
+                s.pop_layer();
+            })
+    }
+
+    // Créer un écran de récolte
+    fn recolter_screen() -> Dialog {
+        let ressources: HashMap<String, u32>;
+        {
+             let lieu_id: String;
+             { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur_mut().get_position(); }
+             ressources = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&lieu_id).expect("Lieu introuvable").get_contient_ressources();
+        }
+        let ressources_clone = ressources.clone();
+        let mut layout = LinearLayout::vertical();
+        let mut select = SelectView::new();
+        for (ressource_id, quantite) in &ressources {
+            let consommable: Result<Consommable, String>;
+            { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+            if consommable.is_ok() {
+                select.add_item(consommable.unwrap().get_nom().clone() + " : " + &quantite.to_string(), ressource_id.clone());
+            }
+            else {
+                let ressource: Result<Ressource, String>;
+                { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+                if ressource.is_ok() {
+                    select.add_item(ressource.unwrap().get_nom().clone() + " : " + &quantite.to_string(), ressource_id.clone());
+                }
+                else {
+                    let equipement: Result<Equipement, String>;
+                    { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+                    if equipement.is_ok() {
+                        select.add_item(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string(), ressource_id.clone());
+                    }
+                }
+            }
+        }
+        select.set_on_submit(move |s, choice: &String| {
+            let ressource_id: String = choice.clone();
+            let value = ressources.clone();
+            s.add_layer(Dialog::text("Voulez vous récolter cette ressource ?")
+                .title("Informations")
+                .button("Oui", move |s| {
+                    let quantite: u32;
+                    {
+                        quantite = value.get(&ressource_id).unwrap().clone();
+                        MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id.to_string(), quantite);
+                    }
+                    let lieu_id: String;
+                    { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur_mut().get_position(); }
+                    { MasterFile::get_instance().lock().unwrap().prendre_lieu_mut_id(&lieu_id).remove_contient_ressources(&ressource_id, quantite); }
+                    s.pop_layer();
+                    s.pop_layer();
+                    s.add_layer(recolter_screen());
+                })
+                .button("Non", |s| {
+                    s.pop_layer();
+                })
+            );
+        });
+        if ressources_clone.len() == 0 {
+            layout.add_child(TextView::new("Aucune ressource à récolter dans cette zone."));
+        }
+        else { layout.add_child(select); }
+        Dialog::around(layout)
+            .title("Récolter")
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(actions_screen());
+            })
     }
 
     // Créer un écran de personnage

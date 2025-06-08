@@ -98,6 +98,15 @@ impl MasterFile {
         return Err("Lieu introuvable".to_string());
     }
 
+    pub fn prendre_lieu_mut_id(&mut self, id: &str) -> &mut Lieu {
+        for lieu in &mut self.Lieu {
+            if lieu.get_id().clone() == id {
+                return lieu;
+            }
+        }
+        panic!("Lieu introuvable {}", id);
+    }
+
 
     ////Joueur////
 
