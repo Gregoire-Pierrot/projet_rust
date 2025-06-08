@@ -368,8 +368,7 @@ fn main() {
                 }
                 else if *choice == 3 {
                     s.pop_layer();
-                    //s.add_layer(quetes_screen());
-                    s.add_layer(Dialog::text("TODO: Quêtes").title("Quêtes").button("Retour", |s| { s.pop_layer(); }));
+                    s.add_layer(quetes_screen());
                 }
             })
         )
@@ -1321,6 +1320,66 @@ fn main() {
             }));
         Dialog::around(layout)
             .title(equipement_clone.get_nom().clone())
+            .button("Retour", |s| {
+                s.pop_layer();
+            })
+    }
+
+    // Créer un écran de quête
+    fn quetes_screen() -> Dialog {
+        let mut quetes: Vec<Quete> = vec![];
+        {
+            let quetes_id: Vec<String>;
+            { quetes_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_quetes(); }
+            for id in quetes_id {
+                quetes.push(MasterFile::get_instance().lock().unwrap().prendre_quete_id(&id).expect("Quête introuvable"));
+            }
+        }
+        let mut select = SelectView::new();
+        for quete in quetes {
+            select.add_item(quete.get_nom().clone(), quete.get_id().clone());
+        }
+        select.set_on_submit(|s, choice: &String| {
+            let quete: Quete;
+            { quete = MasterFile::get_instance().lock().unwrap().prendre_quete_id(&choice).expect("Quête introuvable"); }
+            s.add_layer(create_quete_dialog(quete))
+        });
+        Dialog::around(ScrollView::new(select).scroll_x(true).scroll_y(true))
+            .title("Quête")
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(personnage_screen());
+            })
+    }
+
+    fn create_quete_dialog(quete: Quete) -> Dialog {
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(quete.get_description().clone()));
+        layout.add_child(TextView::new("Récompenses :"));
+        let mut layout_recompenses: LinearLayout = LinearLayout::vertical();
+        for (ressource_id, quantite) in quete.get_recompense() {
+            let consommable: Result<Consommable, String>;
+            { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+            if consommable.is_ok() {
+                layout_recompenses.add_child(TextView::new(consommable.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+            let ressource: Result<Ressource, String>;
+            { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+            if ressource.is_ok() {
+                layout_recompenses.add_child(TextView::new(ressource.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+            let equipement: Result<Equipement, String>;
+            { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+            if equipement.is_ok() {
+                layout_recompenses.add_child(TextView::new(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+        }
+        layout.add_child(LinearLayout::horizontal()
+            .child(DummyView::new().fixed_width(2))
+            .child(layout_recompenses)
+        );
+        Dialog::around(layout)
+            .title(quete.get_nom().clone())
             .button("Retour", |s| {
                 s.pop_layer();
             })

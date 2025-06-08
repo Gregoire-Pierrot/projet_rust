@@ -517,6 +517,18 @@
       "prix": 15,
       "ressource": {},
       "rarete": "Commun"
+    },
+    {
+      "entite": {
+        "id": "climatiseur",
+        "description": "Un climatiseur",
+        "nom": "Climatiseur"
+      },
+      "prix": 50,
+      "ressource": {
+        "fer": 15
+      },
+      "rarete": "PeuCommun"
     }
   ],
   "Equipement": [
