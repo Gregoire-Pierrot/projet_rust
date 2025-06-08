@@ -86,7 +86,7 @@ impl Joueur {
             println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
         } else {
             *eq = Some(equipement.clone());
-            println!("Équipement équipé dans la catégorie {:?}", categorie);
+            //println!("Équipement équipé dans la catégorie {:?}", categorie);
             self.remove_inventaire(equipement, 1);
         }
     }
@@ -95,7 +95,7 @@ impl Joueur {
         match self.personnage.equipement.get_mut(categorie) {
             Some(equipement) => {
                 if let Some(eq) = equipement.take() {
-                    println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
+                    //println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
                     self.add_inventaire(eq, 1);
                 } else {
                     println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
@@ -293,7 +293,7 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui applique les effets d'un consommable au joueur.
-    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>,combat: &bool) {
+    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>, combat: &bool) {
         self.personnage.pv_actuel = if self.personnage.pv_actuel + effets[0] > self.personnage.pv_max {
             self.personnage.pv_max
         } else {
@@ -313,36 +313,29 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui permet d'utiliser un consommable.
-    pub fn utiliser_item(&mut self, master_file: &MasterFile,item: &String,combat: &bool) {
-        match master_file.prendre_consommable_id(item) {
-            Ok(consommable) => {
-                let effets = consommable.get_effets().clone();
-                let should_apply = {
-                    let inventaire = &mut self.personnage.inventaire;
-                    if let Some(quantite) = inventaire.get_mut(item) {
-                        if *quantite > 0 {
-                            *quantite -= 1;
-                            if *quantite == 0 {
-                                self.personnage.inventaire.remove(item);
-                            }
-                            true
-                        } else {
-                            println!("Quantité de {} insuffisante pour l'utiliser.", item);
-                            false
-                        }
-                    } else {
-                        println!("L'item {} n'est pas dans l'inventaire.", item);
-                        false
+    pub fn utiliser_item(&mut self, item: &Consommable, combat: &bool) {
+        let effets = item.get_effets().clone();
+        let should_apply = {
+            let inventaire = &mut self.personnage.inventaire;
+            if let Some(quantite) = inventaire.get_mut(&item.get_id()) {
+                if *quantite > 0 {
+                    *quantite -= 1;
+                    if *quantite == 0 {
+                        self.personnage.inventaire.remove(&item.get_id());
                     }
-                };
-
-                if should_apply {
-                    self.appliquer_effets_items(effets,&combat);
+                    true
+                } else {
+                    println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
+                    false
                 }
+            } else {
+                println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
+                false
             }
-            _ => {
-                println!("L'item {} n'est pas utilisable", item);
-            }
+        };
+
+        if should_apply {
+            self.appliquer_effets_items(effets, &combat);
         }
     }
 

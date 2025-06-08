@@ -16,7 +16,7 @@ use ennemie::Ennemie;
 use lieu::Lieu;
 use quete::Quete;
 use consommable::Consommable;
-use equipement::{Equipement, Arme};
+use equipement::{Equipement, Categorie, Arme, Armure};
 use structs::{EquipementType, Ressource};
 use attaque::Attaque;
 use json_manager::{MasterFile, Item};
@@ -780,7 +780,7 @@ fn main() {
             .item("Décomposer", 2)
             .on_submit(move |s, choice| {
                 if *choice == 1 {
-                    //TODO: utiliser le consommable
+                    { MasterFile::get_instance().lock().unwrap().get_joueur_mut().utiliser_item(&consommable, &false) }
                     s.add_layer(Dialog::text("L'objet : ".to_string() + &consommable.get_nom() + " a bien été utilisé")
                         .title("Equiper")
                         .button("Ok", |s| {
@@ -1010,21 +1010,144 @@ fn main() {
         }
         decomposer_string += "}";
         layout.add_child(TextView::new(decomposer_string));
+        let mut layout_caracteristiques: LinearLayout = LinearLayout::horizontal();
+        let layout_equipement: LinearLayout = LinearLayout::vertical()
+            .child(TextView::new(equipement.get_nom().clone() + " :"))
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(LinearLayout::vertical()
+                    .child(TextView::new("Pv : ".to_string() + &equipement.get_bonus_pv().to_string()))
+                    .child(TextView::new("Force : ".to_string() + &equipement.get_bonus_force().to_string()))
+                    .child(TextView::new("Dexterité : ".to_string() + &equipement.get_bonus_dexterite().to_string()))
+                    .child(TextView::new("Intelligence : ".to_string() + &equipement.get_bonus_intelligence().to_string()))
+                    .child(TextView::new("Vitesse : ".to_string() + &equipement.get_bonus_vitesse().to_string()))
+                    .child(TextView::new("Esquive : ".to_string() + &equipement.get_bonus_esquive().to_string()))
+                    .child(TextView::new("Chance : ".to_string() + &equipement.get_bonus_chance().to_string()))
+                    .child(TextView::new("Résistance physique : ".to_string() + &equipement.get_bonus_resistance_physique().to_string()))
+                    .child(TextView::new("Résistance magique : ".to_string() + &equipement.get_bonus_resistance_magique().to_string()))
+                    .child(TextView::new("Mult xp : ".to_string() + &equipement.get_bonus_multiplicateur_xp().to_string()))
+                    .child(TextView::new("% Pv : ".to_string() + &equipement.get_pourcent_bonus_pv().to_string()))
+                    .child(TextView::new("% Force : ".to_string() + &equipement.get_pourcent_bonus_force().to_string()))
+                    .child(TextView::new("% Dexterité : ".to_string() + &equipement.get_pourcent_bonus_dexterite().to_string()))
+                    .child(TextView::new("% Intelligence : ".to_string() + &equipement.get_pourcent_bonus_intelligence().to_string()))
+                    .child(TextView::new("% Vitesse : ".to_string() + &equipement.get_pourcent_bonus_vitesse().to_string()))
+                    .child(TextView::new("% Esquive : ".to_string() + &equipement.get_pourcent_bonus_esquive().to_string()))
+                    .child(TextView::new("% Chance : ".to_string() + &equipement.get_pourcent_bonus_chance().to_string()))
+                    .child(TextView::new("% Résistance physique : ".to_string() + &equipement.get_pourcent_bonus_resistance_physique().to_string()))
+                    .child(TextView::new("% Résistance magique : ".to_string() + &equipement.get_pourcent_bonus_resistance_magique().to_string()))
+                    .child(TextView::new("Catégorie : ".to_string() + &equipement.get_categorie().to_string()))
+                    .child(TextView::new("Rareté : ".to_string() + &equipement.get_rarete().to_string()))
+                )
+            )
+        ;
+        let maybe: Option<Option<String>> = match &equipement.get_categorie() {
+            Categorie::Arme(Arme::ArmeMelee) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Arme).cloned(),
+            Categorie::Arme(Arme::ArmeDistance) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Arme).cloned(),
+            Categorie::Arme(Arme::ArmeMagie) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Arme).cloned(),
+            Categorie::Armure(Armure::Casque) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Casque).cloned(),
+            Categorie::Armure(Armure::Plastron) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Plastron).cloned(),
+            Categorie::Armure(Armure::Gants) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Gants).cloned(),
+            Categorie::Armure(Armure::Jambieres) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Jambieres).cloned(),
+            Categorie::Armure(Armure::Bottes) => MasterFile::get_instance().lock().unwrap().get_joueur().get_equipement().get_mut(&EquipementType::Bottes).cloned(),
+        };
+        let equipement_actuel_id: Option<String> = match maybe {
+            Some(id) => id,
+            None => None
+        };
+        let mut layout_equipement_actuel: LinearLayout = LinearLayout::vertical();
+        match equipement_actuel_id {
+            Some(ref id) => {
+                let equipement_actuel: Equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&id).unwrap();
+                layout_equipement_actuel.add_child(TextView::new("Equipement actuel : ".to_string() + &equipement_actuel.get_nom().clone() + " :"));
+                layout_equipement_actuel.add_child(LinearLayout::horizontal()
+                    .child(DummyView::new().fixed_width(2))
+                    .child(LinearLayout::vertical()
+                        .child(TextView::new("Pv : ".to_string() + &equipement_actuel.get_bonus_pv().to_string()))
+                        .child(TextView::new("Force : ".to_string() + &equipement_actuel.get_bonus_force().to_string()))
+                        .child(TextView::new("Dexterité : ".to_string() + &equipement_actuel.get_bonus_dexterite().to_string()))
+                        .child(TextView::new("Intelligence : ".to_string() + &equipement_actuel.get_bonus_intelligence().to_string()))
+                        .child(TextView::new("Vitesse : ".to_string() + &equipement_actuel.get_bonus_vitesse().to_string()))
+                        .child(TextView::new("Esquive : ".to_string() + &equipement_actuel.get_bonus_esquive().to_string()))
+                        .child(TextView::new("Chance : ".to_string() + &equipement_actuel.get_bonus_chance().to_string()))
+                        .child(TextView::new("Résistance physique : ".to_string() + &equipement_actuel.get_bonus_resistance_physique().to_string()))
+                        .child(TextView::new("Résistance magique : ".to_string() + &equipement_actuel.get_bonus_resistance_magique().to_string()))
+                        .child(TextView::new("Mult xp : ".to_string() + &equipement_actuel.get_bonus_multiplicateur_xp().to_string()))
+                        .child(TextView::new("% Pv : ".to_string() + &equipement_actuel.get_pourcent_bonus_pv().to_string()))
+                        .child(TextView::new("% Force : ".to_string() + &equipement_actuel.get_pourcent_bonus_force().to_string()))
+                        .child(TextView::new("% Dexterité : ".to_string() + &equipement_actuel.get_pourcent_bonus_dexterite().to_string()))
+                        .child(TextView::new("% Intelligence : ".to_string() + &equipement_actuel.get_pourcent_bonus_intelligence().to_string()))
+                        .child(TextView::new("% Vitesse : ".to_string() + &equipement_actuel.get_pourcent_bonus_vitesse().to_string()))
+                        .child(TextView::new("% Esquive : ".to_string() + &equipement_actuel.get_pourcent_bonus_esquive().to_string()))
+                        .child(TextView::new("% Chance : ".to_string() + &equipement_actuel.get_pourcent_bonus_chance().to_string()))
+                        .child(TextView::new("% Résistance physique : ".to_string() + &equipement_actuel.get_pourcent_bonus_resistance_physique().to_string()))
+                        .child(TextView::new("% Résistance magique : ".to_string() + &equipement_actuel.get_pourcent_bonus_resistance_magique().to_string()))
+                        .child(TextView::new("Catégorie : ".to_string() + &equipement_actuel.get_categorie().to_string()))
+                        .child(TextView::new("Rareté : ".to_string() + &equipement_actuel.get_rarete().to_string()))
+                    )
+                );
+            },
+            None => layout_equipement_actuel.add_child(TextView::new("Aucun equipement actuellement"))
+        }
+        layout_caracteristiques.add_child(layout_equipement);
+        layout_caracteristiques.add_child(layout_equipement_actuel);
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(ScrollView::new(layout_caracteristiques).scroll_x(true).scroll_y(true));
         layout.add_child(DummyView::new().fixed_height(1));
         layout.add_child(SelectView::new()
             .item("Equiper", 1)
             .item("Décomposer", 2)
             .on_submit(move |s, choice| {
                 if *choice == 1 {
-                    //TODO: equiper l'equipement
-                    s.add_layer(Dialog::text("L'objet : ".to_owned() + &equipement.get_nom() + " a bien été équiper")
-                        .title("Equiper")
-                        .button("Ok", |s| {
-                            s.pop_layer();
-                            s.pop_layer();
-                            s.pop_layer();
-                            s.add_layer(inventaire_equipements());
-                        }));
+                    match &equipement_actuel_id {
+                        Some(id) => {
+                            let value = equipement.clone();
+                            s.add_layer(Dialog::text("Un objet est déjà équipé dans cette emplacement. Voulez vous le remplacer ?".to_string())
+                                .title("Confirmation")
+                                .button("Oui", move |s| {
+                                    let equipement_type: EquipementType = match value.get_categorie() {
+                                        Categorie::Arme(Arme::ArmeMelee) => EquipementType::Arme,
+                                        Categorie::Arme(Arme::ArmeDistance) => EquipementType::Arme,
+                                        Categorie::Arme(Arme::ArmeMagie) => EquipementType::Arme,
+                                        Categorie::Armure(Armure::Casque) => EquipementType::Casque,
+                                        Categorie::Armure(Armure::Plastron) => EquipementType::Plastron,
+                                        Categorie::Armure(Armure::Gants) => EquipementType::Gants,
+                                        Categorie::Armure(Armure::Jambieres) => EquipementType::Jambieres,
+                                        Categorie::Armure(Armure::Bottes) => EquipementType::Bottes
+                                    };
+                                    { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_equipement(&equipement_type); }
+                                    { MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_equipement(&equipement_type, &value.get_id().clone()); }
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.add_layer(inventaire_equipements());
+                                })
+                                .button("Non", |s| {
+                                    s.pop_layer();
+                                }));
+                        }
+                        None => {
+                            let equipement_type: EquipementType = match equipement.get_categorie() {
+                                Categorie::Arme(Arme::ArmeMelee) => EquipementType::Arme,
+                                Categorie::Arme(Arme::ArmeDistance) => EquipementType::Arme,
+                                Categorie::Arme(Arme::ArmeMagie) => EquipementType::Arme,
+                                Categorie::Armure(Armure::Casque) => EquipementType::Casque,
+                                Categorie::Armure(Armure::Plastron) => EquipementType::Plastron,
+                                Categorie::Armure(Armure::Gants) => EquipementType::Gants,
+                                Categorie::Armure(Armure::Jambieres) => EquipementType::Jambieres,
+                                Categorie::Armure(Armure::Bottes) => EquipementType::Bottes
+                            };
+                            { MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_equipement(&equipement_type, &equipement.get_id().clone()); }
+                            s.add_layer(Dialog::text("L'équipement : ".to_owned() + &equipement.get_nom() + " a bien été équiper")
+                                .title("Equiper")
+                                .button("Ok", |s| {
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.add_layer(inventaire_equipements());
+                                })
+                            )
+                        }
+                    }
                 }
                 else if *choice == 2 {
                     {
