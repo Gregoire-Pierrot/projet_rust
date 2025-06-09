@@ -1592,6 +1592,20 @@ fn main() {
         ;
         Dialog::around(layout)
             .title(equipement.get_nom())
+            .button("Déséquiper", move |s| {
+                let equipement_type: EquipementType = match equipement.get_categorie() {
+                    Categorie::Arme(_) => EquipementType::Arme,
+                    Categorie::Armure(Armure::Casque) => EquipementType::Casque,
+                    Categorie::Armure(Armure::Plastron) => EquipementType::Plastron,
+                    Categorie::Armure(Armure::Gants) => EquipementType::Gants,
+                    Categorie::Armure(Armure::Jambieres) => EquipementType::Jambieres,
+                    Categorie::Armure(Armure::Bottes) => EquipementType::Bottes
+                };
+                { MasterFile::get_instance().lock().unwrap().get_joueur_mut().remove_equipement(&equipement_type); }
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(equipement_screen());
+            })
             .button("Retour", |s| {
                 s.pop_layer();
             })
