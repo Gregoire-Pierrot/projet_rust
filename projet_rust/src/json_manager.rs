@@ -217,6 +217,42 @@ impl MasterFile {
         return Err("Attaque introuvable".to_string());
     }
 
+    pub fn acheter(&mut self, pnj_id: String, item_id: String, quantite: u32, prix: u32) {
+        for mut pnj in &mut self.Pnj {
+            if pnj.get_id() == pnj_id {
+                pnj.remove_item_commerce_table(item_id.clone(), quantite.clone());
+                self.get_joueur_mut().add_inventaire(item_id.clone(), quantite.clone());
+                self.get_joueur_mut().remove_inventaire(&"monnaie".to_string(), prix);
+                return;
+            }
+        }
+        panic!("Pas de pnj avec l'id : {}", pnj_id);
+    }
+
+    pub fn vendre(&mut self, item_id: String, quantite: u32) {
+        self.get_joueur_mut().remove_inventaire(&item_id, quantite);
+        match self.prendre_item_id(&item_id) {
+            Ok(item) => {
+                let prix: u32;
+                match item {
+                    Item::Consommable(consommable) => {
+                        prix = consommable.get_prix();
+                    }
+                    Item::Equipement(equipement) => {
+                        prix = equipement.get_prix();
+                    }
+                    Item::Ressource(ressource) => {
+                        prix = ressource.get_prix();
+                    }
+                }
+                self.get_joueur_mut().add_inventaire("monnaie".to_string(), quantite * prix);
+            }
+            Err(e) => {
+                eprintln!("Item introuvable : {}", e);
+            }
+        }
+    }
+
 
     ////item////
     pub fn prendre_item_id(&self, id: &str) -> Result<Item, String> {

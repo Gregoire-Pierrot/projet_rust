@@ -67,24 +67,36 @@ impl Pnj {
     ///////////////
     ///Fonction pour récupérer le premier dialogue qui sera jouer avec le statut EnCours et ajoute une quête à un joueur
     pub fn get_dialogue_a_jouer(&mut self, master_file: &mut MasterFile, dialogues: Vec<String>, joueur: &mut Joueur) -> Option<Quete> {
-    for dialogue_id in dialogues {
-        if let Ok(mut quete) = master_file.prendre_quete_id(&dialogue_id) {
-            match quete.get_statut() {
-                crate::quete::StatutQuete::EnCours => {
-                    self.terminer_quete_a_enlever(master_file, &mut quete);
-                    return Some(quete);
+        for dialogue_id in dialogues {
+            if let Ok(mut quete) = master_file.prendre_quete_id(&dialogue_id) {
+                match quete.get_statut() {
+                    crate::quete::StatutQuete::EnCours => {
+                        self.terminer_quete_a_enlever(master_file, &mut quete);
+                        return Some(quete);
+                    }
+                    crate::quete::StatutQuete::NonCommencee if quete.get_quete_joueur() => {
+                        joueur.ajout_quete_joueur(&mut quete);
+                        return None; // Retour au menu si la quête est non commencée
+                    }
+                    _ => continue, // On continue avec le prochain dialogue
                 }
-                crate::quete::StatutQuete::NonCommencee if quete.get_quete_joueur() => {
-                    joueur.ajout_quete_joueur(&mut quete);
-                    return None; // Retour au menu si la quête est non commencée
-                }
-                _ => continue, // On continue avec le prochain dialogue
             }
         }
+        None // Si aucune quête n'a été trouvée, retour au menu
     }
-    None // Si aucune quête n'a été trouvée, retour au menu
-}
 
+    ////Fonction pour retirer les items acheté du pnj
+    pub fn remove_item_commerce_table(&mut self, item_id: String, quantite: u32) {
+        if let Some(item) = self.commerce_table.get_mut(&item_id) {
+            if *item >= quantite {
+                *item -= quantite;
+            } else {
+                panic!("Pas assez d'items");
+            }
+        } else {
+            panic!("Pas d'items");
+        }
+    }
 }
 
 impl std::fmt::Display for Pnj {

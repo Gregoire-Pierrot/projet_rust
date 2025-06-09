@@ -473,8 +473,8 @@ fn main() {
     }
 
     fn create_dialog_pnj(pnj: Pnj) -> Dialog {
-        let is_commercant: bool = pnj.get_commerce_table().len() == 0;
-        let commercant_string: String = if is_commercant { "Non".to_string() } else { "Oui".to_string() };
+        let is_commercant: bool = pnj.get_commerce_table().len() != 0;
+        let commercant_string: String = if is_commercant { "Oui".to_string() } else { "Non".to_string() };
         let mut layout = LinearLayout::vertical();
         layout.add_child(TextView::new(pnj.get_description().clone()));
         layout.add_child(TextView::new("Commercant : ".to_string() + &commercant_string));
@@ -584,13 +584,15 @@ fn main() {
     }
 
     fn create_dialog_action_pnj(pnj: Pnj) -> Dialog {
-        let is_commercant: bool = pnj.get_commerce_table().len() == 0;
+        let pnj_clone = pnj.clone();
+        let is_commercant: bool = pnj.get_commerce_table().len() != 0;
         let mut select = SelectView::new();
         select.add_item("Parler", 1);
         if is_commercant { select.add_item("Commercer", 2); }
         select.add_item("Voler", 3);
-        select.set_on_submit(|s, choice| {
+        select.set_on_submit(move |s, choice| {
             if *choice == 1 {
+                s.pop_layer();
                 //s.add_layer(create_dialog_parler_pnj(pnj));
                 s.add_layer(Dialog::around(TextView::new("TODO: Parler au PNJ"))
                     .title("Parler")
@@ -600,15 +602,11 @@ fn main() {
                 );
             }
             else if *choice == 2 {
-                //s.add_layer(create_dialog_commerce_pnj(pnj));
-                s.add_layer(Dialog::around(TextView::new("TODO: Commercer avec le PNJ"))
-                    .title("Commerce")
-                    .button("Retour", |s| {
-                        s.pop_layer();
-                    })
-                );
+                s.pop_layer();
+                s.add_layer(create_dialog_commerce_pnj(pnj_clone.clone()));
             }
             else if *choice == 3 {
+                s.pop_layer();
                 //s.add_layer(create_dialog_voler_pnj(pnj));
                 s.add_layer(Dialog::around(TextView::new("TODO: Voler le PNJ"))
                     .title("Vol")
@@ -623,6 +621,597 @@ fn main() {
             .button("Retour", |s| {
                 s.pop_layer();
                 s.add_layer(pnj_screen());
+            })
+    }
+
+    fn create_dialog_commerce_pnj(pnj: Pnj) -> Dialog {
+        let pnj_clone = pnj.clone();
+        let mut layout = LinearLayout::vertical();
+        let monnaie: u32;
+        {
+            let monnaie_option: Option<u32> = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().get("monnaie").copied();
+            if monnaie_option.is_some() {
+                monnaie = monnaie_option.unwrap();
+            }
+            else {
+                monnaie = 0;
+            }
+        }
+        layout.add_child(TextView::new("Monnaie : ".to_string() + &monnaie.to_string()));
+        layout.add_child(SelectView::new()
+            .item("Acheter", 1)
+            .item("Vendre", 2)
+            .on_submit(move |s, choice| {
+                if *choice == 1 {
+                    s.pop_layer();
+                    s.add_layer(create_dialog_acheter_pnj(pnj_clone.clone()));
+                }
+                else if *choice == 2 {
+                    s.pop_layer();
+                    s.add_layer(create_dialog_vendre_pnj(pnj_clone.clone()));
+                }
+            }));
+        Dialog::around(layout)
+        .title(pnj.get_nom().clone() + " - Commercer")
+        .button("Retour", move |s| {
+            s.pop_layer();
+            s.add_layer(create_dialog_action_pnj(pnj.clone()));
+        })
+    }
+
+    fn create_dialog_acheter_pnj(pnj: Pnj) -> Dialog {
+        let pnj_clone = pnj.clone();
+        let mut layout = LinearLayout::vertical();
+        let mut select = SelectView::new();
+        let mut counter = 0;
+        for (ressource_id, quantite) in pnj.get_commerce_table() {
+            if quantite > 0 {
+                let consommable: Result<Consommable, String>;
+                { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+                if consommable.is_ok() {
+                    select.add_item(consommable.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                }
+                else {
+                    let ressource: Result<Ressource, String>;
+                    { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+                    if ressource.is_ok() {
+                        select.add_item(ressource.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                    }
+                    else {
+                        let equipement: Result<Equipement, String>;
+                        { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+                        if equipement.is_ok() {
+                            select.add_item(equipement.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                        }
+                    }
+                }
+                counter += 1;
+            }
+        }
+        select.set_on_submit(move |s, choice: &String| {
+            let ressource_id: String = choice.clone();
+            let consommable: Result<Consommable, String>;
+            { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+            if consommable.is_ok() {
+                let mut layout: LinearLayout = LinearLayout::vertical();
+                layout.add_child(TextView::new(consommable.clone().expect("Consommable non trouvé").get_description().clone()));
+                let mut decomposer_string: String = "Décomposer => {".to_string();
+                for (id, quantite) in consommable.clone().expect("Consommable non trouvé").get_ressources() {
+                    decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+                }
+                decomposer_string += "}";
+                layout.add_child(TextView::new(decomposer_string));
+                layout.add_child(TextView::new("Prix : ".to_owned() + &consommable.clone().expect("Consommable non trouvé").get_prix().clone().to_string()));
+                let effets = consommable.clone().expect("Consommable non trouvé").get_effets().clone();
+                layout.add_child(DummyView::new().fixed_height(1));
+                layout.add_child(TextView::new("Régenération pv : ".to_string() + &effets[0].to_string()));
+                layout.add_child(TextView::new("Force : +".to_string() + &effets[1].to_string() + " en combat"));
+                layout.add_child(TextView::new("Dexterité : +".to_string() + &effets[2].to_string() + " en combat"));
+                layout.add_child(TextView::new("Intelligence : +".to_string() + &effets[3].to_string() + " en combat"));
+                layout.add_child(TextView::new("Vitesse : +".to_string() + &effets[4].to_string() + " en combat"));
+                layout.add_child(TextView::new("Esquive : +".to_string() + &effets[5].to_string() + " en combat"));
+                layout.add_child(TextView::new("Chance : +".to_string() + &effets[6].to_string() + " en combat"));
+                layout.add_child(TextView::new("Résistance physique : +".to_string() + &effets[7].to_string() + " en combat"));
+                layout.add_child(TextView::new("Résistance magique : +".to_string() + &effets[8].to_string() + " en combat"));
+                let pnj_clone_clone = pnj_clone.clone();
+                s.add_layer(Dialog::around(layout)
+                    .title("Acheter : ".to_owned() + &consommable.clone().unwrap().get_nom().clone())
+                    .button("Acheter", move |s| {
+                        { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), consommable.clone().expect("Consommable non trouvé").get_id(), 1, consommable.clone().expect("Consommable non trouvé").get_prix().clone()) }
+                        s.pop_layer();
+                        s.pop_layer();
+                        let pnj_mod: Pnj;
+                        {
+                            let pnj_result: Result<Pnj, String>;
+                            pnj_result = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_clone_clone.get_id());
+                            pnj_mod = pnj_result.expect("Pnj introuvable");
+                        }
+                        s.add_layer(create_dialog_commerce_pnj(pnj_mod.clone()));
+                    })
+                    .button("Retour", move |s| {
+                        s.pop_layer();
+                    })
+                );
+            }
+            else {
+                let ressource: Result<Ressource, String>;
+                { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+                if ressource.is_ok() {
+                    let mut layout: LinearLayout = LinearLayout::vertical();
+                    layout.add_child(TextView::new(ressource.clone().expect("Ressource non trouvée").get_description().clone()));
+                    let mut decomposer_string: String = "Décomposer => {".to_string();
+                    for (id, quantite) in ressource.clone().expect("Ressource non trouvée").get_ressource() {
+                        decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+                    }
+                    decomposer_string += "}";
+                    layout.add_child(TextView::new(decomposer_string));
+                    layout.add_child(TextView::new("Prix : ".to_owned() + &ressource.clone().expect("Ressource non trouvée").get_prix().clone().to_string()));
+                    let pnj_clone_clone = pnj_clone.clone();
+                    s.add_layer(Dialog::around(layout)
+                        .title("Acheter : ".to_owned() + &ressource.clone().expect("Ressource non trouvée").get_nom().clone())
+                        .button("Acheter", move |s| {
+                            { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), ressource.clone().expect("Ressource non trouvée").get_id(), 1, ressource.clone().expect("Ressource non trouvée").get_prix().clone()) }
+                            s.pop_layer();
+                            s.pop_layer();
+                            let pnj_mod: Pnj;
+                            {
+                                let pnj_result: Result<Pnj, String>;
+                                pnj_result = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_clone_clone.get_id());
+                                pnj_mod = pnj_result.expect("Pnj introuvable");
+                            }
+                            s.add_layer(create_dialog_commerce_pnj(pnj_mod.clone()));
+                        })
+                        .button("Retour", move |s| {
+                            s.pop_layer();
+                        })
+                    );
+                }
+                else {
+                    let equipement: Result<Equipement, String>;
+                    { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+                    if equipement.is_ok() {
+                        let mut decomposer_string: String = "Décomposer => {".to_string();
+                        for (id, quantite) in equipement.clone().expect("Equipement non trouvée").get_ressources() {
+                            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+                        }
+                        decomposer_string += "}";
+                        let layout: LinearLayout = LinearLayout::vertical()
+                            .child(TextView::new(equipement.clone().expect("Equipement non trouvée").get_description().clone()))
+                            .child(TextView::new(&decomposer_string))
+                            .child(TextView::new("Prix : ".to_owned() + &equipement.clone().expect("Equipement non trouvée").get_prix().to_string()))
+                            .child(DummyView::new().fixed_height(1))
+                            .child(TextView::new("Pv : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_pv().to_string()))
+                            .child(TextView::new("Force : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_force().to_string()))
+                            .child(TextView::new("Dexterité : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_dexterite().to_string()))
+                            .child(TextView::new("Intelligence : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_intelligence().to_string()))
+                            .child(TextView::new("Vitesse : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_vitesse().to_string()))
+                            .child(TextView::new("Esquive : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_esquive().to_string()))
+                            .child(TextView::new("Chance : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_chance().to_string()))
+                            .child(TextView::new("Résistance physique : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_resistance_physique().to_string()))
+                            .child(TextView::new("Résistance magique : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_resistance_magique().to_string()))
+                            .child(TextView::new("Mult xp : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_multiplicateur_xp().to_string()))
+                            .child(TextView::new("% Pv : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_pv().to_string()))
+                            .child(TextView::new("% Force : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_force().to_string()))
+                            .child(TextView::new("% Dexterité : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_dexterite().to_string()))
+                            .child(TextView::new("% Intelligence : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_intelligence().to_string()))
+                            .child(TextView::new("% Vitesse : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_vitesse().to_string()))
+                            .child(TextView::new("% Esquive : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_esquive().to_string()))
+                            .child(TextView::new("% Chance : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_chance().to_string()))
+                            .child(TextView::new("% Résistance physique : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_resistance_physique().to_string()))
+                            .child(TextView::new("% Résistance magique : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_pourcent_bonus_resistance_magique().to_string()))
+                            .child(TextView::new("Catégorie : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_categorie().to_string()))
+                            .child(TextView::new("Rareté : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_rarete().to_string()))
+                        ;
+                        let pnj_clone_clone = pnj_clone.clone();
+                        s.add_layer(Dialog::around(layout)
+                            .title("Acheter : ".to_owned() + &equipement.clone().expect("Equipement non trouvée").get_nom().clone())
+                            .button("Acheter", move |s| {
+                                { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), equipement.clone().expect("Equipement non trouvée").get_id(), 1, equipement.clone().expect("Equipement non trouvée").get_prix().clone()) }
+                                s.pop_layer();
+                                s.pop_layer();
+                                let pnj_mod: Pnj;
+                                {
+                                    let pnj_result: Result<Pnj, String>;
+                                    pnj_result = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_clone_clone.get_id());
+                                    pnj_mod = pnj_result.expect("Pnj introuvable");
+                                }
+                                s.add_layer(create_dialog_commerce_pnj(pnj_mod.clone()));
+                            })
+                            .button("Retour", move |s| {
+                                s.pop_layer();
+                            })
+                        );
+                    }
+                }
+            }
+        });
+        if counter > 0 { layout.add_child(select); }
+        else { layout.add_child(TextView::new(pnj.get_nom().clone() + " n'a rien n'a vendre")); }
+        Dialog::around(layout)
+            .title(pnj.get_nom().clone() + " - Acheter")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.add_layer(create_dialog_commerce_pnj(pnj.clone()));
+            })
+    }
+
+    fn create_dialog_vendre_pnj(pnj: Pnj) -> Dialog {
+        let pnj_id: String = pnj.get_id();
+        Dialog::around(SelectView::new()
+            .item("Consommable", 1)
+            .item("Ressource", 2)
+            .item("Equipement", 3)
+            .on_submit(move |s, choice| {
+                if *choice == 1 {
+                    s.pop_layer();
+                    let pnj_: Pnj;
+                    { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id).expect("Pnj introuvable"); }
+                    s.add_layer(create_dialog_vendre_consommable_pnj(pnj_.clone()));
+                }
+                else if *choice == 2 {
+                    s.pop_layer();
+                    let pnj_: Pnj;
+                    { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id).expect("Pnj introuvable"); }
+                    s.add_layer(create_dialog_vendre_ressource_pnj(pnj_.clone()));
+                }
+                else if *choice == 3 {
+                    s.pop_layer();
+                    let pnj_: Pnj;
+                    { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj_id).expect("Pnj introuvable"); }
+                    s.add_layer(create_dialog_vendre_equipement_pnj(pnj_.clone()));
+                }
+            })
+        )
+        .title("Vendre")
+        .button("Retour", move |s| {
+            s.pop_layer();
+            s.add_layer(create_dialog_commerce_pnj(pnj.clone()));
+        })
+    }
+
+    fn create_dialog_vendre_consommable_pnj(pnj: Pnj) -> Dialog {
+        let inventaire: HashMap<String, u32>;
+        { inventaire = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().clone() }
+        let mut consommables: Vec<Consommable> = vec![];
+        for (id, quantite) in inventaire {
+            if quantite > 0 {
+                match MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&id) {
+                    Ok(consommable) => consommables.push(consommable),
+                    Err(_) => {}
+                }
+            }
+        }
+        let mut layout: LinearLayout = LinearLayout::horizontal();
+        let mut select: SelectView = SelectView::new();
+        select.set_inactive_highlight(false);
+
+        let mut consommable: Consommable;
+        for i in 1..consommables.len() + 1 {
+            consommable = consommables[i - 1].clone();
+            let quantite: u32;
+            {
+                let nb: Option<u32> = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().get(&consommable.get_id().clone()).copied();
+                match nb {
+                    Some(nb) => quantite = nb,
+                    None => quantite = 0
+                }
+            }
+            select.add_item(consommable.get_nom().clone().to_string() + " : " + &quantite.to_string(), i.to_string());
+            if i % 10 == 0 {
+                let consommables_clone = consommables.clone();
+                let pnj_: Pnj;
+                { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable") }
+                select.set_on_submit(move |s, choice: &String| {
+                    if quantite == 0 {
+                        s.add_layer(Dialog::text("Vous n'avez plus de ".to_string() + &consommable.get_nom().clone())
+                            .title("Consommable")
+                            .button("Retour", |s| { s.pop_layer(); })
+                        );
+                    }
+                    else {
+                        let index = choice.parse::<usize>().unwrap() - 1;
+                        let consommable = consommables_clone[index].clone();
+                        s.add_layer(create_dialog_vendre_consommable(consommable, pnj_.clone()));
+                    }
+                });
+                layout.add_child(select);
+                select = SelectView::new();
+                select.set_inactive_highlight(false);
+            }
+            if i % 10 == 1 && i != 1 {
+                layout.add_child(DummyView::new().fixed_width(5));
+            }
+        }
+        if consommables.len() % 10 != 0 {
+            let consommables_clone = consommables.clone();
+            let pnj_: Pnj;
+            { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable") }
+            select.set_on_submit(move |s, choice: &String| {
+                let index = choice.parse::<usize>().unwrap() - 1;
+                let consommable = consommables_clone[index].clone();
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_consommable(consommable, pnj_.clone()));
+            });
+            layout.add_child(select);
+        }
+        if consommables.len() == 0 {
+            layout.add_child(TextView::new("Vous n'avez aucun consommable."));
+        }
+        Dialog::around(layout)
+            .title("Vendre consommable")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
+            })
+    }
+
+    fn create_dialog_vendre_consommable(consommable: Consommable, pnj: Pnj) -> Dialog {
+        let pnj_: Pnj;
+        { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable") }
+        let consommable_clone = consommable.clone();
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(consommable.get_description().clone()));
+        let mut decomposer_string: String = "Décomposer => {".to_string();
+        for (id, quantite) in consommable.get_ressources() {
+            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+        }
+        decomposer_string += "}";
+        layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &consommable.clone().get_prix().clone().to_string()));
+        let effets = consommable.get_effets().clone();
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(TextView::new("Régenération pv : ".to_string() + &effets[0].to_string()));
+        layout.add_child(TextView::new("Force : +".to_string() + &effets[1].to_string() + " en combat"));
+        layout.add_child(TextView::new("Dexterité : +".to_string() + &effets[2].to_string() + " en combat"));
+        layout.add_child(TextView::new("Intelligence : +".to_string() + &effets[3].to_string() + " en combat"));
+        layout.add_child(TextView::new("Vitesse : +".to_string() + &effets[4].to_string() + " en combat"));
+        layout.add_child(TextView::new("Esquive : +".to_string() + &effets[5].to_string() + " en combat"));
+        layout.add_child(TextView::new("Chance : +".to_string() + &effets[6].to_string() + " en combat"));
+        layout.add_child(TextView::new("Résistance physique : +".to_string() + &effets[7].to_string() + " en combat"));
+        layout.add_child(TextView::new("Résistance magique : +".to_string() + &effets[8].to_string() + " en combat"));
+        layout.add_child(DummyView::new().fixed_height(2));
+        Dialog::around(layout)
+            .title(consommable_clone.get_nom().clone())
+            .button("Vendre", move |s| {
+                { MasterFile::get_instance().lock().unwrap().vendre(consommable_clone.get_id(), 1); }
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj_.clone()));
+            })
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
+            })
+    }
+
+    fn create_dialog_vendre_ressource_pnj(pnj: Pnj) -> Dialog {
+        let inventaire: HashMap<String, u32>;
+        { inventaire = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().clone() }
+        let mut ressources: Vec<Ressource> = vec![];
+        for (id, quantite) in inventaire {
+            if quantite > 0 {
+                match MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id) {
+                    Ok(ressource) => ressources.push(ressource),
+                    Err(_) => {}
+                }
+            }
+        }
+        let mut layout: LinearLayout = LinearLayout::horizontal();
+        let mut select: SelectView = SelectView::new();
+        select.set_inactive_highlight(false);
+
+        let mut ressource: Ressource;
+        for i in 1..ressources.len() + 1 {
+            ressource = ressources[i - 1].clone();
+            let quantite: u32;
+            {
+                let nb: Option<u32> = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().get(&ressource.get_id().clone()).copied();
+                match nb {
+                    Some(nb) => quantite = nb,
+                    None => quantite = 0
+                }
+            }
+            select.add_item(ressource.get_nom().clone().to_string() + " : " + &quantite.to_string(), i.to_string());
+            if i % 10 == 0 {
+                let ressources_clone = ressources.clone();
+                let pnj_: Pnj;
+                { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id().clone()).expect("Pnj introuvable"); }
+                select.set_on_submit(move |s, choice: &String| {
+                    let index = choice.parse::<usize>().unwrap() - 1;
+                    let ressource = ressources_clone[index].clone();
+                    s.add_layer(create_dialog_vendre_ressource(ressource, pnj_.clone()));
+                });
+                layout.add_child(select);
+                select = SelectView::new();
+                select.set_inactive_highlight(false);
+            }
+            if i % 10 == 1 && i != 1 {
+                layout.add_child(DummyView::new().fixed_width(5));
+            }
+        }
+        if ressources.len() % 10 != 0 {
+            let ressources_clone = ressources.clone();
+            let pnj_: Pnj;
+            { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id().clone()).expect("Pnj introuvable"); }
+            select.set_on_submit(move |s, choice: &String| {
+                let index = choice.parse::<usize>().unwrap() - 1;
+                let ressource = ressources_clone[index].clone();
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_ressource(ressource, pnj_.clone()));
+            });
+            layout.add_child(select);
+        }
+        if ressources.len() == 0 {
+            layout.add_child(TextView::new("Vous n'avez aucune ressource."));
+        }
+
+        Dialog::around(ScrollView::new(layout)
+            .scroll_x(true)
+            .scroll_y(true)
+        )
+        .title("Ressources")
+        .button("Retour", move |s| {
+            s.pop_layer();
+            s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
+        })
+    }
+
+    fn create_dialog_vendre_ressource(ressource: Ressource, pnj: Pnj) -> Dialog {
+        let pnj_: Pnj;
+        { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable") }
+        let ressource_clone = ressource.clone();
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(ressource.get_description().clone()));
+        let mut decomposer_string: String = "Décomposer => {".to_string();
+        for (id, quantite) in ressource.get_ressource() {
+            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+        }
+        decomposer_string += "}";
+        layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &ressource.clone().get_prix().clone().to_string()));
+        layout.add_child(DummyView::new().fixed_height(1));
+        Dialog::around(layout)
+            .title(ressource_clone.get_nom().clone())
+            .button("Vendre", move |s| {
+                { MasterFile::get_instance().lock().unwrap().vendre(ressource_clone.get_id(), 1); }
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj_.clone()));
+            })
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
+            })
+    }
+
+    fn create_dialog_vendre_equipement_pnj(pnj: Pnj) -> Dialog {
+        let inventaire: HashMap<String, u32>;
+        { inventaire = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().clone() }
+        let mut equipements: Vec<Equipement> = vec![];
+        for (id, quantite) in inventaire {
+            if quantite > 0 {
+                match MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&id) {
+                    Ok(equipement) => equipements.push(equipement),
+                    Err(_) => {}
+                }
+            }
+        }
+        let mut layout: LinearLayout = LinearLayout::horizontal();
+        let mut select: SelectView = SelectView::new();
+        select.set_inactive_highlight(false);
+
+        let mut equipement: Equipement;
+        for i in 1..equipements.len() + 1 {
+            equipement = equipements[i - 1].clone();
+            let quantite: u32;
+            {
+                let nb: Option<u32> = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().get(&equipement.get_id().clone()).copied();
+                match nb {
+                    Some(nb) => quantite = nb,
+                    None => quantite = 0
+                }
+            }
+            select.add_item(equipement.get_nom().clone() + " : " + &quantite.to_string(), i.to_string());
+            if i % 10 == 0 {
+                let equipements_clone = equipements.clone();
+                let pnj_: Pnj;
+                { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id().clone()).expect("Pnj introuvable"); }
+                select.set_on_submit(move |s, choice: &String| {
+                    let index = choice.parse::<usize>().unwrap() - 1;
+                    let equipement = equipements_clone[index].clone();
+                    s.pop_layer();
+                    s.add_layer(create_dialog_vendre_equipement(equipement, pnj_.clone()));
+                });
+                layout.add_child(select);
+                select = SelectView::new();
+                select.set_inactive_highlight(false);
+            }
+            if i % 10 == 1 && i != 1 {
+                layout.add_child(DummyView::new().fixed_width(5));
+            }
+        }
+        if equipements.len() % 10 != 0 {
+            let equipements_clone = equipements.clone();
+            let pnj_: Pnj;
+            { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id().clone()).expect("Pnj introuvable"); }
+            select.set_on_submit(move |s, choice: &String| {
+                let index = choice.parse::<usize>().unwrap() - 1;
+                let equipement = equipements_clone[index].clone();
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_equipement(equipement, pnj_.clone()));
+            });
+            layout.add_child(select);
+        }
+        if equipements.len() == 0 {
+            layout.add_child(TextView::new("Vous n'avez aucun equipement."));
+        }
+
+        Dialog::around(ScrollView::new(layout)
+            .scroll_x(true)
+            .scroll_y(true)
+        )
+        .title("Equipements")
+        .button("Retour", move |s| {
+            s.pop_layer();
+            s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
+        })
+    }
+
+    fn create_dialog_vendre_equipement(equipement: Equipement, pnj: Pnj) -> Dialog {
+        let pnj_: Pnj;
+        { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable") }
+        let equipement_clone = equipement.clone();
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(equipement.get_description().clone()));
+        let mut decomposer_string: String = "Décomposer => {".to_string();
+        for (id, quantite) in equipement.get_ressources() {
+            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+        }
+        decomposer_string += "}";
+        layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &equipement.clone().get_prix().clone().to_string()));
+        let mut layout_caracteristiques: LinearLayout = LinearLayout::horizontal();
+        let layout_equipement: LinearLayout = LinearLayout::vertical()
+            .child(TextView::new(equipement.get_nom().clone() + " :"))
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(LinearLayout::vertical()
+                    .child(TextView::new("Pv : ".to_string() + &equipement.get_bonus_pv().to_string()))
+                    .child(TextView::new("Force : ".to_string() + &equipement.get_bonus_force().to_string()))
+                    .child(TextView::new("Dexterité : ".to_string() + &equipement.get_bonus_dexterite().to_string()))
+                    .child(TextView::new("Intelligence : ".to_string() + &equipement.get_bonus_intelligence().to_string()))
+                    .child(TextView::new("Vitesse : ".to_string() + &equipement.get_bonus_vitesse().to_string()))
+                    .child(TextView::new("Esquive : ".to_string() + &equipement.get_bonus_esquive().to_string()))
+                    .child(TextView::new("Chance : ".to_string() + &equipement.get_bonus_chance().to_string()))
+                    .child(TextView::new("Résistance physique : ".to_string() + &equipement.get_bonus_resistance_physique().to_string()))
+                    .child(TextView::new("Résistance magique : ".to_string() + &equipement.get_bonus_resistance_magique().to_string()))
+                    .child(TextView::new("Mult xp : ".to_string() + &equipement.get_bonus_multiplicateur_xp().to_string()))
+                    .child(TextView::new("% Pv : ".to_string() + &equipement.get_pourcent_bonus_pv().to_string()))
+                    .child(TextView::new("% Force : ".to_string() + &equipement.get_pourcent_bonus_force().to_string()))
+                    .child(TextView::new("% Dexterité : ".to_string() + &equipement.get_pourcent_bonus_dexterite().to_string()))
+                    .child(TextView::new("% Intelligence : ".to_string() + &equipement.get_pourcent_bonus_intelligence().to_string()))
+                    .child(TextView::new("% Vitesse : ".to_string() + &equipement.get_pourcent_bonus_vitesse().to_string()))
+                    .child(TextView::new("% Esquive : ".to_string() + &equipement.get_pourcent_bonus_esquive().to_string()))
+                    .child(TextView::new("% Chance : ".to_string() + &equipement.get_pourcent_bonus_chance().to_string()))
+                    .child(TextView::new("% Résistance physique : ".to_string() + &equipement.get_pourcent_bonus_resistance_physique().to_string()))
+                    .child(TextView::new("% Résistance magique : ".to_string() + &equipement.get_pourcent_bonus_resistance_magique().to_string()))
+                    .child(TextView::new("Catégorie : ".to_string() + &equipement.get_categorie().to_string()))
+                    .child(TextView::new("Rareté : ".to_string() + &equipement.get_rarete().to_string()))
+                )
+            )
+        ;
+        layout_caracteristiques.add_child(layout_equipement);
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(ScrollView::new(layout_caracteristiques).scroll_x(true).scroll_y(true));
+        layout.add_child(DummyView::new().fixed_height(1));
+        Dialog::around(layout)
+            .title(equipement_clone.get_nom().clone())
+            .button("Vendre", move |s| {
+                { MasterFile::get_instance().lock().unwrap().vendre(equipement_clone.get_id(), 1); }
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj_.clone()));
+            })
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.add_layer(create_dialog_vendre_pnj(pnj.clone()));
             })
     }
 
@@ -969,8 +1558,15 @@ fn main() {
     }
 
     fn create_equipement_dialog(equipement: Equipement) -> Dialog {
+        let mut decomposer_string: String = "Décomposer => {".to_string();
+        for (id, quantite) in equipement.clone().get_ressources() {
+            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+        }
+        decomposer_string += "}";
         let layout: LinearLayout = LinearLayout::vertical()
             .child(TextView::new(equipement.get_description().clone()))
+            .child(TextView::new(&decomposer_string))
+            .child(TextView::new("Prix : ".to_owned() + &equipement.clone().get_prix().to_string()))
             .child(DummyView::new().fixed_height(1))
             .child(TextView::new("Pv : ".to_string() + &equipement.get_bonus_pv().to_string()))
             .child(TextView::new("Force : ".to_string() + &equipement.get_bonus_force().to_string()))
@@ -1188,6 +1784,7 @@ fn main() {
         }
         decomposer_string += "}";
         layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &consommable.clone().get_prix().clone().to_string()));
         let effets = consommable.get_effets().clone();
         layout.add_child(DummyView::new().fixed_height(1));
         layout.add_child(TextView::new("Régenération pv : ".to_string() + &effets[0].to_string()));
@@ -1323,6 +1920,7 @@ fn main() {
         }
         decomposer_string += "}";
         layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &ressource.clone().get_prix().clone().to_string()));
         layout.add_child(DummyView::new().fixed_height(1));
         layout.add_child(SelectView::new()
             .item("Décomposer", 1)
@@ -1435,6 +2033,7 @@ fn main() {
         }
         decomposer_string += "}";
         layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &equipement.clone().get_prix().clone().to_string()));
         let mut layout_caracteristiques: LinearLayout = LinearLayout::horizontal();
         let layout_equipement: LinearLayout = LinearLayout::vertical()
             .child(TextView::new(equipement.get_nom().clone() + " :"))
