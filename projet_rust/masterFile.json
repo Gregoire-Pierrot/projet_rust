@@ -315,7 +315,7 @@
       "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Interaction": "porte_1"
+        "Dialogue": "Dialogue_pnj_1_4"
       }
     },
     {

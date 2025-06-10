@@ -539,7 +539,7 @@ fn main() {
                     let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
                     joueur.completion_quete(ressource_id.clone());
                     { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
-                    
+
                     s.pop_layer();
                     s.pop_layer();
                     s.add_layer(recolter_screen());
@@ -675,6 +675,11 @@ fn main() {
             else{
                 layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
                 prochains_dialogues = dialogue.get_quetes_suivantes();
+
+                let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+                joueur.completion_quete(dialogue.clone().get_id());
+                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
+                
             } 
         } else {
             prochains_dialogues = Vec::new(); 
