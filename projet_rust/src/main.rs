@@ -607,31 +607,45 @@ fn main() {
                 s.add_layer(create_dialog_commerce_pnj(pnj_clone.clone()));
             }
             else if *choice == 3 {
-                let inventaire: HashMap<String, u32> = pnj_clone.get_inventaire().clone();
-                let mut quantite_items = 0;
-                for (_, quantite) in inventaire {
-                    quantite_items += quantite;
-                }
-                if quantite_items == 0 {
-                    s.add_layer(Dialog::around(TextView::new(pnj_clone.get_nom() + " n'a rien à voler."))
+                let player_pv: u16;
+                { player_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel(); }
+                if player_pv < 11 {
+                    s.add_layer(Dialog::around(TextView::new("Vous n'avez pas assez de vie, vous risquez d'être mis KO."))
                         .title("Voler")
                         .button("Retour", |s| {
                             s.pop_layer();
                         })
                     );
-                    return;
                 } else {
-                    let player_pv: u16;
-                    { player_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel(); }
-                    if player_pv < 11 {
-                        s.add_layer(Dialog::around(TextView::new("Vous n'avez pas assez de vie, vous risquez de mourir."))
-                            .title("Voler")
-                            .button("Retour", |s| {
-                                s.pop_layer();
-                            })
-                        );
+                    let chance_joueur: f32;
+                    { chance_joueur = MasterFile::get_instance().lock().unwrap().get_joueur().get_chance() as f32 / 100 as f32; }
+                    let mut rng = rand::thread_rng();
+                    if chance_joueur.min(0.75) >= rng.gen_range(0.0..1.0) {
+                        let inventaire: HashMap<String, u32> = pnj_clone.get_inventaire().clone();
+                        let mut quantite_items = 0;
+                        for (_, quantite) in inventaire {
+                            quantite_items += quantite;
+                        }
+                        if quantite_items == 0 {
+                            s.add_layer(Dialog::around(TextView::new(pnj_clone.get_nom() + " n'a rien à voler."))
+                                .title("Voler")
+                                .button("Retour", |s| {
+                                    s.pop_layer();
+                                })
+                            );
+                            return;
+                        } else {
+                            s.add_layer(create_dialog_voler_pnj(pnj_clone.clone()));
+                        }
                     } else {
-                        s.add_layer(create_dialog_voler_pnj(pnj_clone.clone()));
+                        let joueur_pv: u16;
+                        { joueur_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel().clone(); }
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_pv_actuel(joueur_pv - 10); }
+                        s.add_layer(Dialog::around(TextView::new("Vous vous êtes fait prendre !\nVous perdez 10pv.".to_string()))
+                            .title("Vol raté")
+                            .button("Ok", |s| {
+                                s.pop_layer();
+                            }));
                     }
                 }
             }
@@ -1236,43 +1250,30 @@ fn main() {
     }
 
     fn create_dialog_voler_pnj(pnj: Pnj) -> Dialog {
-        let chance_joueur: f32;
-        { chance_joueur = MasterFile::get_instance().lock().unwrap().get_joueur().get_chance() as f32 / 100 as f32; }
         let mut rng = rand::thread_rng();
-        if chance_joueur.min(0.75) >= rng.gen_range(0.0..1.0) {
-            let inventaire: HashMap<String, u32> = pnj.get_inventaire();
-            let mut keys: Vec<String> = vec![];
-            for (key, _) in &inventaire {
-                keys.push(key.clone());
-            }
-            let item_index = rng.gen_range(0..keys.len());
-            if let Some(&ref key) = keys.get(item_index) {
-                let quantite: u32 = inventaire.get(key).unwrap().clone();
-                let quantite_vole: u32 = rng.gen_range(1..quantite + 1);
-                let item_nom: String;
-                { item_nom = MasterFile::get_instance().lock().unwrap().prendre_item_id(&key.clone()).expect("Item introuvable").get_nom().clone(); }
-                { MasterFile::get_instance().lock().unwrap().voler(pnj.get_id(), key.clone(), quantite_vole); }
-                let pnj_: Pnj;
-                { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable"); }
-                Dialog::around(TextView::new("Vous avez volé ".to_string() + &item_nom.to_string() + " x " + &quantite_vole.to_string() + "."))
-                    .title("Vole")
-                    .button("Ok", move |s| {
-                        s.pop_layer();
-                        s.pop_layer();
-                        s.add_layer(create_dialog_action_pnj(pnj_.clone()));
-                    })
-            } else {
-                panic!("Item introuvable");
-            }
-        } else {
-            let joueur_pv: u16;
-            { joueur_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel().clone(); }
-            { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_pv_actuel(joueur_pv - 10); }
-            Dialog::around(TextView::new("Vous vous êtes fait prendre !\nVous perdez 10pv.".to_string()))
-                .title("Vole raté")
-                .button("Ok", |s| {
+        let inventaire: HashMap<String, u32> = pnj.get_inventaire();
+        let mut keys: Vec<String> = vec![];
+        for (key, _) in &inventaire {
+            keys.push(key.clone());
+        }
+        let item_index = rng.gen_range(0..keys.len());
+        if let Some(&ref key) = keys.get(item_index) {
+            let quantite: u32 = inventaire.get(key).unwrap().clone();
+            let quantite_vol: u32 = rng.gen_range(1..quantite + 1);
+            let item_nom: String;
+            { item_nom = MasterFile::get_instance().lock().unwrap().prendre_item_id(&key.clone()).expect("Item introuvable").get_nom().clone(); }
+            { MasterFile::get_instance().lock().unwrap().voler(pnj.get_id(), key.clone(), quantite_vol); }
+            let pnj_: Pnj;
+            { pnj_ = MasterFile::get_instance().lock().unwrap().prendre_pnj_id(&pnj.get_id()).expect("Pnj introuvable"); }
+            Dialog::around(TextView::new("Vous avez volé ".to_string() + &item_nom.to_string() + " x " + &quantite_vol.to_string() + "."))
+                .title("Vol")
+                .button("Ok", move |s| {
                     s.pop_layer();
+                    s.pop_layer();
+                    s.add_layer(create_dialog_action_pnj(pnj_.clone()));
                 })
+        } else {
+            panic!("Item introuvable");
         }
     }
 
@@ -1653,7 +1654,7 @@ fn main() {
         ;
         Dialog::around(layout)
             .title(equipement.get_nom())
-            .button("Déséquiper", move |s| {
+            .button("Retirer", move |s| {
                 let equipement_type: EquipementType = match equipement.get_categorie() {
                     Categorie::Arme(_) => EquipementType::Arme,
                     Categorie::Armure(Armure::Casque) => EquipementType::Casque,
