@@ -596,12 +596,6 @@ fn main() {
             if *choice == 1 {
                 s.pop_layer();
                 s.add_layer(create_dialog_parler_pnj(pnj_clone.clone()));
-                s.add_layer(Dialog::around(TextView::new("TODO: Parler au PNJ"))
-                    .title("Parler")
-                    .button("Retour", |s| {
-                        s.pop_layer();
-                    })
-                );
             }
             else if *choice == 2 {
                 s.pop_layer();
@@ -660,15 +654,14 @@ fn main() {
     }
 
 
-    fn create_dialog_parler_pnj(pnj: Pnj) -> Dialog {
+    fn create_dialog_parler_pnj(mut pnj: Pnj) -> Dialog {
         let pnj_clone = pnj.clone();
         let mut layout = LinearLayout::vertical();
-
-        if let Some(dialogue) = pnj.get_dialogue_a_jouer(&mut master_file,pnj_clone.get_dialogues(),&mut joueur) {
+        
+        if let Some(mut dialogue) = pnj.get_dialogue_a_jouer(pnj_clone.get_dialogues()) {
             layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
         } else {
             println!("\nAprès avoir eu un dialogue qui donne une quête : ");
-            println!("{}", joueur);
         }
 
         Dialog::around(layout)

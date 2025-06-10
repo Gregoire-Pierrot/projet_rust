@@ -71,9 +71,9 @@ impl Pnj {
 
     ///////////////
     /// Fonction pour mettre à jour le statut de la quête à enlever (si présente)
-    fn terminer_quete_a_enlever(&self, master_file: &mut MasterFile, quete: &mut Quete) {
+    fn terminer_quete_a_enlever(&self, quete: &mut Quete) {
         if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-            if let Ok(quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
+            if let Ok(quete_a_enlever) = MasterFile::get_instance().lock().unwrap().prendre_quete_mut(&dialogue_id) {
                 quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
             }
         }
@@ -81,16 +81,22 @@ impl Pnj {
 
     ///////////////
     ///Fonction pour récupérer le premier dialogue qui sera jouer avec le statut EnCours et ajoute une quête à un joueur
-    pub fn get_dialogue_a_jouer(&mut self, master_file: &mut MasterFile, dialogues: Vec<String>, joueur: &mut Joueur) -> Option<Quete> {
+    pub fn get_dialogue_a_jouer(&mut self, dialogues: Vec<String>) -> Option<Quete> {
         for dialogue_id in dialogues {
-            if let Ok(mut quete) = master_file.prendre_quete_id(&dialogue_id) {
+            let result: Result<Quete, String>;
+            { result = MasterFile::get_instance().lock().unwrap().prendre_quete_id(&dialogue_id); } 
+            if let Ok(mut quete) = result {
                 match quete.get_statut() {
                     crate::quete::StatutQuete::EnCours => {
-                        self.terminer_quete_a_enlever(master_file, &mut quete);
+                        self.terminer_quete_a_enlever(&mut quete);
                         return Some(quete);
                     }
                     crate::quete::StatutQuete::NonCommencee if quete.get_quete_joueur() => {
-                        joueur.ajout_quete_joueur(&mut quete);
+                        { 
+                            let master_file: &mut MasterFile = &mut MasterFile::get_instance().lock().unwrap();
+                            let joueur = master_file.get_joueur_mut();
+                            joueur.ajout_quete_joueur(&mut quete);
+                        } 
                         return None; // Retour au menu si la quête est non commencée
                     }
                     _ => continue, // On continue avec le prochain dialogue
