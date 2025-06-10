@@ -240,7 +240,8 @@
       ],
       "meteo": "Interieur",
       "contient_ressources": {
-        "pomme": 5
+        "pomme": 5,
+        "clé": 1
       },
       "contient_ennemies": {
         "ennemie_1": [

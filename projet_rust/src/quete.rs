@@ -132,23 +132,18 @@ impl Quete {
     pub fn find_fin_de_quete(&self, id_fin_de_quete: String) -> bool {
         match &self.fin_de_quete {
             FinDeQuete::Obtention(objet) if objet == &id_fin_de_quete => {
-                println!("Fin de quête par obtention de {}", objet);
                 return true
             }
             FinDeQuete::Combat(enemy) if enemy == &id_fin_de_quete => {
-                println!("Fin de quête par combat contre {}", enemy);
                 return true
             }
             FinDeQuete::Dialogue(dialogue) if dialogue == &id_fin_de_quete => {
-                println!("Fin de quête par dialogue avec {}", dialogue);
                 return true
             }
             FinDeQuete::Interaction(inter) if inter == &id_fin_de_quete => {
-                println!("Fin de quête par interaction avec {}", inter);
                 return true
             }
             _ => {
-                println!("Ce n'est pas la bonne condition de fin.");
                 return false
             }
         }
