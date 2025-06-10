@@ -37,13 +37,12 @@ impl Consommable {
             Rarete::Epique => 0.01,
             Rarete::Legendaire => 0.005,
             Rarete::Mythique => 0.0001,
-            Rarete::Divin => 0.00001
+            Rarete::Divin => 0.00001,
+            _ => panic!("Erreur sur la ressource : id={}, la rareté n'est pas reconnue.", self.ressource.entite.id)
         }
     }
 
     pub fn get_ressource(&self) -> Ressource { self.ressource.clone() }
-
-    pub fn get_ressources(&self) -> HashMap<String, u32> { self.ressource.get_ressource() }
 
     pub fn get_effets(&self) -> Vec<u16> { self.effets.clone() }
 
