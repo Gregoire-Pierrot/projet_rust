@@ -130,11 +130,14 @@ impl Ennemie {
 
     ///////////////
     /// Fonction qui permet de calculer la chance de récupérer les récompenses de fin de combat
-    pub fn lootable(&self) -> HashMap<String, u32>{ 
-        let master_file = MasterFile::new();
+    pub fn lootable(&self) -> HashMap<String, u32>{
+        let master_file = MasterFile::get_instance().lock().unwrap();
         let mut loot: HashMap<String, u32> = HashMap::new();
-        let mut rng = rand::thread_rng();
         for (objet, quantite) in self.personnage.inventaire.iter() {
+            loot.entry(objet.clone()).and_modify(|e| *e += quantite).or_insert(*quantite);
+        }
+        let mut rng = rand::thread_rng();
+        for (objet, quantite) in self.droptable.iter() {
             match master_file.prendre_item_id(objet) {
                 Ok(item) => {
                     let chance_loot = match &item {
@@ -143,13 +146,13 @@ impl Ennemie {
                         Item::Equipement(e) => e.get_value_rarete(),
                     };
                     println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
-                    for _ in 1..self.droptable[objet.as_str()] {
+                    for _ in 0..*quantite {
                         if rng.gen::<f32>() <= chance_loot {
                             loot.entry(objet.clone()).and_modify(|e| *e += 1).or_insert(1);
                         }
                     }
                 }
-                Err(e) => println!("Item indisponible: {}", e),
+                Err(e) => println!("Item indisponible: {}", e)
             }
         }
         loot
@@ -163,7 +166,7 @@ impl Ennemie {
         let new_pv = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv);
         if self.get_pv_actuel() == 0 {
-            let mut loot = self.lootable();
+            let loot = self.lootable();
             joueur.ajout_recompense_inventaire(loot.clone());
             joueur.add_xp(self.xp);
             println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
@@ -175,7 +178,7 @@ impl Ennemie {
 
     ///////////////////////////////////////Mettre la possiblilité de défense pour l'ennemi et l'attaque de base ?
     pub fn combat(&mut self,joueur: &mut Joueur) -> bool {
-        let master_file = MasterFile::new();
+        let master_file = MasterFile::get_instance().lock().unwrap();
         let mut rng = rand::thread_rng();
         let attaques = self.get_attaques();
         if !attaques.is_empty() {

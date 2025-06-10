@@ -33,11 +33,11 @@ impl Joueur {
     pub fn get_nom(&self) -> String { self.personnage.entite.nom.clone() }
     pub fn set_nom(&mut self, nom: String) { self.personnage.entite.nom = nom; }
 
-    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
-    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
-
     pub fn get_pv_actuel(&self) -> u16 { self.personnage.pv_actuel.clone() }
     pub fn set_pv_actuel(&mut self, pv_actuel: u16) { self.personnage.pv_actuel = pv_actuel; }
+
+    pub fn get_pv_max(&self) -> u16 { self.personnage.pv_max.clone() }
+    pub fn set_pv_max(&mut self, pv_max: u16) {self.personnage.pv_max = pv_max}
 
     pub fn get_force(&self) -> u16 { self.personnage.force.clone() }
     pub fn set_force(&mut self, force: u16) { self.personnage.force = force; }
@@ -86,7 +86,7 @@ impl Joueur {
             println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
         } else {
             *eq = Some(equipement.clone());
-            println!("Équipement équipé dans la catégorie {:?}", categorie);
+            //println!("Équipement équipé dans la catégorie {:?}", categorie);
             self.remove_inventaire(equipement, 1);
         }
     }
@@ -95,7 +95,7 @@ impl Joueur {
         match self.personnage.equipement.get_mut(categorie) {
             Some(equipement) => {
                 if let Some(eq) = equipement.take() {
-                    println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
+                    //println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
                     self.add_inventaire(eq, 1);
                 } else {
                     println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
@@ -133,7 +133,7 @@ impl Joueur {
         let inventaire = self.get_inventaire();
         let mut ressources = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_ressource_id(id) {
                 Ok(item) => {
                     ressources.push(item);
@@ -144,11 +144,11 @@ impl Joueur {
         ressources
     }
 
-    pub fn recup_consommable(&mut self, master_file: &MasterFile) -> Vec<Consommable>{
+    pub fn recup_consommables(&mut self, master_file: &MasterFile) -> Vec<Consommable>{
         let inventaire = self.get_inventaire();
         let mut consommable = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_consommable_id(id) {
                 Ok(item) => {
                     consommable.push(item);
@@ -159,11 +159,11 @@ impl Joueur {
         consommable
     }
 
-    pub fn recup_equipement(&mut self, master_file: &MasterFile) -> Vec<Equipement>{
+    pub fn recup_equipements(&mut self, master_file: &MasterFile) -> Vec<Equipement>{
         let inventaire = self.get_inventaire();
         let mut equipement = Vec::new();
 
-        for (i, (id, _)) in inventaire.iter().enumerate() {
+        for (_, (id, _)) in inventaire.iter().enumerate() {
             match master_file.prendre_equipement_id(id) {
                 Ok(item) => {
                     equipement.push(item);
@@ -175,8 +175,9 @@ impl Joueur {
     }
 
     pub fn demantelement(&mut self, item: &String, master_file: &MasterFile) {
+        let item_id = item.clone();
         self.remove_inventaire(item, 1);
-        if let Ok(item_obj) = master_file.prendre_item_id(item) {
+        if let Ok(item_obj) = master_file.prendre_item_id(&item_id) {
             for (composant, quantite) in item_obj.get_ressources() {
                 self.add_inventaire(composant, quantite);
             }
@@ -292,7 +293,7 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui applique les effets d'un consommable au joueur.
-    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>,combat: &bool) {
+    pub fn appliquer_effets_items(&mut self, effets: Vec<u16>, combat: &bool) {
         self.personnage.pv_actuel = if self.personnage.pv_actuel + effets[0] > self.personnage.pv_max {
             self.personnage.pv_max
         } else {
@@ -312,36 +313,29 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui permet d'utiliser un consommable.
-    pub fn utiliser_item(&mut self, master_file: &MasterFile,item: &String,combat: &bool) {
-        match master_file.prendre_consommable_id(item) {
-            Ok(consommable) => {
-                let effets = consommable.get_effets().clone();
-                let should_apply = {
-                    let inventaire = &mut self.personnage.inventaire;
-                    if let Some(quantite) = inventaire.get_mut(item) {
-                        if *quantite > 0 {
-                            *quantite -= 1;
-                            if *quantite == 0 {
-                                self.personnage.inventaire.remove(item);
-                            }
-                            true
-                        } else {
-                            println!("Quantité de {} insuffisante pour l'utiliser.", item);
-                            false
-                        }
-                    } else {
-                        println!("L'item {} n'est pas dans l'inventaire.", item);
-                        false
+    pub fn utiliser_item(&mut self, item: &Consommable, combat: &bool) {
+        let effets = item.get_effets().clone();
+        let should_apply = {
+            let inventaire = &mut self.personnage.inventaire;
+            if let Some(quantite) = inventaire.get_mut(&item.get_id()) {
+                if *quantite > 0 {
+                    *quantite -= 1;
+                    if *quantite == 0 {
+                        self.personnage.inventaire.remove(&item.get_id());
                     }
-                };
-
-                if should_apply {
-                    self.appliquer_effets_items(effets,&combat);
+                    true
+                } else {
+                    println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
+                    false
                 }
+            } else {
+                println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
+                false
             }
-            _ => {
-                println!("L'item {} n'est pas utilisable", item);
-            }
+        };
+
+        if should_apply {
+            self.appliquer_effets_items(effets, &combat);
         }
     }
 
@@ -387,7 +381,7 @@ impl Joueur {
 
     pub fn get_categorie_Arme(&self) -> Option<Arme> {
         let categorie = self.personnage.equipement.get(&EquipementType::Arme)
-            .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::new().prendre_equipement_id(id).ok()))
+            .and_then(|eq| eq.as_ref().and_then(|id| MasterFile::get_instance().lock().unwrap().prendre_equipement_id(id).ok()))
             .and_then(|e| Some(e.get_categorie()));
         match categorie {
             Some(Categorie::Arme(Arme::ArmeMelee)) => Some(Arme::ArmeMelee),
@@ -416,7 +410,11 @@ impl Joueur {
         if let Some(suivante_id) = quetes_suivantes.get(0) {
             let mut quete_suivante = master_file.prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
             if quete_suivante.get_quete_joueur() { //si la quête suivante n'est pas un dialogue alors on l'ajoute
-                self.add_quete(suivante_id.clone());
+                //self.add_quete(suivante_id.clone());
+                match master_file.prendre_quete_id(suivante_id) {
+                    Ok(mut quete_suivante) => self.ajout_quete_joueur(&mut quete_suivante),
+                    Err(_) => println!("Quête suivante introuvable")
+                }
             } else {
                 quete_suivante.set_statut(crate::quete::StatutQuete::Terminee);
             }
@@ -433,7 +431,7 @@ impl Joueur {
                 self.suivi_quete(master_file, &mut quete);
 
                 if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
-                    if let Ok(mut quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
+                    if let Ok(quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                         quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
                     }
                 }
@@ -454,6 +452,6 @@ impl Joueur {
 
 impl std::fmt::Display for Joueur {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {},  points de compétences = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = {}", self.personnage, self.position, self.pronom, self.niveau, self.points_competence, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
+        write!(f, "Joueur : personnage = [{}], position = {}, pronom = {}, niveau = {},  points de compétences = {}, temps = {}, reputation = {}, xp = {}, multiplicateur_xp = {}, quetes = [{}]", self.personnage, self.position, self.pronom, self.niveau, self.points_competence, self.temps, self.str_reputations(), self.xp, self.multiplicateur_xp, self.str_quetes())
     }
 }

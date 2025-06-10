@@ -7,7 +7,7 @@
         "nom": "Jane"
       },
       "pv_actuel": 100,
-      "pv_max":100,
+      "pv_max": 100,
       "force": 10,
       "dexterite": 1,
       "intelligence": 10,
@@ -21,19 +21,20 @@
         "tempête_feu"
       ],
       "equipement": {
-        "Jambieres": "jambieres_feu",
         "Casque": "casque_feu",
+        "Plastron": "plastron_feu",
+        "Arme": null,
         "Gants": "gants_feu",
         "Bottes": "bottes_feu",
-        "Arme": null,
-        "Plastron": "plastron_feu"
+        "Jambieres": "jambieres_feu"
       },
       "inventaire": {
-        "pomme": 5,
         "clé": 1,
         "arc": 1,
+        "pomme": 5,
         "baton": 1,
-        "epee_fer": 1
+        "epee_fer": 1,
+        "monnaie": 20000
       }
     },
     "position": "pièce2",
@@ -71,12 +72,12 @@
         "resistance_magique": 0,
         "attaques": [],
         "equipement": {
-          "Arme": null,
           "Jambieres": null,
+          "Bottes": null,
           "Casque": null,
           "Gants": null,
           "Plastron": null,
-          "Bottes": null
+          "Arme": null
         },
         "inventaire": {
           "pomme": 5
@@ -85,7 +86,9 @@
       "dialogues": [
         "Dialogue_pnj_1"
       ],
-      "commerce_table": {}
+      "commerce_table": {
+        "pomme": 10
+      }
     },
     {
       "personnage": {
@@ -107,11 +110,11 @@
         "attaques": [],
         "equipement": {
           "Bottes": null,
-          "Gants": null,
           "Casque": null,
+          "Jambieres": null,
           "Plastron": null,
-          "Arme": null,
-          "Jambieres": null
+          "Gants": null,
+          "Arme": null
         },
         "inventaire": {
           "pomme": 5
@@ -145,12 +148,12 @@
           "tempête_feu"
         ],
         "equipement": {
-          "Plastron": null,
           "Arme": null,
+          "Bottes": null,
+          "Plastron": null,
           "Gants": null,
           "Casque": null,
-          "Jambieres": null,
-          "Bottes": null
+          "Jambieres": null
         },
         "inventaire": {
           "pomme": 5
@@ -165,13 +168,13 @@
       "mod_chance": 1,
       "mod_resistance_physique": 1,
       "mod_resistance_magique": 1,
-      "xp":150,
+      "xp": 150,
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
       "droptable": {
-        "pomme": 4,
-        "epee_feu": 1
+        "epee_feu": 1,
+        "pomme": 4
       }
     },
     {
@@ -195,10 +198,10 @@
           "tempête_feu"
         ],
         "equipement": {
-          "Plastron": null,
-          "Gants": null,
-          "Arme": null,
           "Bottes": null,
+          "Arme": null,
+          "Gants": null,
+          "Plastron": null,
           "Jambieres": null,
           "Casque": null
         },
@@ -215,13 +218,13 @@
       "mod_chance": 5,
       "mod_resistance_physique": 5,
       "mod_resistance_magique": 5,
-      "xp":10,
+      "xp": 10,
       "dialogues": [
         "Dialogue_ennemie_1"
       ],
       "droptable": {
-        "pomme": 3,
-        "epee_feu": 1
+        "epee_feu": 1,
+        "pomme": 3
       }
     }
   ],
@@ -283,14 +286,14 @@
       },
       "lieu": "pièce1",
       "recompense": {
-        "pomme": 5,
-        "climatiseur": 4
+        "climatiseur": 4,
+        "pomme": 5
       },
       "quetes_suivantes": [
         "principale_2"
       ],
       "quete_joueur": true,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Obtention": "pomme"
@@ -308,7 +311,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Interaction": "porte_1"
@@ -326,7 +329,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Combat": "ennemie_1"
@@ -344,7 +347,7 @@
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "dialogue_1_1"
@@ -364,8 +367,8 @@
         "Dialogue_pnj_1_3",
         "Dialogue_pnj_1_4"
       ],
-      "quete_joueur": true,
-      "dialogue_a_enlever":null,
+      "quete_joueur": false,
+      "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
@@ -383,7 +386,7 @@
         "secondaire_3"
       ],
       "quete_joueur": false,
-      "dialogue_a_enlever":"Dialogue_pnj_1_1",
+      "dialogue_a_enlever": "Dialogue_pnj_1_1",
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": ""
@@ -399,7 +402,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": ""
@@ -415,12 +418,13 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
-      "dialogue_a_enlever":"Dialogue_pnj_1_3",
+      "dialogue_a_enlever": "Dialogue_pnj_1_3",
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": ""
       }
-    },{
+    },
+    {
       "entite": {
         "id": "Dialogue_pnj_1_4",
         "description": "Depuis que tu as détruit le marais je suis devenu riche !",
@@ -430,7 +434,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
         "Dialogue": ""
@@ -446,7 +450,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever":"Dialogue_pnj_1_2",
+      "dialogue_a_enlever": "Dialogue_pnj_1_2",
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Obtention": "clé"
@@ -462,7 +466,7 @@
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
-      "dialogue_a_enlever":null,
+      "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Dialogue": "quelque_chose"
@@ -497,6 +501,16 @@
   "Ressource": [
     {
       "entite": {
+        "id": "monnaie",
+        "description": "Monnaie du jeu",
+        "nom": "Monnaie"
+      },
+      "prix": 1,
+      "ressource": {},
+      "rarete": "Commun"
+    },
+    {
+      "entite": {
         "id": "clé",
         "description": "Une clé",
         "nom": "clé"
@@ -516,9 +530,21 @@
       "prix": 15,
       "ressource": {},
       "rarete": "Commun"
+    },
+    {
+      "entite": {
+        "id": "climatiseur",
+        "description": "Un climatiseur",
+        "nom": "Climatiseur"
+      },
+      "prix": 50,
+      "ressource": {
+        "fer": 15
+      },
+      "rarete": "PeuCommun"
     }
   ],
- "Equipement": [
+  "Equipement": [
     {
       "ressource": {
         "entite": {
@@ -528,7 +554,7 @@
         },
         "prix": 100,
         "ressource": {
-        "fer": 2
+          "fer": 2
         },
         "rarete": "Rare"
       },
@@ -555,7 +581,7 @@
         "Arme": "ArmeMelee"
       }
     },
-     {
+    {
       "ressource": {
         "entite": {
           "id": "epee_fer",
@@ -564,7 +590,7 @@
         },
         "prix": 100,
         "ressource": {
-        "fer": 2
+          "fer": 2
         },
         "rarete": "Rare"
       },
@@ -591,7 +617,7 @@
         "Arme": "ArmeMelee"
       }
     },
-     {
+    {
       "ressource": {
         "entite": {
           "id": "arc",
@@ -627,7 +653,7 @@
         "Arme": "ArmeDistance"
       }
     },
-     {
+    {
       "ressource": {
         "entite": {
           "id": "baton",
@@ -667,8 +693,8 @@
       "ressource": {
         "entite": {
           "id": "plastron_feu",
-          "description": "Un plastron du feu",
-          "nom": "plastron de feu"
+          "description": "Un plastron de feu",
+          "nom": "Plastron de feu"
         },
         "prix": 100,
         "ressource": {
@@ -697,6 +723,150 @@
       "pourcent_bonus_resistance_magique": 0,
       "categorie": {
         "Armure": "Plastron"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "gants_feu",
+          "description": "des gants de feu",
+          "nom": "Gants de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Gants"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "bottes_feu",
+          "description": "Des bottes de feu",
+          "nom": "Bottes de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Bottes"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "casque_feu",
+          "description": "Un casque de feu",
+          "nom": "Casque de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Casque"
+      }
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "jambieres_feu",
+          "description": "Des jambières de feu",
+          "nom": "Jambières de feu"
+        },
+        "prix": 100,
+        "ressource": {
+          "fer": 2
+        },
+        "rarete": "Rare"
+      },
+      "bonus_pv": 0,
+      "bonus_force": 0,
+      "bonus_dexterite": 0,
+      "bonus_intelligence": 0,
+      "bonus_vitesse": 0,
+      "bonus_esquive": 0,
+      "bonus_chance": 0,
+      "bonus_resistance_physique": 0,
+      "bonus_resistance_magique": 0,
+      "bonus_multiplicateur_xp": 0,
+      "pourcent_bonus_pv": 10,
+      "pourcent_bonus_force": 10,
+      "pourcent_bonus_dexterite": 0,
+      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_vitesse": 10,
+      "pourcent_bonus_esquive": 0,
+      "pourcent_bonus_chance": 0,
+      "pourcent_bonus_resistance_physique": 0,
+      "pourcent_bonus_resistance_magique": 0,
+      "categorie": {
+        "Armure": "Jambieres"
       }
     }
   ],
