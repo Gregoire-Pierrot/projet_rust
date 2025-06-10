@@ -16,12 +16,19 @@ pub enum Item {
 }
 
 impl Item {
-
     pub fn get_ressources(&self) -> HashMap<String, u32> {
         match self {
             Item::Ressource(r) => r.get_ressource(),
             Item::Consommable(c) => c.get_ressources(),
             Item::Equipement(e) => e.get_ressources()
+        }
+    }
+
+    pub fn get_nom(&self) -> String {
+        match self {
+            Item::Ressource(r) => r.get_nom(),
+            Item::Consommable(c) => c.get_nom(),
+            Item::Equipement(e) => e.get_nom()
         }
     }
 }
@@ -251,6 +258,17 @@ impl MasterFile {
                 eprintln!("Item introuvable : {}", e);
             }
         }
+    }
+
+    pub fn voler(&mut self, pnj_id: String, item_id: String, quantite: u32) {
+        for mut pnj in &mut self.Pnj {
+            if pnj.get_id() == pnj_id {
+                pnj.remove_inventaire(&item_id.clone(), quantite.clone());
+                self.get_joueur_mut().add_inventaire(item_id.clone(), quantite.clone());
+                return;
+            }
+        }
+        panic!("Pas de pnj avec l'id : {}", pnj_id);
     }
 
 

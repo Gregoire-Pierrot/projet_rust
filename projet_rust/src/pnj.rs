@@ -22,6 +22,21 @@ impl Pnj {
 
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
 
+    pub fn remove_inventaire(&mut self, item: &String, quantite: u32){
+        if let Some(entry) = self.personnage.inventaire.get_mut(item) {
+            if *entry >= quantite {
+                *entry -= quantite;
+                if *entry == 0 {
+                    self.personnage.inventaire.remove(item);
+                }
+            } else {
+                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+            }
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item);
+        }
+    }
+
     pub fn get_dialogues(&self) -> Vec<String> { self.dialogues.clone() }
 
     pub fn get_commerce_table(&self) -> HashMap<String, u32> { self.commerce_table.clone() }
