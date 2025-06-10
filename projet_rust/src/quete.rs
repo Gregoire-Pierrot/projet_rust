@@ -108,6 +108,10 @@ impl Quete {
         }
     }
 
+    pub fn remove_recompense(&mut self, recompense: &String) {
+        self.recompense.remove(recompense);
+    }
+
     fn str_quetes_suivantes(&self) -> String {
         let mut quetes_str = String::new();
         for i in 0..self.quetes_suivantes.len()-1 {

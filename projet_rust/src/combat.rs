@@ -1,6 +1,5 @@
 use crate::joueur::Joueur;
 use crate::ennemie::Ennemie;
-use crate::consommable::Consommable;
 use crate::json_manager::MasterFile;
 
 use std::io;
@@ -108,8 +107,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                 match choix.parse::<usize>() {
                     Ok(num) if num >= 1 && num <= items_valides.len() => {
                         let item = &items_valides[num - 1];
-                        let item: Consommable = master_file.prendre_consommable_id(&item.get_id()).expect("Erreur lors de la récupération de l'objet");
-                        joueur.utiliser_item(&item,&true);
+                        joueur.utiliser_item(&master_file,&item.get_id(),&true);
                         println!("\n--- Actions ---");
                         println!("Vous utilisez l'objet : {}", item.get_nom());
                         combat_en_cours = !ennemie.combat(joueur);

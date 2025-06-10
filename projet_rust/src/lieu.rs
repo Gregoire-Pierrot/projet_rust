@@ -133,7 +133,7 @@ impl Lieu {
         // Niveau aléatoire
         let niveau = ennemie_stats[rng.gen_range(0..length_stats)];
 
-        for _ in 0..niveau {
+        for i in 0..niveau {
             let stat_rand_pv:u16 = rng.gen_range(0..ennemie.get_mod_pv());
             ennemie.set_pv_actuel(ennemie.get_pv_actuel() + stat_rand_pv);
             ennemie.set_pv_max(ennemie.get_pv_actuel() + stat_rand_pv);
