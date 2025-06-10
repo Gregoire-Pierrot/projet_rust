@@ -97,7 +97,7 @@ impl Pnj {
                             let joueur = master_file.get_joueur_mut();
                             joueur.ajout_quete_joueur(&mut quete);
                         } 
-                        return None; // Retour au menu si la quête est non commencée
+                        return Some(quete);
                     }
                     _ => continue, // On continue avec le prochain dialogue
                 }
