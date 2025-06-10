@@ -553,6 +553,7 @@ fn main() {
             })
     }
 
+  
     // Créer un écran de pnj
     fn pnj_screen() -> Dialog {
         let lieu_id: String;
@@ -594,7 +595,7 @@ fn main() {
         select.set_on_submit(move |s, choice| {
             if *choice == 1 {
                 s.pop_layer();
-                //s.add_layer(create_dialog_parler_pnj(pnj));
+                s.add_layer(create_dialog_parler_pnj(pnj_clone.clone()));
                 s.add_layer(Dialog::around(TextView::new("TODO: Parler au PNJ"))
                     .title("Parler")
                     .button("Retour", |s| {
@@ -656,6 +657,25 @@ fn main() {
                 s.pop_layer();
                 s.add_layer(pnj_screen());
             })
+    }
+
+
+    fn create_dialog_parler_pnj(pnj: Pnj) -> Dialog {
+        let pnj_clone = pnj.clone();
+        let mut layout = LinearLayout::vertical();
+
+        if let Some(dialogue) = pnj.get_dialogue_a_jouer(&mut master_file,pnj_clone.get_dialogues(),&mut joueur) {
+            layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
+        } else {
+            println!("\nAprès avoir eu un dialogue qui donne une quête : ");
+            println!("{}", joueur);
+        }
+
+        Dialog::around(layout)
+        .button("Retour", move |s| {
+            s.pop_layer();
+            s.add_layer(create_dialog_action_pnj(pnj.clone()));
+        })
     }
 
     fn create_dialog_commerce_pnj(pnj: Pnj) -> Dialog {
