@@ -367,7 +367,7 @@
         "Dialogue_pnj_1_3",
         "Dialogue_pnj_1_4"
       ],
-      "quete_joueur": true,
+      "quete_joueur": false,
       "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
