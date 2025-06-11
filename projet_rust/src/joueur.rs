@@ -7,6 +7,7 @@ use crate::equipement::{Categorie, Arme};
 use crate::structs::Ressource;
 use crate::equipement::Equipement;
 use crate::consommable::Consommable;
+use crate::parchemin::Parchemin;
 use crate::quete::Quete;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -174,6 +175,21 @@ impl Joueur {
         equipement
     }
 
+    pub fn recup_parchemins(&mut self) -> Vec<Parchemin>{
+        let inventaire = self.get_inventaire();
+        let mut parchemin = Vec::new();
+
+        for (_, (id, _)) in inventaire.iter().enumerate() {
+            match MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(id) {
+                Ok(item) => {
+                    parchemin.push(item);
+                }
+                Err(_) => {}
+            }
+        }
+        parchemin
+    }
+
     pub fn demantelement(&mut self, item: &String, master_file: &MasterFile) {
         let item_id = item.clone();
         self.remove_inventaire(item, 1);
@@ -314,28 +330,39 @@ impl Joueur {
     ///////////////
     /// Fonction qui permet d'utiliser un consommable.
     pub fn utiliser_item(&mut self, item: &Consommable, combat: &bool) {
+        let item_id = item.get_id();
         let effets = item.get_effets().clone();
-        let should_apply = {
-            let inventaire = &mut self.personnage.inventaire;
-            if let Some(quantite) = inventaire.get_mut(&item.get_id()) {
-                if *quantite > 0 {
-                    *quantite -= 1;
-                    if *quantite == 0 {
-                        self.personnage.inventaire.remove(&item.get_id());
-                    }
-                    true
-                } else {
-                    println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
-                    false
+        if let Some(quantite) = self.personnage.inventaire.get_mut(&item_id) {
+            if *quantite > 0 {
+                *quantite -= 1;
+                if *quantite == 0 {
+                    self.personnage.inventaire.remove(&item_id);
                 }
+                self.appliquer_effets_items(effets, combat);
             } else {
-                println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
-                false
+                println!("Quantité de {} insuffisante pour l'utiliser.", item_id);
             }
-        };
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item_id);
+        }
+    }
 
-        if should_apply {
-            self.appliquer_effets_items(effets, &combat);
+    ///////////////
+    /// Fonction qui permet d'utiliser un parchemin.
+    pub fn utiliser_parchemin(&mut self, item: &Parchemin) {
+        let attaque = item.get_attaque();
+        if let Some(quantite) = self.personnage.inventaire.get_mut(&item.get_id()) {
+            if *quantite > 0 {
+                *quantite -= 1;
+                if *quantite == 0 {
+                    self.personnage.inventaire.remove(&item.get_id());
+                }
+                self.add_attaque(attaque);
+            } else {
+                println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
+            }
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
         }
     }
 

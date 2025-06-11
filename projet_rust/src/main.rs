@@ -7,6 +7,7 @@ mod pnj;
 mod ennemie;
 mod consommable;
 mod equipement;
+mod parchemin;
 mod attaque;
 mod combat;
 
@@ -18,6 +19,7 @@ use quete::Quete;
 use consommable::Consommable;
 use equipement::{Equipement, Categorie, Arme, Armure};
 use structs::{EquipementType, Ressource};
+use parchemin::Parchemin;
 use attaque::Attaque;
 use json_manager::{MasterFile, Item};
 //use combat::combat;
@@ -413,6 +415,11 @@ fn main() {
             if equipement.is_ok() {
                 layout_ressources.add_child(TextView::new(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
             }
+            let parchemin: Result<Parchemin, String>;
+            { parchemin = MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(&ressource_id); }
+            if parchemin.is_ok() {
+                layout_ressources.add_child(TextView::new(parchemin.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
         }
         layout.add_child(DummyView::new().fixed_height(1));
         layout.add_child(LinearLayout::vertical()
@@ -514,6 +521,13 @@ fn main() {
                     { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
                     if equipement.is_ok() {
                         select.add_item(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string(), ressource_id.clone());
+                    }
+                    else{
+                        let parchemin: Result<Parchemin, String>;
+                        { parchemin = MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(&ressource_id); }
+                        if parchemin.is_ok() {
+                            select.add_item(parchemin.unwrap().get_nom().clone() + " : " + &quantite.to_string(), ressource_id.clone());
+                        }
                     }
                 }
             }
@@ -704,8 +718,6 @@ fn main() {
         }
         dialog
     }
-
-
 
     fn create_dialog_commerce_pnj(pnj: Pnj) -> Dialog {
         let pnj_clone = pnj.clone();
@@ -1801,6 +1813,7 @@ fn main() {
             .item("Consommable", 1)
             .item("Ressources", 2)
             .item("Equipements", 3)
+            .item("Parchemins", 4)
             .on_submit(|s, choice| {
                 if *choice == 1 {
                     s.pop_layer();
@@ -1813,6 +1826,10 @@ fn main() {
                 else if *choice == 3 {
                     s.pop_layer();
                     s.add_layer(inventaire_equipements());
+                }
+                else if *choice == 4 {
+                    s.pop_layer();
+                    s.add_layer(inventaire_parchemin());
                 }
             })
         )
@@ -2324,6 +2341,124 @@ fn main() {
             })
     }
 
+    fn inventaire_parchemin() -> Dialog {
+        let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+        let mut parchemins = joueur.recup_parchemins();
+        
+        let mut layout: LinearLayout = LinearLayout::horizontal();
+        let mut select: SelectView = SelectView::new();
+        select.set_inactive_highlight(false);
+
+        let mut parchemin: Parchemin;
+        for i in 1..parchemins.len() + 1 {
+            parchemin = parchemins[i - 1].clone();
+            let quantite: u32;
+            {
+                let nb: Option<u32> = joueur.get_inventaire().get(&parchemin.get_id().clone()).copied();
+                match nb {
+                    Some(nb) => quantite = nb,
+                    None => quantite = 0
+                }
+            }
+            select.add_item(parchemin.get_nom().clone().to_string() + " : " + &quantite.to_string(), i.to_string());
+            if i % 10 == 0 {
+                let parchemins_clone = parchemins.clone();
+                select.set_on_submit(move |s, choice: &String| {
+                    if quantite == 0 {
+                        s.add_layer(Dialog::text("Vous n'avez plus de ".to_string() + &parchemin.get_nom().clone())
+                            .title("Parchemin")
+                            .button("Retour", |s| { s.pop_layer(); })
+                        );
+                    }
+                    else {
+                        let index = choice.parse::<usize>().unwrap() - 1;
+                        let parchemin = parchemins_clone[index].clone();
+                        s.add_layer(create_dialog_parchemin(parchemin));
+                    }
+                });
+                layout.add_child(select);
+                select = SelectView::new();
+                select.set_inactive_highlight(false);
+            }
+            if i % 10 == 1 && i != 1 {
+                layout.add_child(DummyView::new().fixed_width(5));
+            }
+        }
+        if parchemins.len() % 10 != 0 {
+            let parchemins_clone = parchemins.clone();
+            select.set_on_submit(move |s, choice: &String| {
+                let index = choice.parse::<usize>().unwrap() - 1;
+                let parchemin = parchemins_clone[index].clone();
+                s.add_layer(create_dialog_parchemin(parchemin));
+            });
+            layout.add_child(select);
+        }
+        if parchemins.len() == 0 {
+            layout.add_child(TextView::new("Vous n'avez aucun parchemin."));
+        }
+
+        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
+
+        Dialog::around(ScrollView::new(layout)
+            .scroll_x(true)
+            .scroll_y(true)
+        )
+        .title("Parchemins")
+        .button("Retour", |s| {
+            s.pop_layer();
+            s.add_layer(inventaire_screen());
+        })
+    }
+
+    fn create_dialog_parchemin(parchemin: Parchemin) -> Dialog {
+        let parchemin_clone = parchemin.clone();
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(parchemin.get_description().clone()));
+        
+        layout.add_child(TextView::new("Prix : ".to_owned() + &parchemin.clone().get_prix().clone().to_string()));
+        let mut attaque  = { MasterFile::get_instance().lock().unwrap().prendre_attaque_id(&parchemin.get_attaque()).clone() };
+
+        match attaque {
+            Ok(atk) => {
+                layout.add_child(DummyView::new().fixed_height(2));
+                layout.add_child(TextView::new(atk.get_nom().clone()));
+                layout.add_child(TextView::new(atk.get_description().clone()));
+                match atk.get_categorie() {
+                    Arme::ArmeMelee => layout.add_child(TextView::new("Catégorie : Mélée".to_string())),
+                    Arme::ArmeDistance => layout.add_child(TextView::new("Catégorie : Distance".to_string())),
+                    Arme::ArmeMagie => layout.add_child(TextView::new("Catégorie : Magique".to_string())),
+                }
+                layout.add_child(TextView::new("Dégats : ".to_string() + &atk.get_degats().to_string()));
+                layout.add_child(TextView::new("Bonus : ".to_string() + &atk.get_pourcent_bonus_degats().to_string() + "%"));
+            
+                layout.add_child(DummyView::new().fixed_height(2));
+                layout.add_child(SelectView::new()
+                    .item("Utiliser", 1)
+                    .on_submit(move |s, choice| {
+                        if *choice == 1 {
+                            { MasterFile::get_instance().lock().unwrap().get_joueur_mut().utiliser_parchemin(&parchemin) }
+                            s.add_layer(Dialog::text("L'objet : ".to_string() + &parchemin.get_nom() + " a bien été utilisé")
+                                .title("Utiliser")
+                                .button("Ok", |s| {
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.pop_layer();
+                                    s.add_layer(inventaire_parchemin());
+                                }));
+                        }
+                    }));
+                },
+            Err(err) => {
+                layout.add_child(TextView::new("Erreur: ".to_owned() + &err));
+            }
+        }
+        Dialog::around(layout)
+            .title(parchemin_clone.get_nom().clone())
+            .button("Retour", |s| {
+                s.pop_layer();
+            })
+    }
+
     // Créer un écran de quête
     fn quetes_screen() -> Dialog {
         let mut quetes: Vec<Quete> = vec![];
@@ -2371,6 +2506,11 @@ fn main() {
             { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
             if equipement.is_ok() {
                 layout_recompenses.add_child(TextView::new(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+            }
+            let parchemin: Result<Parchemin, String>;
+            { parchemin = MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(&ressource_id); }
+            if parchemin.is_ok() {
+                layout_recompenses.add_child(TextView::new(parchemin.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
             }
         }
         layout.add_child(LinearLayout::horizontal()
