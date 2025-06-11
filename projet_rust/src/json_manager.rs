@@ -1,4 +1,4 @@
-use crate::{Joueur, Pnj, Ennemie, Lieu, Quete, Consommable, Equipement, Attaque};
+use crate::{Joueur, Pnj, Ennemie, Lieu, Quete, Consommable, Equipement,Parchemin, Attaque};
 
 use serde::{Serialize, Deserialize};
 use serde_json;
@@ -44,6 +44,7 @@ pub struct MasterFile {
     Consommable: Vec<Consommable>,
     Ressource: Vec<Ressource>,
     Equipement: Vec<Equipement>,
+    Parchemin: Vec<Parchemin>,
     Attaque: Vec<Attaque>
 }
 
@@ -211,6 +212,17 @@ impl MasterFile {
             }
         }
         Err("Quête introuvable".to_string())
+    }
+
+    ////Parchemin////
+
+    pub fn prendre_parchemin_id(&self, id: &str) -> Result<Parchemin, String> {
+        for parchemin in self.Parchemin.clone() {
+            if parchemin.get_id() == id {
+                return Ok(parchemin);
+            }
+        }
+        return Err("Parchemin introuvable".to_string());
     }
 
     ////Attaque////
