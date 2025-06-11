@@ -240,7 +240,8 @@
       ],
       "meteo": "Interieur",
       "contient_ressources": {
-        "pomme": 5
+        "pomme": 5,
+        "clé": 1
       },
       "contient_ennemies": {
         "ennemie_1": [
@@ -314,7 +315,7 @@
       "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Interaction": "porte_1"
+        "Dialogue": "Dialogue_pnj_1_4"
       }
     },
     {

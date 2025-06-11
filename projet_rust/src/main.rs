@@ -530,8 +530,16 @@ fn main() {
                         MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_inventaire(ressource_id.to_string(), quantite);
                     }
                     let lieu_id: String;
-                    { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur_mut().get_position(); }
-                    { MasterFile::get_instance().lock().unwrap().prendre_lieu_mut_id(&lieu_id).remove_contient_ressources(&ressource_id, quantite); }
+                    { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur_mut().get_position(); }                        
+                    {
+                        let mut master_file = MasterFile::get_instance().lock().unwrap();
+                        master_file.prendre_lieu_mut_id(&lieu_id).remove_contient_ressources(&ressource_id, quantite);
+                    }
+
+                    let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+                    joueur.completion_quete(ressource_id.clone());
+                    { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
+
                     s.pop_layer();
                     s.pop_layer();
                     s.add_layer(recolter_screen());
@@ -653,50 +661,6 @@ fn main() {
             })
     }
 
-  /*  fn create_dialogue_parler_pnj(mut pnj: Pnj, dialogues: Vec<String>) -> Dialog {
-        let pnj_clone = pnj.clone();
-        let mut layout = LinearLayout::vertical();
-        
-        
-        let prochains_dialogues: Vec<String>;
-
-        if let Some(mut dialogue) = pnj.get_dialogue_a_jouer(dialogues) {
-            layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
-            prochains_dialogues = dialogue.get_quetes_suivantes();
-        } else {
-            prochains_dialogues = Vec::new(); 
-        }
-
-        let mut dialog = Dialog::around(layout).title(pnj_clone.get_nom());
-
-        if !prochains_dialogues.is_empty() {
-            let mut pnj_for_suivant = pnj.clone();
-            let dialogues_suivants = prochains_dialogues.clone();
-            
-             dialog = dialog.button("...", move |s| {
-                s.pop_layer();
-
-                if MasterFile::get_instance().lock().unwrap().prendre_quete_id(&dialogues_suivants[0]).expect("Aucune quete").get_quete_joueur() {
-                    let dialogues_suivants_clone = dialogues_suivants.clone();
-                    let mut pnj_for_suivant_clone = pnj_for_suivant.clone();
-                    pnj_for_suivant_clone.get_dialogue_a_jouer(dialogues_suivants_clone);
-                    s.add_layer(create_dialog_action_pnj(pnj_for_suivant_clone));
-                } else {
-                    let dialogues_suivants_clone = dialogues_suivants.clone();
-                    s.add_layer(create_dialogue_parler_pnj(pnj_for_suivant.clone(), dialogues_suivants_clone));
-                }
-            });
-        }
-        else{
-              dialog = dialog.button("...", move |s| {
-                s.pop_layer();
-                s.add_layer(create_dialog_action_pnj(pnj.clone()));
-            });
-        }
-        dialog
-    }*/
-
-
     fn create_dialogue_parler_pnj(mut pnj: Pnj, dialogues: Vec<String>) -> Dialog {
         let pnj_clone = pnj.clone();
         let mut layout = LinearLayout::vertical();
@@ -711,6 +675,11 @@ fn main() {
             else{
                 layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
                 prochains_dialogues = dialogue.get_quetes_suivantes();
+
+                let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+                joueur.completion_quete(dialogue.clone().get_id());
+                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
+                
             } 
         } else {
             prochains_dialogues = Vec::new(); 
