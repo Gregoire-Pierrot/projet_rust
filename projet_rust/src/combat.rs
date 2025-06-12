@@ -14,7 +14,7 @@ pub fn saisir_choix(prompt: &str) -> String {
     choix.trim().to_string()
 }
 
-
+/*
 pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut Joueur){
     let reset = joueur.clone();
     let mut combat_en_cours = true;
@@ -54,7 +54,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                         println!("Vous lancez l'attaque basique - {} dégâts infligés", degats);
                         
                         if !ennemie.application_degats(&degats, joueur) {
-                            combat_en_cours = !ennemie.combat(joueur);
+                            combat_en_cours = !ennemie.combat();
                         } else {
                             combat_en_cours = false;
                         }
@@ -72,7 +72,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                                 println!("Vous lancez l'attaque : {} - {} dégâts infligés", attaque.get_nom(), degats);
                                 
                                 if !ennemie.application_degats(&degats, joueur) {
-                                    combat_en_cours = !ennemie.combat(joueur);
+                                    combat_en_cours = !ennemie.combat();
                                 } else {
                                     combat_en_cours = false;
                                 }
@@ -112,7 +112,7 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
                         joueur.utiliser_item(&item,&true);
                         println!("\n--- Actions ---");
                         println!("Vous utilisez l'objet : {}", item.get_nom());
-                        combat_en_cours = !ennemie.combat(joueur);
+                        combat_en_cours = !ennemie.combat();
                     }
                     Ok(_) => continue,
                     _ => println!("Choix d'objet invalide."),
@@ -128,4 +128,4 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
         }
     }
     joueur.reset_stats(reset);
-}
+}*/

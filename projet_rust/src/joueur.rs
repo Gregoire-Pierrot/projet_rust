@@ -108,6 +108,20 @@ impl Joueur {
         }
     }
 
+    pub fn get_categorie_arme(&self) -> Option<Arme> {
+        let equipement_map = self.get_equipement();
+
+        if let Some(Some(id_arme)) = equipement_map.get(&EquipementType::Arme) {
+            if let Ok(equipement) = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(id_arme).clone() {
+                if let Categorie::Arme(categorie_arme) = equipement.get_categorie() {
+                    return Some(categorie_arme);
+                }
+            }
+        }
+
+        None
+    }
+    
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
     
     pub fn add_inventaire(&mut self, item: String, quantite: u32) {
@@ -368,7 +382,7 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui permet d'ajouter les récompenses d'un combat dans l'inventaire du joueur.
-    pub fn ajout_recompense_inventaire(&mut self,recompense: HashMap<String, u32>){
+    pub fn ajout_recompense_inventaire(&mut self, recompense: HashMap<String, u32>){
         for (item, quantite) in recompense.iter() {
             self.add_inventaire(item.clone(), *quantite);
         }
@@ -376,17 +390,17 @@ impl Joueur {
     
     ///////////////
     /// Fonction qui retourne les dégâts reçus après que la résistance physique/magique ait été prise en compte.
-    pub fn degats_recus_net(&mut self,degats_recus_brut: &Vec<u16>) -> u16{
+    pub fn degats_recus_net(&mut self, degats_recus_brut: &Vec<u16>) -> u16{
         self.personnage.defense(degats_recus_brut)
     }
 
     ///////////////
     /// Fonction qui applique les dégâts infligés au joueur et peut amener à des conséquences en cas de PV tombant à 0.
-    pub fn application_degats(&mut self,degats_recus_net: &u16) -> bool {
+    pub fn application_degats(&mut self, degats_recus_net: &u16) -> bool {
         let new_pv_actuel = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv_actuel);
         if self.get_pv_actuel() == 0 {//game over si 0
-            println!("Vous avez perdu !");
+            //println!("Vous avez perdu !");
             return true;
             //Retour à l'interface
         }
@@ -395,7 +409,7 @@ impl Joueur {
 
     ///////////////
     ///Fonction qui permet de reset les stats du joueur à la fin d'un combat
-    pub fn reset_stats(&mut self,joueur: Joueur){
+    pub fn reset_stats(&mut self, joueur: Joueur){
         self.set_force(joueur.get_force());
         self.set_dexterite(joueur.get_dexterite());
         self.set_intelligence(joueur.get_intelligence());
@@ -432,7 +446,6 @@ impl Joueur {
         self.remove_quete(quete.get_id());
         quete.set_statut(crate::quete::StatutQuete::Terminee);
         self.ajout_recompense_inventaire(quete.get_recompense());
-
         if let Some(suivante_id) = quetes_suivantes.get(0) {
             let mut quete_suivante = MasterFile::get_instance().lock().unwrap().prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
             if quete_suivante.get_quete_joueur() { //si la quête suivante n'est pas un dialogue alors on l'ajoute

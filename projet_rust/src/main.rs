@@ -205,6 +205,7 @@ fn main() {
 
     */
 
+
     let mut siv = Cursive::new();
 
     // Créez un écran de menu principal
@@ -374,9 +375,28 @@ fn main() {
                     s.add_layer(pnj_screen());
                 }
                 else if *choice == 4 {
-                    s.pop_layer();
-                    //s.add_layer(combat_screen());
-                    s.add_layer(Dialog::text("TODO: Combat").title("Combat").button("Retour", |s| { s.pop_layer(); }));
+                    let lieu: Lieu;
+                    {
+                        let lieu_id: String;
+                        { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_position(); }
+                        lieu = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&lieu_id).expect("Lieu introuvable");
+                    }
+                    let mut rng = rand::thread_rng();
+                    let ennemies: HashMap<String, Vec<u16>> = lieu.get_contient_ennemies();
+                    let mut keys: Vec<String> = vec![];
+                    for (key, _) in &ennemies {
+                        keys.push(key.clone());
+                    }
+                    let ennemie_index = rng.gen_range(0..keys.len());
+                    if let Some(&ref key) = keys.get(ennemie_index) {
+                        let mut ennemie: Ennemie;
+                        { ennemie = MasterFile::get_instance().lock().unwrap().prendre_ennemie_id(&key.clone()).expect("Ennemie introuvable").clone(); }
+                        { lieu.synchro_ennemie(&mut ennemie, &MasterFile::get_instance().lock().unwrap().get_joueur()); }
+                        s.pop_layer();
+                        s.add_layer(combat_screen(ennemie));
+                    } else {
+                        panic!("Ennemie introuvable");
+                    }
                 }
             })
         )
@@ -1336,6 +1356,317 @@ fn main() {
         } else {
             panic!("Item introuvable");
         }
+    }
+
+    // Créer un écran de combat
+    fn combat_screen(ennemie: Ennemie) -> Dialog {
+        let ennemie_clone = ennemie.clone();
+        let mut select = SelectView::new()
+            .item("> Attaquer", 1)
+            .item("> Consommable", 2);
+        select.set_on_submit(move |s, choice| {
+            if *choice == 1 {
+                s.add_layer(combat_attaque_screen(ennemie.clone()));
+            } else if *choice == 2 {
+                s.add_layer(combat_consommable_screen(ennemie.clone()));
+            }
+        });
+        select.set_inactive_highlight(false);
+        let joueur: Joueur;
+        { joueur = MasterFile::get_instance().lock().unwrap().get_joueur(); }
+        Dialog::around(LinearLayout::vertical()
+            .child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(LinearLayout::vertical()
+                    .child(TextView::new(joueur.get_nom()))
+                    .child(LinearLayout::horizontal()
+                        .child(DummyView::new().fixed_width(1))
+                        .child(TextView::new(format!("Pv: {}/{}", joueur.get_pv_actuel(), joueur.get_pv_max())))
+                    )
+                )
+                .child(DummyView::new().fixed_width(5))
+                .child(LinearLayout::vertical()
+                    .child(TextView::new(ennemie_clone.get_nom()))
+                    .child(LinearLayout::horizontal()
+                        .child(DummyView::new().fixed_width(1))
+                        .child(TextView::new(format!("Pv: {}/{}", ennemie_clone.get_pv_actuel(), ennemie_clone.get_pv_max())))
+                    )
+                )
+                .child(DummyView::new().fixed_width(2))
+            )
+            .child(DummyView::new().fixed_height(1))
+            .child(select)
+        )
+        .title("Combat")
+        .button("Fuir", |s| {
+            s.pop_layer();
+            s.add_layer(actions_screen());
+        })
+    }
+
+
+    fn combat_attaque_screen(mut ennemie: Ennemie) -> Dialog {
+        let ennemie_for_basique = ennemie.clone();
+        let ennemie_for_spe = ennemie.clone();
+        let mut select_attaque_bas = SelectView::new()
+            .item("Attaque basique", 1)
+            .on_submit(move |s, choice| {
+                if *choice == 1 {
+
+                    let degats: u16;
+                    let mut ennemie_clone = ennemie_for_basique.clone();
+                    let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+
+                    degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque_base());
+                    if ennemie_clone.application_degats(&degats,&mut joueur) {
+                        //joueur.completion_quete(ennemie_clone.clone().get_id());
+                        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
+                        s.add_layer(create_dialog_victoire_combat());
+                        return;
+                    }
+
+                    s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone()));
+
+                }
+            });
+        select_attaque_bas.set_inactive_highlight(false);
+        let mut select_attaques_spe = SelectView::new();
+        select_attaques_spe.set_inactive_highlight(false);
+        let attaques_id: Vec<String>;
+        { attaques_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_attaques(); }
+        for attaque_id in attaques_id {
+            let attaque: Attaque;
+            { attaque = MasterFile::get_instance().lock().unwrap().prendre_attaque_id(&attaque_id).expect("Attaque introuvable"); }
+            select_attaques_spe.add_item(attaque.get_nom().clone(), attaque_id.clone());
+        }
+        select_attaques_spe.set_on_submit(move |s, choice: &String| {
+
+            let degats: u16;
+            let mut ennemie_clone = ennemie_for_spe.clone();
+            let mut attaque = { MasterFile::get_instance().lock().unwrap().prendre_attaque_id(choice).expect("Attaque introuvable").clone() };
+            let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+
+
+            if let Some(categorie_arme) = joueur.get_categorie_arme() {
+                if attaque.get_categorie() != categorie_arme {
+                    s.add_layer(create_dialog_arme_combat(ennemie_clone.clone()));
+                    return;
+                }
+            } else {
+                s.add_layer(create_dialog_arme_combat(ennemie_clone.clone()));
+                return;
+            }
+
+            degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque(&attaque));
+            if ennemie_clone.application_degats(&degats,&mut joueur) {
+                //joueur.completion_quete(ennemie_clone.clone().get_id());
+                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
+                s.add_layer(create_dialog_victoire_combat());
+                return;
+            }
+            s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone()));
+
+        });
+        Dialog::around(LinearLayout::vertical()
+            .child(select_attaque_bas)
+            .child(select_attaques_spe)
+        )
+        .title("Choix d'attaque")
+        .button("Retour", |s| {
+            s.pop_layer();
+        })
+    }
+
+    fn create_dialog_attaque_combat(ennemie: Ennemie) -> Dialog {
+        let mut layout: LinearLayout = LinearLayout::vertical();
+
+        layout.add_child(TextView::new("Vous avez infligée : ".to_owned()+&ennemie.get_pv_actuel().to_string()+" dégâts"));
+       
+        if ennemie.clone().combat() {
+            return create_dialog_defaite_combat();
+        }
+
+        Dialog::around(layout)
+            .title("attaque")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(combat_screen(ennemie.clone()));
+            })
+    }
+
+    
+    fn create_dialog_arme_combat(ennemie: Ennemie) -> Dialog {
+        let mut layout: LinearLayout = LinearLayout::vertical();
+
+        layout.add_child(TextView::new("Vous n'avez pas la bonne arme pour cette attaque. "));
+
+        Dialog::around(layout)
+            .title("Attaque")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(combat_attaque_screen(ennemie.clone()));
+            })
+    }
+
+    fn create_dialog_victoire_combat() -> Dialog {
+        let mut layout: LinearLayout = LinearLayout::vertical();
+
+        layout.add_child(TextView::new("Vous avez gagnée ! "));
+
+        Dialog::around(layout)
+            .title("Victoire")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(actions_screen());
+            })
+    }
+
+    fn create_dialog_defaite_combat() -> Dialog {
+        let mut layout: LinearLayout = LinearLayout::vertical();
+
+        layout.add_child(TextView::new("Vous avez perdu ! "));
+
+        Dialog::around(layout)
+            .title("Défaite")
+            .button("Retour", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(actions_screen());
+            })
+    }
+
+
+
+
+    fn combat_consommable_screen(ennemie: Ennemie) -> Dialog {
+        let inventaire: HashMap<String, u32>;
+        { inventaire = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().clone() }
+        let mut consommables: Vec<Consommable> = vec![];
+        for (id, quantite) in inventaire {
+            if quantite > 0 {
+                match MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&id) {
+                    Ok(consommable) => consommables.push(consommable),
+                    Err(_) => {}
+                }
+            }
+        }
+        let mut layout: LinearLayout = LinearLayout::horizontal();
+        let mut select: SelectView = SelectView::new();
+        select.set_inactive_highlight(false);
+
+        let ennemie_clone = ennemie.clone();
+        let mut consommable: Consommable;
+        for i in 1..consommables.len() + 1 {
+            consommable = consommables[i - 1].clone();
+            let quantite: u32;
+            {
+                let nb: Option<u32> = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().get(&consommable.get_id().clone()).copied();
+                match nb {
+                    Some(nb) => quantite = nb,
+                    None => quantite = 0
+                }
+            }
+            select.add_item(consommable.get_nom().clone().to_string() + " : " + &quantite.to_string(), i.to_string());
+            if i % 10 == 0 {
+                let consommables_clone = consommables.clone();
+                let ennemie_value = ennemie_clone.clone();
+                select.set_on_submit(move |s, choice: &String| {
+                    if quantite == 0 {
+                        s.add_layer(Dialog::text("Vous n'avez plus de ".to_string() + &consommable.get_nom().clone())
+                            .title("Consommable")
+                            .button("Retour", |s| { s.pop_layer(); })
+                        );
+                    }
+                    else {
+                        let index = choice.parse::<usize>().unwrap() - 1;
+                        let consommable = consommables_clone[index].clone();
+                        s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone()));
+                    }
+                });
+                layout.add_child(select);
+                select = SelectView::new();
+                select.set_inactive_highlight(false);
+            }
+            if i % 10 == 1 && i != 1 {
+                layout.add_child(DummyView::new().fixed_width(5));
+            }
+        }
+        if consommables.len() % 10 != 0 {
+            let ennemie_value = ennemie_clone.clone();
+            let consommables_clone = consommables.clone();
+            select.set_on_submit(move |s, choice: &String| {
+                let index = choice.parse::<usize>().unwrap() - 1;
+                let consommable = consommables_clone[index].clone();
+                s.pop_layer();
+                s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone()));
+            });
+            layout.add_child(select);
+        }
+        if consommables.len() == 0 {
+            layout.add_child(TextView::new("Vous n'avez aucun consommable."));
+        }
+        Dialog::around(layout)
+            .title("Vendre consommable")
+            .button("Retour", move |s| {
+                s.pop_layer();
+            })
+    }
+
+    fn create_dialog_utiliser_consommable_combat(consommable: Consommable, ennemie: Ennemie) -> Dialog {
+        let consommable_clone = consommable.clone();
+        let mut layout: LinearLayout = LinearLayout::vertical();
+        layout.add_child(TextView::new(consommable.get_description().clone()));
+        let mut decomposer_string: String = "Décomposer => {".to_string();
+        for (id, quantite) in consommable.get_ressources() {
+            decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
+        }
+        decomposer_string += "}";
+        layout.add_child(TextView::new(decomposer_string));
+        layout.add_child(TextView::new("Prix : ".to_owned() + &consommable.clone().get_prix().clone().to_string()));
+        let effets = consommable.get_effets().clone();
+        layout.add_child(DummyView::new().fixed_height(1));
+        layout.add_child(TextView::new("Régenération pv : ".to_string() + &effets[0].to_string()));
+        layout.add_child(TextView::new("Force : +".to_string() + &effets[1].to_string() + " en combat"));
+        layout.add_child(TextView::new("Dexterité : +".to_string() + &effets[2].to_string() + " en combat"));
+        layout.add_child(TextView::new("Intelligence : +".to_string() + &effets[3].to_string() + " en combat"));
+        layout.add_child(TextView::new("Vitesse : +".to_string() + &effets[4].to_string() + " en combat"));
+        layout.add_child(TextView::new("Esquive : +".to_string() + &effets[5].to_string() + " en combat"));
+        layout.add_child(TextView::new("Chance : +".to_string() + &effets[6].to_string() + " en combat"));
+        layout.add_child(TextView::new("Résistance physique : +".to_string() + &effets[7].to_string() + " en combat"));
+        layout.add_child(TextView::new("Résistance magique : +".to_string() + &effets[8].to_string() + " en combat"));
+        layout.add_child(DummyView::new().fixed_height(2));
+        let mut ennemie_clone = ennemie.clone();
+        layout.add_child(SelectView::new()
+            .item("Utiliser", 1)
+            .on_submit(move |s, choice| {
+                if *choice == 1 {
+                    { MasterFile::get_instance().lock().unwrap().get_joueur_mut().utiliser_item(&consommable, &true) }
+                    let mut ennemie_value = ennemie_clone.clone();
+                    //ennemie_value.combat();
+                    ennemie_value.combat();
+                    //ennemie_value.combat();
+                    s.add_layer(Dialog::text("L'objet : ".to_string() + &consommable.get_nom() + " a bien été utilisé")
+                        .title("Equiper")
+                        .button("Ok", move |s| {
+                            s.pop_layer();
+                            s.pop_layer();
+                            s.pop_layer();
+                            s.add_layer(combat_screen(ennemie_value.clone()));
+                        })
+                    );
+                }
+            }));
+        Dialog::around(layout)
+            .title(consommable_clone.get_nom().clone())
+            .button("Retour", |s| {
+                s.pop_layer();
+            })
     }
 
     // Créer un écran de personnage
@@ -2555,6 +2886,35 @@ fn main() {
 
     siv.add_layer(main_menu_screen());
     siv.run();
+
+
+  /*  {
+        let mut ennemie: Ennemie;
+        { ennemie = MasterFile::get_instance().lock().unwrap().prendre_ennemie_id(&"ennemie_1".to_string()).expect("Ennemie introuvable"); }
+        println!("======= Ennemie initial ======");
+        println!("{}", ennemie);
+        println!("======= Joueur initial ======");
+        println!("{}", MasterFile::get_instance().lock().unwrap().get_joueur());
+        
+        let mut rng = rand::thread_rng();
+        let attaques = ennemie.get_attaques();
+        if !attaques.is_empty() {
+            let index = rng.gen_range(0..attaques.len());
+            let attaque_obj: Attaque;
+            { attaque_obj = MasterFile::get_instance().lock().unwrap().prendre_attaque_id(&attaques[index]).expect("Attaque introuvable"); }
+            let attaque: Vec<u16>;
+            { attaque = ennemie.attaque(&attaque_obj); }
+            let degats: u16;
+            let mut joueur = {  MasterFile::get_instance().lock().unwrap().get_joueur() };
+            degats = joueur.degats_recus_net(&attaque);
+            println!("{} lance l'attaque : {} - {} dégâts infligés", joueur.get_nom() , attaque_obj.get_nom(),degats);
+            ennemie.application_degats(&degats,&mut joueur);
+            println!("{} : pv ennemie", ennemie.get_pv_actuel());
+            let degats_applique: bool;
+            { degats_applique = MasterFile::get_instance().lock().unwrap().get_joueur_mut().application_degats(&degats); }
+            println!("{}", degats_applique);
+        }
+    }*/
 
     /*
     let mut position = "".to_string();
