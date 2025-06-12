@@ -6,7 +6,7 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "pv_actuel": 100,
+      "pv_actuel": 9,
       "pv_max": 100,
       "force": 10,
       "dexterite": 1,
@@ -34,7 +34,8 @@
         "pomme": 5,
         "baton": 1,
         "epee_fer": 1,
-        "monnaie": 20000
+        "monnaie": 20000,
+        "parchemin_1": 1
       }
     },
     "position": "pièce2",
@@ -240,7 +241,8 @@
       ],
       "meteo": "Interieur",
       "contient_ressources": {
-        "pomme": 5
+        "pomme": 5,
+        "clé": 1
       },
       "contient_ennemies": {
         "ennemie_1": [
@@ -263,7 +265,8 @@
       ],
       "meteo": "Interieur",
       "contient_ressources": {
-        "pomme": 5
+        "pomme": 5,
+        "parchemin_2": 1
       },
       "contient_ennemies": {
         "ennemie_2": [
@@ -287,7 +290,8 @@
       "lieu": "pièce1",
       "recompense": {
         "climatiseur": 4,
-        "pomme": 5
+        "pomme": 5,
+        "parchemin_2": 1
       },
       "quetes_suivantes": [
         "principale_2"
@@ -314,7 +318,7 @@
       "dialogue_a_enlever": null,
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Interaction": "porte_1"
+        "Dialogue": "Dialogue_pnj_1_4"
       }
     },
     {
@@ -367,7 +371,7 @@
         "Dialogue_pnj_1_3",
         "Dialogue_pnj_1_4"
       ],
-      "quete_joueur": true,
+      "quete_joueur": false,
       "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
@@ -870,6 +874,34 @@
       }
     }
   ],
+  "Parchemin":[
+    {
+      "ressource": {
+        "entite": {
+          "id": "parchemin_1",
+          "description": "Ce parchemin donne accès aux pouvoirs du vide",
+          "nom": "Parchemin du vide"
+        },
+        "prix": 10,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "attaque": "Bombe_Nova"
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "parchemin_2",
+          "description": "Ce parchemin donne accès aux pouvoirs du chaos",
+          "nom": "Parchemin du chaos"
+        },
+        "prix": 10,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "attaque": "Chaos_Spear"
+    }
+  ],
   "Attaque": [
     {
       "entite": {
@@ -884,12 +916,32 @@
     {
       "entite": {
         "id": "tempête_feu",
-        "description": "Une attaque qui déclanche une tempête de feu",
+        "description": "Une attaque qui déclenche une tempête de feu",
         "nom": "Tempête de feu"
       },
       "degats": 15,
       "pourcent_bonus_degats": 10,
       "categorie": "ArmeMagie"
+    },
+    {
+      "entite": {
+        "id": "Bombe_Nova",
+        "description": "Une attaque qui déclenche une explosion nova",
+        "nom": "Bombe Nova"
+      },
+      "degats": 30,
+      "pourcent_bonus_degats": 5,
+      "categorie": "ArmeMagie"
+    },
+    {
+      "entite": {
+        "id": "Chaos_Spear",
+        "description": "Une attaque qui envoie une lance d'énergie",
+        "nom": "Chaos Spear"
+      },
+      "degats": 16,
+      "pourcent_bonus_degats": 2,
+      "categorie": "ArmeDistance"
     }
   ]
 }

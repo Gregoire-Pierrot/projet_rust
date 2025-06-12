@@ -7,6 +7,7 @@ use crate::equipement::{Categorie, Arme};
 use crate::structs::Ressource;
 use crate::equipement::Equipement;
 use crate::consommable::Consommable;
+use crate::parchemin::Parchemin;
 use crate::quete::Quete;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -188,6 +189,21 @@ impl Joueur {
         equipement
     }
 
+    pub fn recup_parchemins(&mut self) -> Vec<Parchemin>{
+        let inventaire = self.get_inventaire();
+        let mut parchemin = Vec::new();
+
+        for (_, (id, _)) in inventaire.iter().enumerate() {
+            match MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(id) {
+                Ok(item) => {
+                    parchemin.push(item);
+                }
+                Err(_) => {}
+            }
+        }
+        parchemin
+    }
+
     pub fn demantelement(&mut self, item: &String, master_file: &MasterFile) {
         let item_id = item.clone();
         self.remove_inventaire(item, 1);
@@ -328,28 +344,39 @@ impl Joueur {
     ///////////////
     /// Fonction qui permet d'utiliser un consommable.
     pub fn utiliser_item(&mut self, item: &Consommable, combat: &bool) {
+        let item_id = item.get_id();
         let effets = item.get_effets().clone();
-        let should_apply = {
-            let inventaire = &mut self.personnage.inventaire;
-            if let Some(quantite) = inventaire.get_mut(&item.get_id()) {
-                if *quantite > 0 {
-                    *quantite -= 1;
-                    if *quantite == 0 {
-                        self.personnage.inventaire.remove(&item.get_id());
-                    }
-                    true
-                } else {
-                    println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
-                    false
+        if let Some(quantite) = self.personnage.inventaire.get_mut(&item_id) {
+            if *quantite > 0 {
+                *quantite -= 1;
+                if *quantite == 0 {
+                    self.personnage.inventaire.remove(&item_id);
                 }
+                self.appliquer_effets_items(effets, combat);
             } else {
-                println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
-                false
+                println!("Quantité de {} insuffisante pour l'utiliser.", item_id);
             }
-        };
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item_id);
+        }
+    }
 
-        if should_apply {
-            self.appliquer_effets_items(effets, &combat);
+    ///////////////
+    /// Fonction qui permet d'utiliser un parchemin.
+    pub fn utiliser_parchemin(&mut self, item: &Parchemin) {
+        let attaque = item.get_attaque();
+        if let Some(quantite) = self.personnage.inventaire.get_mut(&item.get_id()) {
+            if *quantite > 0 {
+                *quantite -= 1;
+                if *quantite == 0 {
+                    self.personnage.inventaire.remove(&item.get_id());
+                }
+                self.add_attaque(attaque);
+            } else {
+                println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
+            }
+        } else {
+            println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
         }
     }
 
@@ -414,18 +441,16 @@ impl Joueur {
 
     ///////////////
     ///Fonction pour mettre la suite d'une quête dans la liste des quêtes du joueur 
-    pub fn suivi_quete(&mut self, master_file: &mut MasterFile, quete: &mut Quete) {
+    pub fn suivi_quete(&mut self, quete: &mut Quete) {
         let quetes_suivantes = quete.get_quetes_suivantes();
         self.remove_quete(quete.get_id());
         quete.set_statut(crate::quete::StatutQuete::Terminee);
         self.ajout_recompense_inventaire(quete.get_recompense());
-        //println!("Quête terminée : [{}]", quete.get_statut());
-
         if let Some(suivante_id) = quetes_suivantes.get(0) {
-            let mut quete_suivante = master_file.prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
+            let mut quete_suivante = MasterFile::get_instance().lock().unwrap().prendre_quete_id(suivante_id).expect("Quête suivante introuvable");
             if quete_suivante.get_quete_joueur() { //si la quête suivante n'est pas un dialogue alors on l'ajoute
                 //self.add_quete(suivante_id.clone());
-                match master_file.prendre_quete_id(suivante_id) {
+                match MasterFile::get_instance().lock().unwrap().prendre_quete_id(suivante_id) {
                     Ok(mut quete_suivante) => self.ajout_quete_joueur(&mut quete_suivante),
                     Err(_) => println!("Quête suivante introuvable")
                 }
@@ -437,14 +462,21 @@ impl Joueur {
 
     ///////////////
     ///Fonction qui permet de vérifier si l'une des quêtes du joueur est fini
-    pub fn completion_quete(&mut self, master_file: &mut MasterFile, id_condition: String){
+    pub fn completion_quete(&mut self, id_condition: String) {
         let quetes = self.get_quetes();
+
         for quete_id in quetes {
-            let mut quete: Quete = master_file.prendre_quete_id(&quete_id).expect("Quête introuvable");
+            let quete = {
+                let master_file = MasterFile::get_instance().lock().unwrap();
+                master_file.prendre_quete_id(&quete_id).expect("Quête introuvable").clone()
+            };
+
             if quete.find_fin_de_quete(id_condition.clone()) {
-                self.suivi_quete(master_file, &mut quete);
+                let mut quete_clone = quete.clone();
+                self.suivi_quete(&mut quete_clone);
 
                 if let Some(dialogue_id) = quete.get_dialogue_a_enlever() {
+                    let mut master_file = MasterFile::get_instance().lock().unwrap();
                     if let Ok(quete_a_enlever) = master_file.prendre_quete_mut(&dialogue_id) {
                         quete_a_enlever.set_statut(crate::quete::StatutQuete::Terminee);
                     }
