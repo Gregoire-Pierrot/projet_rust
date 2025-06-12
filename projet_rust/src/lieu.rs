@@ -136,7 +136,7 @@ impl Lieu {
         for _ in 0..niveau {
             let stat_rand_pv:u16 = rng.gen_range(0..ennemie.get_mod_pv());
             ennemie.set_pv_actuel(ennemie.get_pv_actuel() + stat_rand_pv);
-            ennemie.set_pv_max(ennemie.get_pv_actuel() + stat_rand_pv);
+            ennemie.set_pv_max(ennemie.get_pv_max() + stat_rand_pv);
 
             let stat_rand_force:u16  = rng.gen_range(0..ennemie.get_mod_force());
             ennemie.set_force(ennemie.get_force() + stat_rand_force * niveau);

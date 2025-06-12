@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
+use crate::Equipement;
 use crate::equipement::{Categorie, Arme};
 use crate::json_manager::MasterFile;
 use crate::attaque::Attaque;
@@ -105,13 +106,12 @@ impl Personnage {
 
     pub fn calcul_dexterite(&mut self) -> u16 {
         let mut dexterite: u16 = self.dexterite;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    dexterite += equipement_obj.get_bonus_dexterite();
-                    dexterite += (dexterite * equipement_obj.get_pourcent_bonus_dexterite()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                dexterite += equipement_obj.get_bonus_dexterite();
+                dexterite += (dexterite * equipement_obj.get_pourcent_bonus_dexterite()) / 100; // base + equipement + %base+equipement
             }
         }
         dexterite
@@ -119,13 +119,12 @@ impl Personnage {
 
     pub fn calcul_vitesse(&mut self) -> u16 {
         let mut vitesse: u16 = self.vitesse;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    vitesse += equipement_obj.get_bonus_vitesse();
-                    vitesse += (vitesse * equipement_obj.get_pourcent_bonus_vitesse()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                vitesse += equipement_obj.get_bonus_vitesse();
+                vitesse += (vitesse * equipement_obj.get_pourcent_bonus_vitesse()) / 100; // base + equipement + %base+equipement
             }
         }
         vitesse
@@ -133,13 +132,14 @@ impl Personnage {
 
     pub fn calcul_esquive(&mut self) -> u16 {
         let mut esquive: u16 = self.esquive;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    esquive += equipement_obj.get_bonus_esquive();
-                    esquive += (esquive * equipement_obj.get_pourcent_bonus_esquive()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                println!("Je bloque pas encore ici !");
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                println!("Je bloque pas encore ici !");
+                esquive += equipement_obj.get_bonus_esquive();
+                esquive += (esquive * equipement_obj.get_pourcent_bonus_esquive()) / 100; // base + equipement + %base+equipement
             }
         }
         esquive
@@ -147,13 +147,12 @@ impl Personnage {
 
     pub fn calcul_chance(&mut self) -> u16 {
         let mut chance: u16 = self.chance;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    chance += equipement_obj.get_bonus_chance();
-                    chance += (chance * equipement_obj.get_pourcent_bonus_chance()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                chance += equipement_obj.get_bonus_chance();
+                chance += (chance * equipement_obj.get_pourcent_bonus_chance()) / 100; // base + equipement + %base+equipement
             }
         }
         chance
@@ -161,13 +160,12 @@ impl Personnage {
 
     pub fn calcul_resistance_physique(&mut self) -> u16 {
         let mut resistance_physique: u16 = self.resistance_physique;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    resistance_physique += equipement_obj.get_bonus_resistance_physique();
-                    resistance_physique += (resistance_physique * equipement_obj.get_pourcent_bonus_resistance_physique()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                resistance_physique += equipement_obj.get_bonus_resistance_physique();
+                resistance_physique += (resistance_physique * equipement_obj.get_pourcent_bonus_resistance_physique()) / 100; // base + equipement + %base+equipement
             }
         }
         resistance_physique
@@ -175,13 +173,12 @@ impl Personnage {
 
      pub fn calcul_resistance_magique(&mut self) -> u16 {
         let mut resistance_magique: u16 = self.resistance_magique;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    resistance_magique += equipement_obj.get_bonus_resistance_magique();
-                    resistance_magique += (resistance_magique * equipement_obj.get_pourcent_bonus_resistance_magique()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                resistance_magique += equipement_obj.get_bonus_resistance_magique();
+                resistance_magique += (resistance_magique * equipement_obj.get_pourcent_bonus_resistance_magique()) / 100; // base + equipement + %base+equipement
             }
         }
         resistance_magique
@@ -189,13 +186,12 @@ impl Personnage {
 
     pub fn calcul_force(&mut self) -> u16 { // Dégats physique
         let mut force: u16 = self.force;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    force += equipement_obj.get_bonus_force();
-                    force += (force * equipement_obj.get_pourcent_bonus_force()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                force += equipement_obj.get_bonus_force();
+                force += (force * equipement_obj.get_pourcent_bonus_force()) / 100; // base + equipement + %base+equipement
             }
         }
         force
@@ -203,13 +199,12 @@ impl Personnage {
 
     pub fn calcul_intelligence(&mut self) -> u16 { // Dégats magique
         let mut intelligence: u16 = self.intelligence;
-        let master_file  = MasterFile::get_instance().lock().unwrap();
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
-                if let Ok(equipement_obj) = master_file.prendre_equipement_id(&equipement_id) {
-                    intelligence += equipement_obj.get_bonus_intelligence();
-                    intelligence += (intelligence * equipement_obj.get_pourcent_bonus_intelligence()) / 100; // base + equipement + %base+equipement
-                }
+                let equipement_obj: Equipement;
+                { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
+                intelligence += equipement_obj.get_bonus_intelligence();
+                intelligence += (intelligence * equipement_obj.get_pourcent_bonus_intelligence()) / 100; // base + equipement + %base+equipement
             }
         }
         intelligence
@@ -222,24 +217,25 @@ impl Personnage {
         let mut degats_magique: u16 = 0;
         match attaque.get_categorie() {
             Arme::ArmeMelee => {
-                degats_brute= self.calcul_force()+attaque.get_degats();
+                degats_brute = self.calcul_force() + attaque.get_degats();
                 degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
             }
             Arme::ArmeDistance => {
-                degats_brute = self.calcul_dexterite()+attaque.get_degats();
+                degats_brute = self.calcul_dexterite() + attaque.get_degats();
                 degats_brute += (degats_brute * attaque.get_pourcent_bonus_degats()) / 100;
             },
             Arme::ArmeMagie => {
-                degats_magique = self.calcul_intelligence()+attaque.get_degats();
+                degats_magique = self.calcul_intelligence() + attaque.get_degats();
                 degats_magique += (degats_magique * attaque.get_pourcent_bonus_degats()) / 100;// base + attaque + %base+attaque
             }
         }
 
-        let chance_critique = *CHANCE_CRITIQUE.lock().unwrap()   * (0.1*self.calcul_chance() as f32)/100.0;
+        let chance_critique;
+        { chance_critique = *CHANCE_CRITIQUE.lock().unwrap() * (0.1*self.calcul_chance() as f32)/100.0; }
         if rng.gen::<f32>() <= chance_critique {
             degats_brute = (degats_brute as f32 * 1.5) as u16;
             degats_magique = (degats_magique as f32 * 1.5) as u16;
-            println!("Coup critique !");
+            //println!("Coup critique !");
         }
         degats[0] = degats_brute;
         degats[1] = degats_magique;
@@ -304,8 +300,10 @@ impl Personnage {
             println!("Dégâts esquiver !");
             return 0;
         }
-        let degats_physiques = degats_recus[0].saturating_sub(self.calcul_resistance_physique());
-        let degats_magiques = degats_recus[1].saturating_sub(self.calcul_resistance_magique());
+        let degats_physiques;
+        { degats_physiques = degats_recus[0].saturating_sub(self.calcul_resistance_physique()); }
+        let degats_magiques;
+        { degats_magiques = degats_recus[1].saturating_sub(self.calcul_resistance_magique()); }
         degats_physiques + degats_magiques
     }
 

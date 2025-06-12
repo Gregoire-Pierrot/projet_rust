@@ -7,6 +7,7 @@ use crate::structs::{Personnage, EquipementType};
 use crate::json_manager::Item;
 use crate::json_manager::MasterFile;
 use crate::joueur::Joueur;
+use crate::attaque::Attaque;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Ennemie {
@@ -177,29 +178,29 @@ impl Ennemie {
     }
 
     ///////////////////////////////////////Mettre la possiblilité de défense pour l'ennemi et l'attaque de base ?
-    pub fn combat(&mut self,joueur: &mut Joueur) -> bool {
-        let master_file = MasterFile::get_instance().lock().unwrap();
+    pub fn combat(&mut self) -> bool {
         let mut rng = rand::thread_rng();
         let attaques = self.get_attaques();
         if !attaques.is_empty() {
             let index = rng.gen_range(0..attaques.len());
-            let attaque_obj = match master_file.prendre_attaque_id(&attaques[index]) {
-                Ok(a) => a,
-                Err(a) => {
-                    eprintln!("Erreur : {}", a);
-                    return false;
-                }
-            };
+            let attaque_obj: Attaque;
+            { attaque_obj = MasterFile::get_instance().lock().unwrap().prendre_attaque_id(&attaques[index]).expect("Attaque introuvable"); }
 
-            let attaque = self.personnage.attaque(&attaque_obj);
-            let degats = joueur.degats_recus_net(&attaque);
-            println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
-            return joueur.application_degats(&degats);
+            let attaque: Vec<u16>;
+            { attaque = self.personnage.attaque(&attaque_obj); }
+            let degats: u16;
+            { degats = MasterFile::get_instance().lock().unwrap().get_joueur().degats_recus_net(&attaque); }
+            //println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
+            let degats_applique: bool;
+            { degats_applique = MasterFile::get_instance().lock().unwrap().get_joueur_mut().application_degats(&degats); }
+            return degats_applique;
         }
         false
     }
 
-    
+    pub fn attaque(&mut self, attaque: &Attaque) -> Vec<u16> {
+        self.personnage.attaque(attaque)
+    }    
 }
 
 impl std::fmt::Display for Ennemie {

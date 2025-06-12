@@ -341,7 +341,7 @@ impl Joueur {
 
     ///////////////
     /// Fonction qui permet d'ajouter les récompenses d'un combat dans l'inventaire du joueur.
-    pub fn ajout_recompense_inventaire(&mut self,recompense: HashMap<String, u32>){
+    pub fn ajout_recompense_inventaire(&mut self, recompense: HashMap<String, u32>){
         for (item, quantite) in recompense.iter() {
             self.add_inventaire(item.clone(), *quantite);
         }
@@ -349,13 +349,13 @@ impl Joueur {
     
     ///////////////
     /// Fonction qui retourne les dégâts reçus après que la résistance physique/magique ait été prise en compte.
-    pub fn degats_recus_net(&mut self,degats_recus_brut: &Vec<u16>) -> u16{
+    pub fn degats_recus_net(&mut self, degats_recus_brut: &Vec<u16>) -> u16{
         self.personnage.defense(degats_recus_brut)
     }
 
     ///////////////
     /// Fonction qui applique les dégâts infligés au joueur et peut amener à des conséquences en cas de PV tombant à 0.
-    pub fn application_degats(&mut self,degats_recus_net: &u16) -> bool {
+    pub fn application_degats(&mut self, degats_recus_net: &u16) -> bool {
         let new_pv_actuel = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv_actuel);
         if self.get_pv_actuel() == 0 {//game over si 0
@@ -368,7 +368,7 @@ impl Joueur {
 
     ///////////////
     ///Fonction qui permet de reset les stats du joueur à la fin d'un combat
-    pub fn reset_stats(&mut self,joueur: Joueur){
+    pub fn reset_stats(&mut self, joueur: Joueur){
         self.set_force(joueur.get_force());
         self.set_dexterite(joueur.get_dexterite());
         self.set_intelligence(joueur.get_intelligence());
