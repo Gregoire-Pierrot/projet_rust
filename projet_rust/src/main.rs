@@ -1419,7 +1419,7 @@ fn main() {
 
                     degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque_base());
                     if ennemie_clone.application_degats(&degats,&mut joueur) {
-                        //joueur.completion_quete(ennemie_clone.clone().get_id());
+                        joueur.completion_quete(ennemie_clone.clone().get_id());
                         { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
                         s.add_layer(create_dialog_victoire_combat());
                         return;
@@ -1459,7 +1459,7 @@ fn main() {
 
             degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque(&attaque));
             if ennemie_clone.application_degats(&degats,&mut joueur) {
-                //joueur.completion_quete(ennemie_clone.clone().get_id());
+                joueur.completion_quete(ennemie_clone.clone().get_id());
                 { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
                 s.add_layer(create_dialog_victoire_combat());
                 return;
