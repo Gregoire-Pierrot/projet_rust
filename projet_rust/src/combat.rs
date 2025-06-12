@@ -14,7 +14,7 @@ pub fn saisir_choix(prompt: &str) -> String {
     choix.trim().to_string()
 }
 
-
+/*
 pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut Joueur){
     let reset = joueur.clone();
     let mut combat_en_cours = true;
@@ -128,4 +128,4 @@ pub fn combat(master_file: &mut MasterFile,ennemie: &mut Ennemie, joueur: &mut J
         }
     }
     joueur.reset_stats(reset);
-}
+}*/

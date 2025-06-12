@@ -146,7 +146,7 @@ impl Ennemie {
                         Item::Consommable(c) => c.get_value_rarete(),
                         Item::Equipement(e) => e.get_value_rarete(),
                     };
-                    println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
+                    //println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
                     for _ in 0..*quantite {
                         if rng.gen::<f32>() <= chance_loot {
                             loot.entry(objet.clone()).and_modify(|e| *e += 1).or_insert(1);
@@ -170,7 +170,7 @@ impl Ennemie {
             let loot = self.lootable();
             joueur.ajout_recompense_inventaire(loot.clone());
             joueur.add_xp(self.xp);
-            println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
+            //println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
             return true;
             //Fin de combat -> retour à l'interface
         }
@@ -189,7 +189,8 @@ impl Ennemie {
             let attaque: Vec<u16>;
             { attaque = self.personnage.attaque(&attaque_obj); }
             let degats: u16;
-            { degats = MasterFile::get_instance().lock().unwrap().get_joueur().degats_recus_net(&attaque); }
+            let mut joueur = {  MasterFile::get_instance().lock().unwrap().get_joueur() };
+            degats = joueur.degats_recus_net(&attaque);
             //println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
             let degats_applique: bool;
             { degats_applique = MasterFile::get_instance().lock().unwrap().get_joueur_mut().application_degats(&degats); }

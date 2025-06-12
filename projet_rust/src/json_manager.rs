@@ -157,7 +157,6 @@ impl MasterFile {
         return Err("Ennemie introuvable".to_string());
     }
 
-
     ////Consommable////
 
     pub fn prendre_consommable_id(&self, id: &str) -> Result<Consommable, String> {

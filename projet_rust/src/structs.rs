@@ -135,9 +135,7 @@ impl Personnage {
         for equipement in self.get_equipement() {
             if let Some(equipement_id) = equipement.1 {
                 let equipement_obj: Equipement;
-                println!("Je bloque pas encore ici !");
                 { equipement_obj = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&equipement_id).expect("Equipement introuvable"); }
-                println!("Je bloque pas encore ici !");
                 esquive += equipement_obj.get_bonus_esquive();
                 esquive += (esquive * equipement_obj.get_pourcent_bonus_esquive()) / 100; // base + equipement + %base+equipement
             }
@@ -244,13 +242,16 @@ impl Personnage {
 
     ///////////////
     /// Fonction qui calcul les dégâts de l'attaque de base.
-    pub fn attaque_base(&mut self,master_file: &MasterFile) -> Vec<u16> {  // à opti
+    pub fn attaque_base(&mut self) -> Vec<u16> {  // à opti
         let mut rng = rand::thread_rng();
         let mut degats: Vec<u16> = vec![0, 0];
         let mut degats_brute: u16 = 0;
         let mut degats_magique: u16 = 0;
         if let Some(Some(id)) = self.equipement.get(&EquipementType::Arme) {
-            if let Ok(equipement) = master_file.prendre_equipement_id(id) {
+            let equipement_result = {
+                MasterFile::get_instance().lock().unwrap().prendre_equipement_id(id).clone() 
+            };
+            if let Ok(equipement) = equipement_result {
                 match equipement.get_categorie() {
                     Categorie::Arme(Arme::ArmeMelee) => {
                         degats_brute = self.calcul_force()+equipement.get_bonus_force();
@@ -284,7 +285,7 @@ impl Personnage {
         if rng.gen::<f32>() <= chance_critique {
             degats_brute = (degats_brute as f32 * 1.5) as u16;
             degats_magique = (degats_magique as f32 * 1.5) as u16;
-            println!("Coup critique !");
+            //println!("Coup critique !");
         }
 
         degats[0] = degats_brute;
@@ -297,7 +298,7 @@ impl Personnage {
         let mut rng = rand::thread_rng();
         let esquive = (0.5_f32).min(0.001 * self.calcul_esquive() as f32);
         if rng.gen::<f32>() <= esquive {
-            println!("Dégâts esquiver !");
+            //println!("Dégâts esquiver !");
             return 0;
         }
         let degats_physiques;

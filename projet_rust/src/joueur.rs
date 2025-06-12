@@ -107,6 +107,20 @@ impl Joueur {
         }
     }
 
+    pub fn get_categorie_arme(&self) -> Option<Arme> {
+        let equipement_map = self.get_equipement();
+
+        if let Some(Some(id_arme)) = equipement_map.get(&EquipementType::Arme) {
+            if let Ok(equipement) = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(id_arme).clone() {
+                if let Categorie::Arme(categorie_arme) = equipement.get_categorie() {
+                    return Some(categorie_arme);
+                }
+            }
+        }
+
+        None
+    }
+    
     pub fn get_inventaire(&self) -> HashMap<String, u32> { self.personnage.inventaire.clone() }
     
     pub fn add_inventaire(&mut self, item: String, quantite: u32) {
@@ -359,7 +373,7 @@ impl Joueur {
         let new_pv_actuel = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv_actuel);
         if self.get_pv_actuel() == 0 {//game over si 0
-            println!("Vous avez perdu !");
+            //println!("Vous avez perdu !");
             return true;
             //Retour à l'interface
         }
@@ -405,7 +419,7 @@ impl Joueur {
         self.remove_quete(quete.get_id());
         quete.set_statut(crate::quete::StatutQuete::Terminee);
         self.ajout_recompense_inventaire(quete.get_recompense());
-        println!("Quête terminée : [{}]", quete.get_statut());
+        //println!("Quête terminée : [{}]", quete.get_statut());
 
         if let Some(suivante_id) = quetes_suivantes.get(0) {
             let mut quete_suivante = master_file.prendre_quete_id(suivante_id).expect("Quête suivante introuvable");

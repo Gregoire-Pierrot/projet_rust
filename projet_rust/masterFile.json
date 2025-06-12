@@ -23,7 +23,7 @@
       "equipement": {
         "Casque": "casque_feu",
         "Plastron": "plastron_feu",
-        "Arme": null,
+        "Arme": "epee_fer",
         "Gants": "gants_feu",
         "Bottes": "bottes_feu",
         "Jambieres": "jambieres_feu"
