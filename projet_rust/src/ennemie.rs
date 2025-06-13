@@ -178,7 +178,7 @@ impl Ennemie {
     }
 
     ///////////////////////////////////////Mettre la possiblilité de défense pour l'ennemi et l'attaque de base ?
-    pub fn combat(&mut self) -> bool {
+    pub fn combat(&mut self, degats_recus: &mut u16) -> bool {
         let mut rng = rand::thread_rng();
         let attaques = self.get_attaques();
         if !attaques.is_empty() {
@@ -191,7 +191,7 @@ impl Ennemie {
             let degats: u16;
             let mut joueur = {  MasterFile::get_instance().lock().unwrap().get_joueur() };
             degats = joueur.degats_recus_net(&attaque);
-            //println!("{} lance l'attaque : {} - {} dégâts infligés", self.get_nom() , attaque_obj.get_nom(),degats);
+            *degats_recus = degats;
             let degats_applique: bool;
             { degats_applique = MasterFile::get_instance().lock().unwrap().get_joueur_mut().application_degats(&degats); }
             return degats_applique;

@@ -12,8 +12,8 @@
       "dexterite": 1,
       "intelligence": 10,
       "vitesse": 1,
-      "esquive": 1000,
-      "chance": 10000,
+      "esquive": 100,
+      "chance": 100,
       "resistance_physique": 1,
       "resistance_magique": 1,
       "attaques": [
@@ -31,7 +31,7 @@
       "inventaire": {
         "clé": 1,
         "arc": 1,
-        "pomme": 5,
+        "pomme": 120,
         "baton": 1,
         "epee_fer": 1,
         "monnaie": 20000,
@@ -511,7 +511,7 @@
         "rarete": "Commun"
       },
       "effets": [
-        10,
+        1,
         5,
         5,
         5,
