@@ -22,8 +22,8 @@ use parchemin::Parchemin;
 use attaque::Attaque;
 use json_manager::{MasterFile, Item};
 
-use cursive::views::{Dialog, TextView, SelectView, LinearLayout, ScrollView, DummyView};
-use cursive::view::{Resizable};
+use cursive::views::{Dialog, TextView, SelectView, LinearLayout, ScrollView, DummyView,EditView};
+use cursive::view::{Resizable,Nameable};
 use cursive::{Cursive, CursiveExt};
 
 use std::collections::HashMap;
@@ -42,13 +42,44 @@ fn main() {
                     s.add_layer(Dialog::text("Chargement du jeu... Veuillez patienter").title("Chargement"));
                     // TODO: *chargement du jeu et vérification du json
                     s.pop_layer();
-                    s.add_layer(game_screen());
+                    s.add_layer(choix_nom());
                 }
             })
         )
         .title("Menu principal")
         .button("Quitter", |s| s.quit())
     }
+
+    fn choix_nom() -> Dialog {
+        Dialog::new()
+            .title("Choisissez votre nom")
+            .padding_lrtb(1, 1, 1, 0)
+            .content(
+                EditView::new()
+                    .on_submit(|s, nom| {
+                        s.pop_layer();
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_nom(nom.to_string()); }
+                        { MasterFile::get_instance().lock().unwrap().sauvegarder(); }
+                        s.add_layer(game_screen());
+                    })
+                    .with_name("nom_joueur")
+                    .fixed_width(20),
+            )
+            .button("Valider", |s| {
+                let nom = s.call_on_name("nom_joueur", |view: &mut EditView| {
+                    view.get_content().to_string()
+                }).unwrap();
+                s.pop_layer();
+                { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_nom(nom); }
+                { MasterFile::get_instance().lock().unwrap().sauvegarder(); }
+                s.add_layer(game_screen());
+            })
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(main_menu_screen());
+            })
+    }
+
 
     // Créez un écran de jeu
     fn game_screen() -> Dialog {
@@ -2749,6 +2780,8 @@ fn main() {
                     { MasterFile::get_instance().lock().unwrap().newGame(); }
                     s.add_layer(Dialog::text("Démarrage une nouvelle partie").title("Nouvelle Partie").button("Ok", |s| {
                         s.pop_layer();
+                        s.pop_layer();
+                        s.add_layer(main_menu_screen());
                     }));
                 }
             })
