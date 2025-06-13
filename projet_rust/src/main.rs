@@ -1240,12 +1240,12 @@ fn main() {
                     let degats: u16;
                     let mut ennemie_clone = ennemie_for_basique.clone();
                     let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
-
+                    let mut loot_recupere = HashMap::<String, u32>::new();
                     degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque_base());
-                    if ennemie_clone.application_degats(&degats,&mut joueur) {
+                    if ennemie_clone.application_degats(&degats,&mut joueur,&mut loot_recupere) {
                         joueur.completion_quete(ennemie_clone.clone().get_id());
                         { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
-                        s.add_layer(create_dialog_victoire_combat());
+                        s.add_layer(create_dialog_victoire_combat(loot_recupere));
                         return;
                     }
 
@@ -1269,7 +1269,7 @@ fn main() {
             let mut ennemie_clone = ennemie_for_spe.clone();
             let mut attaque = { MasterFile::get_instance().lock().unwrap().prendre_attaque_id(choice).expect("Attaque introuvable").clone() };
             let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
-
+            let mut loot_recupere = HashMap::<String, u32>::new();
 
             if let Some(categorie_arme) = joueur.get_categorie_arme() {
                 if attaque.get_categorie() != categorie_arme {
@@ -1282,10 +1282,10 @@ fn main() {
             }
 
             degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque(&attaque));
-            if ennemie_clone.application_degats(&degats,&mut joueur) {
+            if ennemie_clone.application_degats(&degats,&mut joueur,&mut loot_recupere) {
                 joueur.completion_quete(ennemie_clone.clone().get_id());
                 { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
-                s.add_layer(create_dialog_victoire_combat());
+                s.add_layer(create_dialog_victoire_combat(loot_recupere));
                 return;
             }
             s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone()));
@@ -1335,10 +1335,40 @@ fn main() {
             })
     }
 
-    fn create_dialog_victoire_combat() -> Dialog {
+    fn create_dialog_victoire_combat(loot_recupere: HashMap<String, u32>) -> Dialog {
         let mut layout: LinearLayout = LinearLayout::vertical();
 
         layout.add_child(TextView::new("Vous avez gagnée ! "));
+        if(!loot_recupere.is_empty()){
+            layout.add_child(TextView::new("Récompenses :"));
+            let mut layout_recompenses: LinearLayout = LinearLayout::vertical();
+            for (ressource_id, quantite) in loot_recupere {
+                let consommable: Result<Consommable, String>;
+                { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
+                if consommable.is_ok() {
+                    layout_recompenses.add_child(TextView::new(consommable.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+                }
+                let ressource: Result<Ressource, String>;
+                { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
+                if ressource.is_ok() {
+                    layout_recompenses.add_child(TextView::new(ressource.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+                }
+                let equipement: Result<Equipement, String>;
+                { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
+                if equipement.is_ok() {
+                    layout_recompenses.add_child(TextView::new(equipement.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+                }
+                let parchemin: Result<Parchemin, String>;
+                { parchemin = MasterFile::get_instance().lock().unwrap().prendre_parchemin_id(&ressource_id); }
+                if parchemin.is_ok() {
+                    layout_recompenses.add_child(TextView::new(parchemin.unwrap().get_nom().clone() + " : " + &quantite.to_string()));
+                }
+            }
+            layout.add_child(LinearLayout::horizontal()
+                .child(DummyView::new().fixed_width(2))
+                .child(layout_recompenses)
+            );
+        }
 
         Dialog::around(layout)
             .title("Victoire")

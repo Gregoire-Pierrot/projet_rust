@@ -163,14 +163,14 @@ impl Ennemie {
         self.personnage.defense(degats_recus_brut)
     }
 
-    pub fn application_degats(&mut self,degats_recus_net: &u16, joueur: &mut Joueur) -> bool{
+    pub fn application_degats(&mut self,degats_recus_net: &u16, joueur: &mut Joueur,loot: &mut HashMap<String, u32>) -> bool{
         let new_pv = self.get_pv_actuel().saturating_sub(*degats_recus_net);
         self.set_pv_actuel(new_pv);
         if self.get_pv_actuel() == 0 {
-            let loot = self.lootable();
-            joueur.ajout_recompense_inventaire(loot.clone());
+            let drop = self.lootable();
+            joueur.ajout_recompense_inventaire(drop.clone());
             joueur.add_xp(self.xp);
-            //println!("Vous avez gagnée le combat : voici vos récompenses : {:?}",loot);
+            loot.extend(drop);
             return true;
             //Fin de combat -> retour à l'interface
         }
