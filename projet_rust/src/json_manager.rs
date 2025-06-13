@@ -70,8 +70,10 @@ impl MasterFile {
     }
 
     pub fn recharger(&mut self) {
-        let data = fs::read_to_string("sav.json").unwrap();
-        let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+        let data = fs::read_to_string("sav.json").unwrap_or_else(|_| {
+            fs::read_to_string("game.json").expect("Erreur de parsing du fichier game.json")
+        });
+        let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing du fichier json");
         self.Joueur = master_file.Joueur;
         self.Pnj = master_file.Pnj;
         self.Ennemie = master_file.Ennemie;

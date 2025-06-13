@@ -1464,7 +1464,7 @@ fn create_dialog_defaite_combat() -> Dialog {
 
     Dialog::around(layout)
         .title("Défaite")
-        .button("Continuer", move |s| {
+        .button("Continuer", |s| {
             s.pop_layer();
             s.pop_layer();
             s.pop_layer();
