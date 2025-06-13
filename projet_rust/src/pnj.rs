@@ -30,10 +30,10 @@ impl Pnj {
                     self.personnage.inventaire.remove(item);
                 }
             } else {
-                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+                //println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
             }
         } else {
-            println!("L'item {} n'est pas dans l'inventaire.", item);
+            //println!("L'item {} n'est pas dans l'inventaire.", item);
         }
     }
 

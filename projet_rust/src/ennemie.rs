@@ -145,6 +145,7 @@ impl Ennemie {
                         Item::Ressource(r) => r.get_value_rarete(),
                         Item::Consommable(c) => c.get_value_rarete(),
                         Item::Equipement(e) => e.get_value_rarete(),
+                        Item::Parchemin(p) => p.get_value_rarete()
                     };
                     //println!("chance d'avoir l'item : {} - {}",objet,chance_loot);
                     for _ in 0..*quantite {

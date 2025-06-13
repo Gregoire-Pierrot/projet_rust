@@ -84,7 +84,7 @@ impl Joueur {
     pub fn add_equipement(&mut self, categorie: &EquipementType, equipement: &String) {
         let eq = self.personnage.equipement.entry(categorie.clone()).or_insert(None);
         if eq.is_some() {
-            println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
+            //println!("Un équipement est déjà équipé dans la catégorie {:?}: {:?}", categorie, eq.as_ref().unwrap());
         } else {
             *eq = Some(equipement.clone());
             //println!("Équipement équipé dans la catégorie {:?}", categorie);
@@ -99,11 +99,11 @@ impl Joueur {
                     //println!("Équipement retiré de la catégorie {:?}: {:?}", categorie, eq);
                     self.add_inventaire(eq, 1);
                 } else {
-                    println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
+                    //println!("Aucun équipement de la catégorie {:?} à retirer.", categorie);
                 }
             }
             None => {
-                println!("Catégorie {:?} inconnue dans l'équipement.", categorie);
+                //println!("Catégorie {:?} inconnue dans l'équipement.", categorie);
             }
         }
     }
@@ -137,10 +137,10 @@ impl Joueur {
                     self.personnage.inventaire.remove(item);
                 }
             } else {
-                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+                //println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
             }
         } else {
-            println!("L'item {} n'est pas dans l'inventaire.", item);
+            //println!("L'item {} n'est pas dans l'inventaire.", item);
         }
     }
 
@@ -375,10 +375,10 @@ impl Joueur {
                 }
                 self.appliquer_effets_items(effets, combat);
             } else {
-                println!("Quantité de {} insuffisante pour l'utiliser.", item_id);
+                //println!("Quantité de {} insuffisante pour l'utiliser.", item_id);
             }
         } else {
-            println!("L'item {} n'est pas dans l'inventaire.", item_id);
+            //println!("L'item {} n'est pas dans l'inventaire.", item_id);
         }
     }
 
@@ -394,10 +394,10 @@ impl Joueur {
                 }
                 self.add_attaque(attaque);
             } else {
-                println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
+                //println!("Quantité de {} insuffisante pour l'utiliser.", item.get_id());
             }
         } else {
-            println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
+            //println!("L'item {} n'est pas dans l'inventaire.", item.get_id());
         }
     }
 
@@ -512,7 +512,7 @@ impl Joueur {
     ///Fonction qui permet de se déplacer
     pub fn deplacement(&mut self,destination: &str) {
         self.set_position(destination.to_string());
-        println!("Vous vous êtes déplacé vers {} ",destination);
+        //println!("Vous vous êtes déplacé vers {} ",destination);
     }
 
 }

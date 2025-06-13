@@ -95,10 +95,10 @@ impl Lieu {
                     self.contient_ressources.remove(item);
                 }
             } else {
-                println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
+                //println!("Quantité insuffisante pour retirer {} de {}.", quantite, item);
             }
         } else {
-            println!("L'item {} n'est pas dans le lieu.", item);
+            //println!("L'item {} n'est pas dans le lieu.", item);
         }
     }
 

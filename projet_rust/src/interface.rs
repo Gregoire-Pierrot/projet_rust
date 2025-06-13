@@ -233,6 +233,16 @@ fn actions_screen() -> Dialog {
                     { lieu_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_position(); }
                     lieu = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&lieu_id).expect("Lieu introuvable");
                 }
+                if lieu.get_contient_ennemies().is_empty() {
+                    s.pop_layer();
+                    s.add_layer(Dialog::around(TextView::new("Il n'y a pas d'ennemie à combattre dans cette zone."))
+                        .button("Retour", |s| {
+                            s.pop_layer();
+                            s.add_layer(actions_screen());
+                        })
+                    );
+                    return;
+                }
                 let mut rng = rand::thread_rng();
                 let ennemies: HashMap<String, Vec<u16>> = lieu.get_contient_ennemies();
                 let mut keys: Vec<String> = vec![];

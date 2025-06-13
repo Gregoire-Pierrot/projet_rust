@@ -13,6 +13,7 @@ pub enum Item {
     Ressource(Ressource),
     Consommable(Consommable),
     Equipement(Equipement),
+    Parchemin(Parchemin)
 }
 
 impl Item {
@@ -20,7 +21,8 @@ impl Item {
         match self {
             Item::Ressource(r) => r.get_ressource(),
             Item::Consommable(c) => c.get_ressources(),
-            Item::Equipement(e) => e.get_ressources()
+            Item::Equipement(e) => e.get_ressources(),
+            Item::Parchemin(p) => p.get_ressources()
         }
     }
 
@@ -28,7 +30,8 @@ impl Item {
         match self {
             Item::Ressource(r) => r.get_nom(),
             Item::Consommable(c) => c.get_nom(),
-            Item::Equipement(e) => e.get_nom()
+            Item::Equipement(e) => e.get_nom(),
+            Item::Parchemin(p) => p.get_nom()
         }
     }
 }
@@ -281,6 +284,9 @@ impl MasterFile {
                     Item::Ressource(ressource) => {
                         prix = ressource.get_prix();
                     }
+                    Item::Parchemin(parchemin) => {
+                        prix = parchemin.get_prix();
+                    }
                 }
                 self.get_joueur_mut().add_inventaire("monnaie".to_string(), quantite * prix);
             }
@@ -310,6 +316,8 @@ impl MasterFile {
             Ok(Item::Equipement(equipement))
         } else if let Ok(ressource) = self.prendre_ressource_id(id) {
             Ok(Item::Ressource(ressource))
+        } else if let Ok(parchemin) = self.prendre_parchemin_id(id) {
+            Ok(Item::Parchemin(parchemin))
         } else {
             Err(format!("Item avec id '{}' introuvable", id))
         }
