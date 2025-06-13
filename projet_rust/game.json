@@ -4,54 +4,44 @@
       "entite": {
         "id": "joueur",
         "description": "Un joueur lambda",
-        "nom": "Jane"
+        "nom": ""
       },
       "pv_actuel": 100,
       "pv_max": 100,
-      "force": 10,
-      "dexterite": 1,
-      "intelligence": 10,
+      "force": 20,
+      "dexterite": 5,
+      "intelligence": 5,
       "vitesse": 1,
-      "esquive": 100,
-      "chance": 100,
+      "esquive": 1,
+      "chance": 1,
       "resistance_physique": 1,
       "resistance_magique": 1,
-      "attaques": [
-        "brise_glace",
-        "tempête_feu"
-      ],
+      "attaques": [],
       "equipement": {
-        "Casque": "casque_feu",
-        "Plastron": "plastron_feu",
-        "Arme": "epee_fer",
-        "Gants": "gants_feu",
-        "Bottes": "bottes_feu",
-        "Jambieres": "jambieres_feu"
+        "Casque": null,
+        "Plastron": null,
+        "Arme": null,
+        "Gants": null,
+        "Bottes": null,
+        "Jambieres": null
       },
       "inventaire": {
-        "clé": 1,
-        "arc": 1,
-        "pomme": 120,
-        "baton": 1,
-        "epee_fer": 1,
-        "monnaie": 20000,
-        "parchemin_1": 1
+        "monnaie": 10
       }
     },
-    "position": "pièce2",
-    "pronom": "elle",
+    "position": "exterieur_1",
+    "pronom": "il",
     "niveau": 1,
     "temps": 0,
-    "reputations": [
-      40,
-      90
-    ],
+    "reputations": {
+      "piece_3": 40,
+      "piece_5": 90
+    },
     "xp": 0,
     "multiplicateur_xp": 1,
     "points_competence": 5,
     "quetes": [
-      "principale",
-      "combat_1"
+      "principale"
     ]
   },
   "Pnj": [
@@ -59,8 +49,8 @@
       "personnage": {
         "entite": {
           "id": "pnj_1",
-          "description": "Un PNJ lambda",
-          "nom": "Garrus"
+          "description": "Un étudiant qui en a marre des problèmes d'appartement",
+          "nom": "Grégoire"
         },
         "pv_actuel": 100,
         "pv_max": 100,
@@ -89,15 +79,16 @@
         "Dialogue_pnj_1"
       ],
       "commerce_table": {
-        "pomme": 10
+        "pomme": 10,
+        "lipton":7
       }
     },
     {
       "personnage": {
         "entite": {
           "id": "pnj_2",
-          "description": "Un PNJ lambda",
-          "nom": "Seth"
+          "description": "Un étudiant qui est toujours inquiet pour rien",
+          "nom": "Ylies"
         },
         "pv_actuel": 100,
         "pv_max": 100,
@@ -123,7 +114,8 @@
         }
       },
       "dialogues": [
-        "Dialogue_pnj_1"
+        "Dialogue_pnj_2",
+        "Dialogue_pnj_2_1"
       ],
       "commerce_table": {}
     }
@@ -133,21 +125,21 @@
       "personnage": {
         "entite": {
           "id": "ennemie_1",
-          "description": "Un ennemie lambda",
-          "nom": "Moissonneur"
+          "description": "Un étudiant qui aime prêcher l'automatisation",
+          "nom": "Tom"
         },
         "pv_actuel": 100,
         "pv_max": 100,
-        "force": 0,
-        "dexterite": 0,
-        "intelligence": 0,
-        "vitesse": 0,
-        "esquive": 0,
-        "chance": 0,
-        "resistance_physique": 0,
-        "resistance_magique": 0,
+        "force": 4,
+        "dexterite": 4,
+        "intelligence": 4,
+        "vitesse": 4,
+        "esquive": 4,
+        "chance": 4,
+        "resistance_physique": 4,
+        "resistance_magique": 4,
         "attaques": [
-          "tempête_feu"
+          "cursor"
         ],
         "equipement": {
           "Arme": null,
@@ -171,11 +163,9 @@
       "mod_resistance_physique": 1,
       "mod_resistance_magique": 1,
       "xp": 150,
-      "dialogues": [
-        "Dialogue_ennemie_1"
-      ],
+      "dialogues": [],
       "droptable": {
-        "epee_feu": 1,
+        "parchemin_1":1,
         "pomme": 4
       }
     },
@@ -183,21 +173,21 @@
       "personnage": {
         "entite": {
           "id": "ennemie_2",
-          "description": "Un ennemie lambda",
-          "nom": "Recolteur"
+          "description": "Un prof passionnée",
+          "nom": "Ze prof"
         },
         "pv_actuel": 100,
         "pv_max": 100,
-        "force": 0,
-        "dexterite": 0,
-        "intelligence": 0,
-        "vitesse": 0,
-        "esquive": 0,
-        "chance": 0,
-        "resistance_physique": 0,
-        "resistance_magique": 0,
+        "force": 10,
+        "dexterite": 10,
+        "intelligence": 10,
+        "vitesse": 10,
+        "esquive": 10,
+        "chance": 10,
+        "resistance_physique": 10,
+        "resistance_magique": 10,
         "attaques": [
-          "tempête_feu"
+          "rust"
         ],
         "equipement": {
           "Bottes": null,
@@ -221,11 +211,55 @@
       "mod_resistance_physique": 5,
       "mod_resistance_magique": 5,
       "xp": 10,
-      "dialogues": [
-        "Dialogue_ennemie_1"
-      ],
+      "dialogues": [],
       "droptable": {
-        "epee_feu": 1,
+        "pomme": 3
+      }
+    },
+    {
+      "personnage": {
+        "entite": {
+          "id": "ennemie_3",
+          "description": "Un prof vachement cool",
+          "nom": "Ze prof d'inglich in de roum en bas"
+        },
+        "pv_actuel": 100,
+        "pv_max": 100,
+        "force": 5,
+        "dexterite": 5,
+        "intelligence": 5,
+        "vitesse": 5,
+        "esquive": 5,
+        "chance": 5,
+        "resistance_physique": 5,
+        "resistance_magique": 5,
+        "attaques": [
+          "correction"
+        ],
+        "equipement": {
+          "Bottes": null,
+          "Arme": null,
+          "Gants": null,
+          "Plastron": null,
+          "Jambieres": null,
+          "Casque": null
+        },
+        "inventaire": {
+          "pomme": 5
+        }
+      },
+      "mod_pv": 5,
+      "mod_force": 5,
+      "mod_dexterite": 5,
+      "mod_intelligence": 5,
+      "mod_vitesse": 5,
+      "mod_esquive": 5,
+      "mod_chance": 5,
+      "mod_resistance_physique": 5,
+      "mod_resistance_magique": 5,
+      "xp": 10,
+      "dialogues": [],
+      "droptable": {
         "pomme": 3
       }
     }
@@ -233,64 +267,188 @@
   "Lieu": [
     {
       "entite": {
-        "id": "pièce1",
-        "description": "Une chambre vachement bleue",
-        "nom": "chambre bleue"
+        "id": "exterieur_1",
+        "description": "Juste devant l'entrée du CERI",
+        "nom": "L'Extérieur"
       },
       "destinations": [
-        "pièce2"
+        "piece_1"
       ],
-      "meteo": "Interieur",
-      "contient_ressources": {
-        "pomme": 5,
-        "clé": 1
-      },
-      "contient_ennemies": {
-        "ennemie_1": [
-          1,
-          2
-        ]
-      },
-      "contient_pnj": [
-        "pnj_2"
-      ]
+      "meteo": "Soleil",
+      "contient_ressources": {"pomme":10},
+      "contient_ennemies": {},
+      "contient_pnj": []
     },
     {
       "entite": {
-        "id": "pièce2",
-        "description": "Une chambre vachement rouge",
-        "nom": "chambre rouge"
+        "id": "piece_1",
+        "description": "Le hall du CERI",
+        "nom": "Le Hall"
       },
       "destinations": [
-        "pièce1"
+        "exterieur_1",
+        "piece_2",
+        "piece_12"
       ],
       "meteo": "Interieur",
-      "contient_ressources": {
-        "pomme": 5,
-        "parchemin_2": 1
+      "contient_ressources": {"lipton":7},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_2",
+        "description": "Le couloir menant aux salles de TD",
+        "nom": "Couloir des Salles de TD"
       },
-      "contient_ennemies": {
-        "ennemie_2": [
-          1,
-          2,
-          3
-        ]
+      "destinations": [
+        "piece_1",
+        "piece_3",
+        "piece_4",
+        "piece_5",
+        "piece_6",
+        "piece_7",
+        "piece_8",
+        "piece_9"
+      ],
+      "meteo": "Interieur",
+      "contient_ressources": {"epee_fer":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_3",
+        "description": "Une salle de TD",
+        "nom": "Salle S1"
       },
-      "contient_pnj": [
-        "pnj_1"
-      ]
+      "destinations": [
+        "piece_2",
+        "piece_4"
+      ],
+      "meteo": "Interieur",
+      "contient_ressources": {"epee_feu":1},
+      "contient_ennemies": {},
+      "contient_pnj": ["pnj_1"]
+    },
+    {
+      "entite": {
+        "id": "piece_4",
+        "description": "Une salle de TD",
+        "nom": "Salle S2"
+      },
+      "destinations": ["piece_2","piece_5","piece_3"],
+      "meteo": "Interieur",
+      "contient_ressources": {"arc":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_5",
+        "description": "Une salle de TD",
+        "nom": "Salle S2bis"
+      },
+      "destinations": ["piece_2","piece_4"],
+      "meteo": "Interieur",
+      "contient_ressources": {"baton":1},
+      "contient_ennemies": {},
+      "contient_pnj": ["pnj_2"]
+    },
+    {
+      "entite": {
+        "id": "piece_6",
+        "description": "Une salle de TD",
+        "nom": "Salle S3"
+      },
+      "destinations": ["piece_2","piece_7"],
+      "meteo": "Interieur",
+      "contient_ressources": {"plastron_feu":1},
+      "contient_ennemies": {"ennemie_1":[1,2]},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_7",
+        "description": "Une salle de TD",
+        "nom": "Salle S4"
+      },
+      "destinations": ["piece_2","piece_6"],
+      "meteo": "Interieur",
+      "contient_ressources": {"gants_feu":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_8",
+        "description": "Une salle de TD",
+        "nom": "Salle S5"
+      },
+      "destinations": ["piece_2"],
+      "meteo": "Interieur",
+      "contient_ressources": {"bottes_feu":1},
+      "contient_ennemies": {"ennemie_3":[1,2]},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_9",
+        "description": "Une salle de TD",
+        "nom": "Salle S6"
+      },
+      "destinations": ["piece_2"],
+      "meteo": "Interieur",
+      "contient_ressources": {"casque_feu":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_13",
+        "description": "Un amphi assez grand",
+        "nom": "Amphi Blaise"
+      },
+      "destinations": ["piece_12"],
+      "meteo": "Interieur",
+      "contient_ressources": {},
+      "contient_ennemies": {"ennemie_2":[3,5]},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_11",
+        "description": "Un amphi assez petit",
+        "nom": "Amphi Ada"
+      },
+      "destinations": ["piece_12"],
+      "meteo": "Interieur",
+      "contient_ressources": {"notes":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
+    },
+    {
+      "entite": {
+        "id": "piece_12",
+        "description": "Le couloir menant aux amphis",
+        "nom": "Couloir des Amphis"
+      },
+      "destinations": ["piece_1","piece_11","piece_13"],
+      "meteo": "Interieur",
+      "contient_ressources": {"jambieres_feu":1},
+      "contient_ennemies": {},
+      "contient_pnj": []
     }
   ],
   "Quete": [
     {
       "entite": {
         "id": "principale",
-        "description": "La quete principale",
+        "description": "Parler à Ylies en S2bis",
         "nom": "Quête principale"
       },
       "lieu": "pièce1",
       "recompense": {
-        "climatiseur": 4,
         "pomme": 5,
         "parchemin_2": 1
       },
@@ -301,87 +459,80 @@
       "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
-        "Obtention": "pomme"
+        "Dialogue": "Dialogue_pnj_2"
       }
     },
     {
       "entite": {
         "id": "principale_2",
-        "description": "La quete principale étape 2",
+        "description": "Battre le prof en amphi Blaise",
         "nom": "Quête principale: étape 2"
       },
       "lieu": "pièce2",
       "recompense": {
-        "pomme": 5
+        "pomme": 5,
+        "parchemin_4":1
       },
-      "quetes_suivantes": [],
+      "quetes_suivantes": ["principale_3"],
       "quete_joueur": true,
       "dialogue_a_enlever": null,
       "statut": "NonCommencee",
-      "fin_de_quete": {
-        "Dialogue": "Dialogue_pnj_1_4"
-      }
-    },
-    {
-      "entite": {
-        "id": "combat_1",
-        "description": "La quete du combat test",
-        "nom": "Combat test"
-      },
-      "lieu": "pièce1",
-      "recompense": {
-        "climatiseur": 4,
-        "pomme": 5,
-        "parchemin_2": 1
-      },
-      "quetes_suivantes": [],
-      "quete_joueur": true,
-      "dialogue_a_enlever": null,
-      "statut": "EnCours",
       "fin_de_quete": {
         "Combat": "ennemie_2"
       }
     },
     {
       "entite": {
-        "id": "secondaire_1",
-        "description": "La quete secondaire étape 1",
-        "nom": "Quête secondaire: étape 1"
+        "id": "principale_3",
+        "description": "Vous avez fini le jeu !",
+        "nom": "Quête principale: fin"
       },
-      "lieu": "pièce3",
-      "recompense": {
-        "pomme": 5
-      },
+      "lieu": "pièce2",
+      "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": true,
       "dialogue_a_enlever": null,
+      "statut": "NonCommencee",
+      "fin_de_quete": {
+        "Combat": ""
+      }
+    },
+    {
+      "entite": {
+        "id": "secondaire_1",
+        "description": "Combattez Tom et gagnez",
+        "nom": "Combattre Tom"
+      },
+      "lieu": "pièce3",
+      "recompense": {"parchemin_3":1},
+      "quetes_suivantes": [],
+      "quete_joueur": true,
+      "dialogue_a_enlever": "Dialogue_pnj_1_2",
       "statut": "NonCommencee",
       "fin_de_quete": {
         "Combat": "ennemie_1"
       }
     },
-    {
+     {
       "entite": {
-        "id": "secondaire_2_1",
-        "description": "La quete secondaire 2 étape 1",
-        "nom": "Quête secondaire 2: étape 1"
+        "id": "secondaire_2",
+        "description": "Trouvez les notes d'Ylies",
+        "nom": "Notes perdues"
       },
       "lieu": "pièce3",
-      "recompense": {
-        "pomme": 5
-      },
+      "recompense": {"milka":1},
       "quetes_suivantes": [],
       "quete_joueur": true,
-      "dialogue_a_enlever": null,
+      "dialogue_a_enlever": "Dialogue_pnj_2",
       "statut": "NonCommencee",
       "fin_de_quete": {
-        "Dialogue": "dialogue_1_1"
+        "Obtention": "notes"
       }
     },
     {
       "entite": {
         "id": "Dialogue_pnj_1",
-        "description": "Je suis un PNJ",
+        "description": "Bonjour",
         "nom": "PNJ dialogue"
       },
       "lieu": "pièce3",
@@ -396,19 +547,19 @@
       "dialogue_a_enlever": null,
       "statut": "EnCours",
       "fin_de_quete": {
-        "Dialogue": "quelque_chose"
+        "Dialogue": ""
       }
     },
     {
       "entite": {
         "id": "Dialogue_pnj_1_1",
-        "description": "Aide moi à détruire le marais",
+        "description": "Es que tu pourrais battre Tom, il est en salle S3",
         "nom": "dialogue quete"
       },
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [
-        "secondaire_3"
+        "secondaire_1"
       ],
       "quete_joueur": false,
       "dialogue_a_enlever": "Dialogue_pnj_1_1",
@@ -420,7 +571,7 @@
     {
       "entite": {
         "id": "Dialogue_pnj_1_2",
-        "description": "Es que tu as détruit le marais ?",
+        "description": "Es que tu as battu Tom ?",
         "nom": "dialogue Mi-quete"
       },
       "lieu": "pièce3",
@@ -436,7 +587,7 @@
     {
       "entite": {
         "id": "Dialogue_pnj_1_3",
-        "description": "Merci d'avoir détruit le marais",
+        "description": "Merci d'avoir détruit Tom",
         "nom": "dialogue fin de quete"
       },
       "lieu": "pièce3",
@@ -452,7 +603,7 @@
     {
       "entite": {
         "id": "Dialogue_pnj_1_4",
-        "description": "Depuis que tu as détruit le marais je suis devenu riche !",
+        "description": "Depuis que tu as détruit Tom, je ne l'entends plus prêcher Cursor !",
         "nom": "dialogue défaut"
       },
       "lieu": "pièce3",
@@ -467,34 +618,34 @@
     },
     {
       "entite": {
-        "id": "secondaire_3",
-        "description": "Détruire le marais",
-        "nom": "Destruction du marais"
+        "id": "Dialogue_pnj_2",
+        "description": "Euh bonjour, je suis désolé mais j'ai pas le temps là, j'ai perdu mes notes",
+        "nom": "dialogue défaut2"
       },
       "lieu": "pièce3",
       "recompense": {},
-      "quetes_suivantes": [],
-      "quete_joueur": true,
-      "dialogue_a_enlever": "Dialogue_pnj_1_2",
-      "statut": "NonCommencee",
+      "quetes_suivantes": ["secondaire_2"],
+      "quete_joueur": false,
+      "dialogue_a_enlever": null,
+      "statut": "EnCours",
       "fin_de_quete": {
-        "Obtention": "clé"
+        "Dialogue": ""
       }
     },
     {
       "entite": {
-        "id": "Dialogue_ennemie_1",
-        "description": "Je suis un Ennemie",
-        "nom": "Ennemie dialogue"
+        "id": "Dialogue_pnj_2_1",
+        "description": "Eh mes notes ! Tu les as trouvées, euh tiens, je te donne ma tablette de milka en récompense !",
+        "nom": "dialogue défaut3"
       },
       "lieu": "pièce3",
       "recompense": {},
       "quetes_suivantes": [],
       "quete_joueur": false,
       "dialogue_a_enlever": null,
-      "statut": "NonCommencee",
+      "statut": "EnCours",
       "fin_de_quete": {
-        "Dialogue": "quelque_chose"
+        "Dialogue": ""
       }
     }
   ],
@@ -504,22 +655,68 @@
         "entite": {
           "id": "pomme",
           "description": "Une pomme",
-          "nom": "pomme"
+          "nom": "Pomme"
         },
         "prix": 10,
         "ressource": {},
         "rarete": "Commun"
       },
       "effets": [
+        5,
         1,
-        5,
-        5,
-        5,
-        5,
-        5,
-        5,
-        5,
-        5
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "milka",
+          "description": "Une Tablette Milka",
+          "nom": "Tablette Milka"
+        },
+        "prix": 20,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "effets": [
+        15,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "lipton",
+          "description": "Une cannette d'IceTea",
+          "nom": "IceTea"
+        },
+        "prix": 20,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "effets": [
+        15,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ]
     }
   ],
@@ -536,15 +733,13 @@
     },
     {
       "entite": {
-        "id": "clé",
-        "description": "Une clé",
-        "nom": "clé"
+        "id": "notes",
+        "description": "Les notes d'un étudiant",
+        "nom": "Notes"
       },
-      "prix": 5,
-      "ressource": {
-        "fer": 2
-      },
-      "rarete": "PeuCommun"
+      "prix": 1,
+      "ressource": {},
+      "rarete": "Commun"
     },
     {
       "entite": {
@@ -555,18 +750,6 @@
       "prix": 15,
       "ressource": {},
       "rarete": "Commun"
-    },
-    {
-      "entite": {
-        "id": "climatiseur",
-        "description": "Un climatiseur",
-        "nom": "Climatiseur"
-      },
-      "prix": 50,
-      "ressource": {
-        "fer": 15
-      },
-      "rarete": "PeuCommun"
     }
   ],
   "Equipement": [
@@ -583,16 +766,16 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
       "pourcent_bonus_dexterite": 0,
@@ -619,25 +802,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Arme": "ArmeMelee"
       }
@@ -655,25 +838,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Arme": "ArmeDistance"
       }
@@ -691,25 +874,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Arme": "ArmeMagie"
       }
@@ -727,25 +910,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 10,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Armure": "Plastron"
       }
@@ -763,25 +946,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Armure": "Gants"
       }
@@ -799,25 +982,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Armure": "Bottes"
       }
@@ -835,25 +1018,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Armure": "Casque"
       }
@@ -871,25 +1054,25 @@
         },
         "rarete": "Rare"
       },
-      "bonus_pv": 0,
-      "bonus_force": 0,
-      "bonus_dexterite": 0,
-      "bonus_intelligence": 0,
-      "bonus_vitesse": 0,
-      "bonus_esquive": 0,
-      "bonus_chance": 0,
-      "bonus_resistance_physique": 0,
-      "bonus_resistance_magique": 0,
-      "bonus_multiplicateur_xp": 0,
+      "bonus_pv": 1,
+      "bonus_force": 1,
+      "bonus_dexterite": 1,
+      "bonus_intelligence": 1,
+      "bonus_vitesse": 1,
+      "bonus_esquive": 1,
+      "bonus_chance": 1,
+      "bonus_resistance_physique": 1,
+      "bonus_resistance_magique": 1,
+      "bonus_multiplicateur_xp": 1,
       "pourcent_bonus_pv": 10,
       "pourcent_bonus_force": 10,
-      "pourcent_bonus_dexterite": 0,
-      "pourcent_bonus_intelligence": 0,
+      "pourcent_bonus_dexterite": 1,
+      "pourcent_bonus_intelligence": 1,
       "pourcent_bonus_vitesse": 10,
-      "pourcent_bonus_esquive": 0,
-      "pourcent_bonus_chance": 0,
-      "pourcent_bonus_resistance_physique": 0,
-      "pourcent_bonus_resistance_magique": 0,
+      "pourcent_bonus_esquive": 1,
+      "pourcent_bonus_chance": 1,
+      "pourcent_bonus_resistance_physique": 1,
+      "pourcent_bonus_resistance_magique": 1,
       "categorie": {
         "Armure": "Jambieres"
       }
@@ -900,45 +1083,71 @@
       "ressource": {
         "entite": {
           "id": "parchemin_1",
-          "description": "Ce parchemin donne accès aux pouvoirs du vide",
-          "nom": "Parchemin du vide"
+          "description": "Ce parchemin donne accès aux pouvoirs de Cursor",
+          "nom": "Parchemin du travail automatique"
         },
         "prix": 10,
         "ressource": {},
         "rarete": "Commun"
       },
-      "attaque": "Bombe_Nova"
+      "attaque": "cursor"
     },
     {
       "ressource": {
         "entite": {
           "id": "parchemin_2",
-          "description": "Ce parchemin donne accès aux pouvoirs du chaos",
-          "nom": "Parchemin du chaos"
+          "description": "Ce parchemin donne accès aux pouvoirs du Stress",
+          "nom": "Parchemin de l'inquiétude"
         },
         "prix": 10,
         "ressource": {},
         "rarete": "Commun"
       },
-      "attaque": "Chaos_Spear"
+      "attaque": "stress"
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "parchemin_3",
+          "description": "Ce parchemin donne accès aux pouvoirs de la Colère",
+          "nom": "Parchemin de l'irritation"
+        },
+        "prix": 10,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "attaque": "colere"
+    },
+    {
+      "ressource": {
+        "entite": {
+          "id": "parchemin_4",
+          "description": "Ce parchemin donne accès aux pouvoirs du Rust",
+          "nom": "Parchemin de l'optimisation"
+        },
+        "prix": 10,
+        "ressource": {},
+        "rarete": "Commun"
+      },
+      "attaque": "rust"
     }
   ],
   "Attaque": [
     {
       "entite": {
-        "id": "brise_glace",
-        "description": "Une attaque qui brise la glace",
-        "nom": "Brise glace"
+        "id": "cursor",
+        "description": "Une attaque qui fais son travail à sa place",
+        "nom": "Cursor"
       },
       "degats": 10,
       "pourcent_bonus_degats": 0,
-      "categorie": "ArmeMelee"
+      "categorie": "ArmeDistance"
     },
     {
       "entite": {
-        "id": "tempête_feu",
-        "description": "Une attaque qui déclenche une tempête de feu",
-        "nom": "Tempête de feu"
+        "id": "stress",
+        "description": "Une attaque qui invoque le stress d'un étudiant",
+        "nom": "Stress"
       },
       "degats": 15,
       "pourcent_bonus_degats": 10,
@@ -946,23 +1155,33 @@
     },
     {
       "entite": {
-        "id": "Bombe_Nova",
-        "description": "Une attaque qui déclenche une explosion nova",
-        "nom": "Bombe Nova"
+        "id": "colere",
+        "description": "Une attaque qui appelle la colère d'un étudiant",
+        "nom": "Colère"
       },
       "degats": 30,
       "pourcent_bonus_degats": 5,
-      "categorie": "ArmeMagie"
+      "categorie": "ArmeMelee"
     },
     {
       "entite": {
-        "id": "Chaos_Spear",
-        "description": "Une attaque qui envoie une lance d'énergie",
-        "nom": "Chaos Spear"
+        "id": "rust",
+        "description": "Une attaque qui utilise votre maitrise du Rust",
+        "nom": "Maitrise du Rust"
       },
-      "degats": 16,
-      "pourcent_bonus_degats": 2,
+      "degats": 40,
+      "pourcent_bonus_degats": 5,
       "categorie": "ArmeDistance"
+    },
+    {
+      "entite": {
+        "id": "correction",
+        "description": "Une attaque qui corrige vos erreurs",
+        "nom": "Correction bienveillante"
+      },
+      "degats": 25,
+      "pourcent_bonus_degats": 7,
+      "categorie": "ArmeMelee"
     }
   ]
 }
