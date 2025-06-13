@@ -2731,6 +2731,7 @@ fn main() {
         Dialog::around(SelectView::new()
             .item("Sauvegarder", 1)
             .item("Recharger", 2)
+            .item("Nouvelle Partie", 3)
             .on_submit(|s, choice| {
                 if *choice == 1 {
                     { MasterFile::get_instance().lock().unwrap().sauvegarder(); }
@@ -2741,6 +2742,12 @@ fn main() {
                 else if *choice == 2 {
                     { MasterFile::get_instance().lock().unwrap().recharger(); }
                     s.add_layer(Dialog::text("Rechargement de la dernière sauvegarde effectuée").title("Rechargement").button("Ok", |s| {
+                        s.pop_layer();
+                    }));
+                }
+                else if *choice == 3 {
+                    { MasterFile::get_instance().lock().unwrap().newGame(); }
+                    s.add_layer(Dialog::text("Démarrage une nouvelle partie").title("Nouvelle Partie").button("Ok", |s| {
                         s.pop_layer();
                     }));
                 }

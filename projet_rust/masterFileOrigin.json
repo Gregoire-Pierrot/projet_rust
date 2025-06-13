@@ -6,7 +6,7 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "pv_actuel": 4,
+      "pv_actuel": 100,
       "pv_max": 100,
       "force": 10,
       "dexterite": 1,
@@ -21,23 +21,21 @@
         "tempête_feu"
       ],
       "equipement": {
-        "Bottes": "bottes_feu",
+        "Casque": "casque_feu",
         "Plastron": "plastron_feu",
         "Arme": "epee_fer",
-        "Casque": "casque_feu",
-        "Jambieres": "jambieres_feu",
-        "Gants": "gants_feu"
+        "Gants": "gants_feu",
+        "Bottes": "bottes_feu",
+        "Jambieres": "jambieres_feu"
       },
       "inventaire": {
-        "parchemin_1": 1,
+        "clé": 1,
+        "arc": 1,
+        "pomme": 120,
+        "baton": 1,
         "epee_fer": 1,
         "monnaie": 20000,
-        "pomme": 130,
-        "arc": 1,
-        "baton": 1,
-        "parchemin_2": 2,
-        "clé": 1,
-        "climatiseur": 4
+        "parchemin_1": 1
       }
     },
     "position": "pièce2",
@@ -52,8 +50,8 @@
     "multiplicateur_xp": 1,
     "points_competence": 5,
     "quetes": [
-      "combat_1",
-      "principale_2"
+      "principale",
+      "combat_1"
     ]
   },
   "Pnj": [
@@ -76,11 +74,11 @@
         "resistance_magique": 0,
         "attaques": [],
         "equipement": {
-          "Bottes": null,
-          "Gants": null,
           "Jambieres": null,
-          "Plastron": null,
+          "Bottes": null,
           "Casque": null,
+          "Gants": null,
+          "Plastron": null,
           "Arme": null
         },
         "inventaire": {
@@ -113,12 +111,12 @@
         "resistance_magique": 0,
         "attaques": [],
         "equipement": {
-          "Casque": null,
-          "Arme": null,
-          "Gants": null,
           "Bottes": null,
+          "Casque": null,
+          "Jambieres": null,
           "Plastron": null,
-          "Jambieres": null
+          "Gants": null,
+          "Arme": null
         },
         "inventaire": {
           "pomme": 5
@@ -152,12 +150,12 @@
           "tempête_feu"
         ],
         "equipement": {
+          "Arme": null,
           "Bottes": null,
-          "Jambieres": null,
-          "Casque": null,
-          "Gants": null,
           "Plastron": null,
-          "Arme": null
+          "Gants": null,
+          "Casque": null,
+          "Jambieres": null
         },
         "inventaire": {
           "pomme": 5
@@ -202,12 +200,12 @@
           "tempête_feu"
         ],
         "equipement": {
-          "Plastron": null,
           "Bottes": null,
-          "Casque": null,
+          "Arme": null,
           "Gants": null,
+          "Plastron": null,
           "Jambieres": null,
-          "Arme": null
+          "Casque": null
         },
         "inventaire": {
           "pomme": 5
@@ -227,8 +225,8 @@
         "Dialogue_ennemie_1"
       ],
       "droptable": {
-        "pomme": 3,
-        "epee_feu": 1
+        "epee_feu": 1,
+        "pomme": 3
       }
     }
   ],
@@ -244,8 +242,8 @@
       ],
       "meteo": "Interieur",
       "contient_ressources": {
-        "clé": 1,
-        "pomme": 5
+        "pomme": 5,
+        "clé": 1
       },
       "contient_ennemies": {
         "ennemie_1": [
@@ -267,7 +265,10 @@
         "pièce1"
       ],
       "meteo": "Interieur",
-      "contient_ressources": {},
+      "contient_ressources": {
+        "pomme": 5,
+        "parchemin_2": 1
+      },
       "contient_ennemies": {
         "ennemie_2": [
           1,
@@ -330,8 +331,8 @@
       "lieu": "pièce1",
       "recompense": {
         "climatiseur": 4,
-        "parchemin_2": 1,
-        "pomme": 5
+        "pomme": 5,
+        "parchemin_2": 1
       },
       "quetes_suivantes": [],
       "quete_joueur": true,
@@ -894,7 +895,7 @@
       }
     }
   ],
-  "Parchemin": [
+  "Parchemin":[
     {
       "ressource": {
         "entite": {
