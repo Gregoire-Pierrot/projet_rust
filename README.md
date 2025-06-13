@@ -123,7 +123,7 @@ voir le fichier des [armes](Weapons.md).
 | Modélisation code                     | Grégoire          | Modélisation des entités du jeu                                         | ✅      |
 | Systeme d'interface avec Cursive      | Grégoire          | Interface graphique pour jouer                                          | ✅      |
 | Systeme de choix (d'intéraction)      | Grégoire          | Ensemble de tout les choix possible au joueur à un moment donné         | ✅      |
-| Systeme de déplacement                | Ylies             | Possibilité de déplacement entre les différentes zones                  | ✅      |
+| Systeme de déplacement                | Grégoire          | Possibilité de déplacement entre les différentes zones                  | ✅      |
 | Systeme d'interaction avec les pnj    | Ylies & Grégoire  | Intéraction avec les pnj (dialogue, quêtes, commerce, ...)              | ✅      |
 | Systeme de combat                     | Ylies             | -                                                                       | ✅      |
 | Systeme de loot                       | Ylies             | -                                                                       | ✅      |
