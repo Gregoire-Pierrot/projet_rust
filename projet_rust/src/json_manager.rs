@@ -54,19 +54,20 @@ impl MasterFile {
     ////MasterFile////
     pub fn get_instance() -> &'static Mutex<MasterFile> {
         INSTANCE.get_or_init(|| {
-            let data = fs::read_to_string("masterFile.json").unwrap();
-            let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
-            Mutex::new(master_file)
+            let data = fs::read_to_string("sav.json").unwrap_or_else(|_| {
+                fs::read_to_string("game.json").expect("Erreur de parsing du fichier game.json")
+            });
+            serde_json::from_str(&data).expect("Erreur de parsing du fichier json")
         })
     }
 
     pub fn sauvegarder(&mut self) {
         let updated_data = serde_json::to_string_pretty(&self).unwrap(); // Serialiser les données
-        fs::write("masterFile.json", updated_data).unwrap(); // Sauvegarder les données dans le fichier
+        fs::write("sav.json", updated_data).unwrap(); // Sauvegarder les données dans le fichier
     }
 
     pub fn recharger(&mut self) {
-        let data = fs::read_to_string("masterFile.json").unwrap();
+        let data = fs::read_to_string("sav.json").unwrap();
         let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
         self.Joueur = master_file.Joueur;
         self.Pnj = master_file.Pnj;
@@ -76,7 +77,24 @@ impl MasterFile {
         self.Consommable = master_file.Consommable;
         self.Ressource = master_file.Ressource;
         self.Equipement = master_file.Equipement;
+        self.Parchemin = master_file.Parchemin;
         self.Attaque = master_file.Attaque;
+    }
+
+    pub fn newGame(&mut self) {
+        let data = fs::read_to_string("game.json").unwrap();
+        let master_file: MasterFile = serde_json::from_str(&data).expect("Erreur de parsing");
+        self.Joueur = master_file.Joueur;
+        self.Pnj = master_file.Pnj;
+        self.Ennemie = master_file.Ennemie;
+        self.Lieu = master_file.Lieu;
+        self.Quete = master_file.Quete;
+        self.Consommable = master_file.Consommable;
+        self.Ressource = master_file.Ressource;
+        self.Equipement = master_file.Equipement;
+        self.Parchemin = master_file.Parchemin;
+        self.Attaque = master_file.Attaque;
+        self.sauvegarder();
     }
 
     //pub fn new() -> Self {

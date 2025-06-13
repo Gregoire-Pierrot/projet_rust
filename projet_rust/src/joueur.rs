@@ -226,7 +226,7 @@ impl Joueur {
     pub fn get_niveau(&self) -> u8 { self.niveau.clone() }
     pub fn add_niveau(&mut self, niveau: u8) { 
         self.niveau += niveau; 
-        self.points_competence+=5;
+        self.points_competence += 5;
     }
 
 
@@ -276,11 +276,11 @@ impl Joueur {
 
     fn str_quetes(&self) -> String {
         let mut quetes = String::new();
-        for i in 0..self.quetes.len()-1 {
+        for i in 0..self.quetes.len() - 1 {
             quetes.push_str(&self.quetes[i].to_string());
             quetes.push_str(", ");
         }
-        quetes.push_str(&self.quetes[self.quetes.len()-1].to_string());
+        quetes.push_str(&self.quetes[self.quetes.len() - 1].to_string());
         quetes
     }
 
@@ -288,36 +288,38 @@ impl Joueur {
     pub fn ajout_point_stat(&mut self, stat: &str) {
         match stat {
             "pv" => {
-                self.set_pv_max(self.get_pv_max()+10);
-                self.set_pv_actuel(self.get_pv_actuel()+10);
+                for _ in 0..10 {
+                    self.set_pv_max((self.get_pv_max() + 1).min(u16::MAX));
+                    self.set_pv_actuel((self.get_pv_actuel() + 1).min(u16::MAX));
+                }
             }
             "force" => {
-                self.set_force(self.get_force()+1);
+                self.set_force((self.get_force() + 1).min(u16::MAX));
             }
             "dexterite" => {
-                self.set_dexterite(self.get_dexterite()+1);
+                self.set_dexterite((self.get_dexterite() + 1).min(u16::MAX));
             }
             "intelligence" => {
-                self.set_intelligence(self.get_intelligence()+1);
+                self.set_intelligence((self.get_intelligence() + 1).min(u16::MAX));
             }
             "vitesse" => {
-                self.set_vitesse(self.get_vitesse()+1);
+                self.set_vitesse((self.get_vitesse() + 1).min(u16::MAX));
             }
             "esquive" => {
-                self.set_esquive(self.get_esquive()+1);
+                self.set_esquive((self.get_esquive() + 1).min(u16::MAX));
             }
             "chance" => {
-                self.set_chance(self.get_chance()+1);
+                self.set_chance((self.get_chance() + 1).min(u16::MAX));
             }
             "resistance_physique" => {
-                self.set_resistance_physique(self.get_resistance_physique()+1);
+                self.set_resistance_physique((self.get_resistance_physique() + 1).min(u16::MAX));
             }
             "resistance_magique" => {
-                self.set_resistance_magique(self.get_resistance_magique()+1);
+                self.set_resistance_magique((self.get_resistance_magique() + 1).min(u16::MAX));
             }
             _ => panic!("Erreur : la stat [{}] n'est pas reconnue.", stat),
         }
-        self.set_points_competence(self.get_points_competence()-1);
+        self.set_points_competence(self.get_points_competence() - 1);
 
     }
 

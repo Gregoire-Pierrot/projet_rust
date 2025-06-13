@@ -22,10 +22,9 @@ use structs::{EquipementType, Ressource};
 use parchemin::Parchemin;
 use attaque::Attaque;
 use json_manager::{MasterFile, Item};
-//use combat::combat;
 
-use cursive::views::{Dialog, TextView, SelectView, LinearLayout, ScrollView, DummyView};
-use cursive::view::{Resizable};
+use cursive::views::{Dialog, TextView, SelectView, LinearLayout, ScrollView, DummyView, EditView};
+use cursive::view::{Resizable, Nameable};
 use cursive::{Cursive, CursiveExt};
 
 use std::collections::HashMap;
@@ -33,186 +32,195 @@ use rand::Rng;
 
 fn main() {
 
-    /*
-    println!("\n--- AFFICHAGE DE BASE ---\n");
+    /*{
+        println!("\n--- AFFICHAGE DE BASE ---\n");
 
-    let mut master_file = MasterFile::new();
-    let mut joueur = master_file.get_joueur();
-    let mut quete = master_file.prendre_quete_id(&String::from("principale")).expect("Quête introuvable");
-    let mut ressource = master_file.prendre_ressource_id(&String::from("clé")).expect("Ressource introuvable");
-    let mut pnj = master_file.prendre_pnj_id_string(String::from("pnj_1"));
-    let equipement = master_file.prendre_equipement_id("baton").unwrap();
-    println!("{}", joueur);
-
-
-    println!("\n--- TEST DES QUETES ---\n");
-
-    // Étape 1 : Dialogue primaire
-    println!("\nÉtape 1 : Dialogue primaire");
-    let dialogue_primaire_id = pnj.get_dialogue_a_jouer(&mut master_file, pnj.get_dialogues(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
-    let mut dialogue_primaire = master_file.prendre_quete_id(&dialogue_primaire_id).expect("Dialogue primaire introuvable");
-    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
-
-    // Étape 2 : Dialogue secondaire
-    println!("\nÉtape 2 : Dialogue secondaire :");
-    let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
-    let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
-    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
-    
-    // Étape 3 : La quete à ajouter (ajout de quete)
-    println!("\nÉtape 3 : La quete à ajouter (ajout de quete) :");
-    if let Some(dq) = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_secondaire.get_quetes_suivantes(),&mut joueur) {
+        let mut master_file = MasterFile::new();
+        let mut joueur = master_file.get_joueur();
+        let mut quete = master_file.prendre_quete_id(&String::from("principale")).expect("Quête introuvable");
+        let mut ressource = master_file.prendre_ressource_id(&String::from("clé")).expect("Ressource introuvable");
+        let mut pnj = master_file.prendre_pnj_id_string(String::from("pnj_1"));
+        let equipement = master_file.prendre_equipement_id("baton").unwrap();
         println!("{}", joueur);
-    } else {
-        println!("\nAprès avoir eu un dialogue qui donne une quête : ");
+
+
+        println!("\n--- TEST DES QUETES ---\n");
+
+        // Étape 1 : Dialogue primaire
+        println!("\nÉtape 1 : Dialogue primaire");
+        let dialogue_primaire_id = pnj.get_dialogue_a_jouer(&mut master_file, pnj.get_dialogues(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+        let mut dialogue_primaire = master_file.prendre_quete_id(&dialogue_primaire_id).expect("Dialogue primaire introuvable");
+        println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
+
+        // Étape 2 : Dialogue secondaire
+        println!("\nÉtape 2 : Dialogue secondaire :");
+        let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+        let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
+        println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
+        
+        // Étape 3 : La quete à ajouter (ajout de quete)
+        println!("\nÉtape 3 : La quete à ajouter (ajout de quete) :");
+        if let Some(dq) = pnj.get_dialogue_a_jouer(&mut master_file,dialogue_secondaire.get_quetes_suivantes(),&mut joueur) {
+            println!("{}", joueur);
+        } else {
+            println!("\nAprès avoir eu un dialogue qui donne une quête : ");
+            println!("{}", joueur);
+        }
+
+        println!("\nÉtape 4 dialogue mi quete :");
+        //Étape 4 dialogue mi quete
+        let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
+        let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
+        println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
+
+        // Étape 5 : Fin de quête
+        println!("\nÉtape 5 : Fin de quête :");
+        joueur.completion_quete(&mut master_file, ressource.get_id());
         println!("{}", joueur);
-    }
 
-    println!("\nÉtape 4 dialogue mi quete :");
-    //Étape 4 dialogue mi quete
-    let dialogue_secondaire_id = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur).expect("Aucun dialogue trouvé").get_id().to_string();
-    let mut dialogue_secondaire = master_file.prendre_quete_id(&dialogue_secondaire_id).expect("Dialogue secondaire introuvable");
-    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_secondaire));
+        // Rechargement du dialogue primaire mis à jour
+        // Étape 6 :Reparler au pnj après avoir fini la quête
+        println!("\nÉtape 6 : Reparler au pnj :");
+        println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
 
-    // Étape 5 : Fin de quête
-    println!("\nÉtape 5 : Fin de quête :");
-    joueur.completion_quete(&mut master_file, ressource.get_id());
-    println!("{}", joueur);
-
-    // Rechargement du dialogue primaire mis à jour
-    // Étape 6 :Reparler au pnj après avoir fini la quête
-    println!("\nÉtape 6 : Reparler au pnj :");
-    println!("{:?}", pnj.afficher_dialogue(&mut dialogue_primaire));
-
-    if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
-        let autres_id = autres_dialogue_secondaire.get_id();
-        let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
-        println!("{:?}", pnj.afficher_dialogue(&mut autres));
-    } else {
-        println!("Aucun autre dialogue secondaire trouvé.");
-    }
-    println!("{}", joueur);
-
-    // Étape 7 : Reparler au pnj pour avoir le dialogue par défaut 
-    println!("\nÉtape 7 : Reparler au pnj pour avoir le dialogue par défaut  :");
-    if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
-        let autres_id = autres_dialogue_secondaire.get_id();
-        let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
-        println!("{:?}", pnj.afficher_dialogue(&mut autres));
-    } else {
-        println!("Aucun autre dialogue secondaire trouvé.");
-    }
-
-
-    println!("\n--- TEST DES EQUIPEMENTS ---\n");
-    
-    joueur.add_equipement(&EquipementType::Arme, &equipement.get_id().clone());
-    joueur.remove_equipement(&EquipementType::Arme);
-    joueur.remove_equipement(&EquipementType::Arme);
-    joueur.add_equipement(&EquipementType::Arme, &equipement.get_id().clone());
-    println!("\n{}", joueur);
-
-
-    println!("\n--- TEST DES STATS DES ENNEMIES EN FONCTION DU LIEU ---\n");
-    
-    let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1").clone() {
-        Ok(e) => e,
-        Err(e) => {
-            eprintln!("Erreur : {}", e);
-            return;
+        if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
+            let autres_id = autres_dialogue_secondaire.get_id();
+            let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
+            println!("{:?}", pnj.afficher_dialogue(&mut autres));
+        } else {
+            println!("Aucun autre dialogue secondaire trouvé.");
         }
-    };
+        println!("{}", joueur);
 
-    let mut lieu = match master_file.prendre_lieu_id("pièce1") {
-        Ok(l) => l,
-        Err(e) => {
-            eprintln!("Erreur : {}", e);
-            return;
+        // Étape 7 : Reparler au pnj pour avoir le dialogue par défaut 
+        println!("\nÉtape 7 : Reparler au pnj pour avoir le dialogue par défaut  :");
+        if let Some(autres_dialogue_secondaire) = pnj.get_dialogue_a_jouer(&mut master_file, dialogue_primaire.get_quetes_suivantes(), &mut joueur){
+            let autres_id = autres_dialogue_secondaire.get_id();
+            let mut autres = master_file.prendre_quete_id(&autres_id).expect("Autre dialogue secondaire introuvable");
+            println!("{:?}", pnj.afficher_dialogue(&mut autres));
+        } else {
+            println!("Aucun autre dialogue secondaire trouvé.");
         }
-    };
-
-    println!("\nEnnemie avant attribution des stats de lieu  :");
-    println!("{:?}", ennemie);
-    let id = ennemie.get_id();
-    lieu.synchro_ennemie(&mut ennemie, &mut joueur);
-    println!("\nEnnemie après attribution des stats de lieu :");
-    println!("{:?}\n", ennemie);
-    println!("{:?}\n", ennemie.lootable());
 
 
-    println!("\n--- TEST DE L'AJOUT DE STATS AU JOUEUR ---\n");
-
-    println!("\nAvant ajout de stats");
-    println!("{:?}", &joueur);
-    joueur.ajout_point_stat("pv");
-    println!("\nAprès ajout de stats");
-    println!("{:?}\n", &joueur);
-
-
-    println!("\n--- TEST DE L'AFFICHAGE DES ITEMS DE L'INVENTAIRE (équipement,ressources et consommable) ---\n");
-
-    println!("\nAffichage Ressources :");
-    println!("{:?}", joueur.recup_ressources(&master_file));
-    println!("\nAffichage Equipement :");
-    println!("{:?}", joueur.recup_equipement(&master_file));
-    println!("\nAffichage Consommable :");
-    println!("{:?}", joueur.recup_consommable(&master_file));
+        println!("\n--- TEST DES EQUIPEMENTS ---\n");
+        
+        joueur.add_equipement(&EquipementType::Arme, &equipement.get_id().clone());
+        joueur.remove_equipement(&EquipementType::Arme);
+        joueur.remove_equipement(&EquipementType::Arme);
+        joueur.add_equipement(&EquipementType::Arme, &equipement.get_id().clone());
+        println!("\n{}", joueur);
 
 
-    println!("\n--- TEST DU DEMANTELEMENT D'UN ITEM ---\n");
+        println!("\n--- TEST DES STATS DES ENNEMIES EN FONCTION DU LIEU ---\n");
+        
+        let mut ennemie = match master_file.prendre_ennemie_id("ennemie_1").clone() {
+            Ok(e) => e,
+            Err(e) => {
+                eprintln!("Erreur : {}", e);
+                return;
+            }
+        };
 
-    println!("\nAvant Demantelement");
-    println!("{:?}", &joueur);
-    joueur.demantelement(&"clé".to_string(),&master_file);
-    joueur.demantelement(&"pomme".to_string(),&master_file);
-    joueur.demantelement(&"arc".to_string(),&master_file);
-    println!("\nAprès Demantelement :");
-    println!("{:?}", &joueur);
+        let mut lieu = match master_file.prendre_lieu_id("pièce1") {
+            Ok(l) => l,
+            Err(e) => {
+                eprintln!("Erreur : {}", e);
+                return;
+            }
+        };
 
-
-    println!("\n--- TEST DE LA RECOLTE D'UN ITEM DANS UN LIEU ---\n");
-
-    println!("\nAvant Récupération item");
-    println!("{:?}", &joueur);
-    println!("{:?}", &lieu);
-    lieu.recolter_item(("pomme").to_string(), 3, &mut joueur);
-
-    println!("\nAprès Récupération item :");
-    println!("{:?}", &joueur);
-    println!("{:?}", &lieu);
-
-
-    println!("\n--- TEST DU DÉPLACEMENT DU JOUEUR ---\n");
-
-    println!("\nAvant Déplacement");
-    println!("{:?}", &joueur);
-    joueur.deplacement(&lieu.get_id());
-
-    println!("\nAprès Déplacement :");
-    println!("{:?}", &joueur);
+        println!("\nEnnemie avant attribution des stats de lieu  :");
+        println!("{:?}", ennemie);
+        let id = ennemie.get_id();
+        lieu.synchro_ennemie(&mut ennemie, &mut joueur);
+        println!("\nEnnemie après attribution des stats de lieu :");
+        println!("{:?}\n", ennemie);
+        println!("{:?}\n", ennemie.lootable());
 
 
-    println!("\n--- TEST DU COMBAT ---\n");
+        println!("\n--- TEST DE L'AJOUT DE STATS AU JOUEUR ---\n");
 
-    combat(&mut master_file, &mut ennemie, &mut joueur);
-    
+        println!("\nAvant ajout de stats");
+        println!("{:?}", &joueur);
+        joueur.ajout_point_stat("pv");
+        println!("\nAprès ajout de stats");
+        println!("{:?}\n", &joueur);
 
 
-    println!("\n--- AFFICHAGE DU JOUEUR APRÈS LES MODIFICATIONS ---\n");
-    println!("{}", joueur);
+        println!("\n--- TEST DE L'AFFICHAGE DES ITEMS DE L'INVENTAIRE (équipement,ressources et consommable) ---\n");
 
-    //master_file.sauvegarder(&joueur);
+        println!("\nAffichage Ressources :");
+        println!("{:?}", joueur.recup_ressources(&master_file));
+        println!("\nAffichage Equipement :");
+        println!("{:?}", joueur.recup_equipement(&master_file));
+        println!("\nAffichage Consommable :");
+        println!("{:?}", joueur.recup_consommable(&master_file));
 
-    */
+
+        println!("\n--- TEST DU DEMANTELEMENT D'UN ITEM ---\n");
+
+        println!("\nAvant Demantelement");
+        println!("{:?}", &joueur);
+        joueur.demantelement(&"clé".to_string(),&master_file);
+        joueur.demantelement(&"pomme".to_string(),&master_file);
+        joueur.demantelement(&"arc".to_string(),&master_file);
+        println!("\nAprès Demantelement :");
+        println!("{:?}", &joueur);
+
+
+        println!("\n--- TEST DE LA RECOLTE D'UN ITEM DANS UN LIEU ---\n");
+
+        println!("\nAvant Récupération item");
+        println!("{:?}", &joueur);
+        println!("{:?}", &lieu);
+        lieu.recolter_item(("pomme").to_string(), 3, &mut joueur);
+
+        println!("\nAprès Récupération item :");
+        println!("{:?}", &joueur);
+        println!("{:?}", &lieu);
+
+
+        println!("\n--- TEST DU DÉPLACEMENT DU JOUEUR ---\n");
+
+        println!("\nAvant Déplacement");
+        println!("{:?}", &joueur);
+        joueur.deplacement(&lieu.get_id());
+
+        println!("\nAprès Déplacement :");
+        println!("{:?}", &joueur);
+
+
+        println!("\n--- TEST DU COMBAT ---\n");
+
+        combat(&mut master_file, &mut ennemie, &mut joueur);
+        
+
+
+        println!("\n--- AFFICHAGE DU JOUEUR APRÈS LES MODIFICATIONS ---\n");
+        println!("{}", joueur);
+
+        //master_file.sauvegarder(&joueur);
+    }*/
 
 
     let mut siv = Cursive::new();
 
     // Créez un écran de menu principal
     fn main_menu_screen() -> Dialog {
-        Dialog::around(SelectView::new()
-            .item("Jouer", 1)
-            .on_submit(move |s, choice| {
+        let mut select = SelectView::new().item("Jouer", 1);
+        if { MasterFile::get_instance().lock().unwrap().get_joueur().get_nom() } == "" {
+            select.set_on_submit(|s, choice| {
+                if *choice == 1 {
+                    s.pop_layer();
+                    s.add_layer(Dialog::text("Chargement du jeu... Veuillez patienter").title("Chargement"));
+                    // TODO: *chargement du jeu et vérification du json
+                    s.pop_layer();
+                    s.add_layer(choix_nom());
+                }
+            })
+        } else {
+            select.set_on_submit(|s, choice| {
                 if *choice == 1 {
                     s.pop_layer();
                     s.add_layer(Dialog::text("Chargement du jeu... Veuillez patienter").title("Chargement"));
@@ -221,24 +229,54 @@ fn main() {
                     s.add_layer(game_screen());
                 }
             })
-        )
+        }
+        let dialog = Dialog::around(select)
         .title("Menu principal")
-        .button("Quitter", |s| s.quit())
+        .button("Quitter", |s| s.quit());
+        dialog
+    }
+
+    fn choix_nom() -> Dialog {
+        Dialog::new()
+            .title("Choisissez votre nom")
+            .padding_lrtb(1, 1, 1, 0)
+            .content(
+                EditView::new()
+                    .on_submit(|s, nom| {
+                        s.pop_layer();
+                        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_nom(nom.to_string()); }
+                        s.add_layer(game_screen());
+                    })
+                    .with_name("nom_joueur")
+                    .fixed_width(20),
+            )
+            .button("Valider", |s| {
+                let nom = s.call_on_name("nom_joueur", |view: &mut EditView| {
+                    view.get_content().to_string()
+                }).unwrap();
+                s.pop_layer();
+                { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_nom(nom); }
+                s.add_layer(game_screen());
+            })
+            .button("Retour", |s| {
+                s.pop_layer();
+                s.add_layer(main_menu_screen());
+            })
     }
 
     // Créez un écran de jeu
     fn game_screen() -> Dialog {
         let mut layout = LinearLayout::vertical();
         let mut layout_player_infos = LinearLayout::horizontal();
-        { layout_player_infos.add_child(TextView::new(MasterFile::get_instance().lock().unwrap().get_joueur().get_nom().to_string() + ",")) }
+        { layout_player_infos.add_child(TextView::new(MasterFile::get_instance().lock().unwrap().get_joueur().get_nom().to_string() + " |")) }
         layout_player_infos.add_child(DummyView::new().fixed_width(1));
-        { layout_player_infos.add_child(TextView::new("nv:".to_string() + &MasterFile::get_instance().lock().unwrap().get_joueur().get_niveau().to_string() + ",")) }
+        { layout_player_infos.add_child(TextView::new("nv:".to_string() + &MasterFile::get_instance().lock().unwrap().get_joueur().get_niveau().to_string() + " |")) }
         layout_player_infos.add_child(DummyView::new().fixed_width(1));
         {
             let position_id: String;
             { position_id = MasterFile::get_instance().lock().unwrap().get_joueur().get_position(); }
             let position_nom = MasterFile::get_instance().lock().unwrap().prendre_lieu_id(&position_id).expect("Lieu introuvable").get_nom();
-            layout_player_infos.add_child(TextView::new("lieu:".to_string() + &position_nom + ","));
+            layout_player_infos.add_child(TextView::new("lieu:".to_string() + &position_nom + " |"));
         }
         layout_player_infos.add_child(DummyView::new().fixed_width(1));
         {
@@ -392,8 +430,9 @@ fn main() {
                         let mut ennemie: Ennemie;
                         { ennemie = MasterFile::get_instance().lock().unwrap().prendre_ennemie_id(&key.clone()).expect("Ennemie introuvable").clone(); }
                         { lieu.synchro_ennemie(&mut ennemie, &MasterFile::get_instance().lock().unwrap().get_joueur()); }
+                        let joueur_copie = { MasterFile::get_instance().lock().unwrap().get_joueur().clone() };
                         s.pop_layer();
-                        s.add_layer(combat_screen(ennemie));
+                        s.add_layer(combat_screen(ennemie, joueur_copie));
                     } else {
                         panic!("Ennemie introuvable");
                     }
@@ -648,7 +687,7 @@ fn main() {
                 { player_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel(); }
                 if player_pv < 11 {
                     s.add_layer(Dialog::around(TextView::new("Vous n'avez pas assez de vie, vous risquez d'être mis KO."))
-                        .title("Voler")
+                        .title("Notification")
                         .button("Retour", |s| {
                             s.pop_layer();
                         })
@@ -697,29 +736,31 @@ fn main() {
 
     fn create_dialogue_parler_pnj(mut pnj: Pnj, dialogues: Vec<String>) -> Dialog {
         let pnj_clone = pnj.clone();
+        let mut title: String = pnj_clone.get_nom();
         let mut layout = LinearLayout::vertical();
         
         let prochains_dialogues: Vec<String>;
 
         if let Some(mut dialogue) = pnj.get_dialogue_a_jouer(dialogues) {
-            if(dialogue.get_quete_joueur()){
-                layout.add_child(TextView::new("Nouvelle quête obtenu : ".to_owned()+&dialogue.get_nom()));
+            if (dialogue.get_quete_joueur()) {
+                layout.add_child(TextView::new("Nouvelle quête obtenu : ".to_owned() + &dialogue.get_nom()));
                 prochains_dialogues = Vec::new(); 
+                title = "Notification".to_string();
             }
-            else{
+            else {
                 layout.add_child(TextView::new(pnj_clone.afficher_dialogue(&mut dialogue)));
                 prochains_dialogues = dialogue.get_quetes_suivantes();
 
-                let mut joueur  = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+                let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
                 joueur.completion_quete(dialogue.clone().get_id());
-                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut()=joueur; }
+                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
                 
             } 
         } else {
             prochains_dialogues = Vec::new(); 
         }
 
-        let mut dialog = Dialog::around(layout).title(pnj_clone.get_nom());
+        let mut dialog = Dialog::around(layout).title(title.to_string());
 
 
         if !prochains_dialogues.is_empty() {
@@ -1359,16 +1400,16 @@ fn main() {
     }
 
     // Créer un écran de combat
-    fn combat_screen(ennemie: Ennemie) -> Dialog {
+    fn combat_screen(ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
         let ennemie_clone = ennemie.clone();
         let mut select = SelectView::new()
             .item("> Attaquer", 1)
             .item("> Consommable", 2);
         select.set_on_submit(move |s, choice| {
             if *choice == 1 {
-                s.add_layer(combat_attaque_screen(ennemie.clone()));
+                s.add_layer(combat_attaque_screen(ennemie.clone(), joueur_copie.clone()));
             } else if *choice == 2 {
-                s.add_layer(combat_consommable_screen(ennemie.clone()));
+                s.add_layer(combat_consommable_screen(ennemie.clone(), joueur_copie.clone()));
             }
         });
         select.set_inactive_highlight(false);
@@ -1404,29 +1445,21 @@ fn main() {
         })
     }
 
-
-    fn combat_attaque_screen(mut ennemie: Ennemie) -> Dialog {
+    fn combat_attaque_screen(mut ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
         let ennemie_for_basique = ennemie.clone();
         let ennemie_for_spe = ennemie.clone();
+        let joueur_copie_for_basique = joueur_copie.clone();
         let mut select_attaque_bas = SelectView::new()
             .item("Attaque basique", 1)
             .on_submit(move |s, choice| {
                 if *choice == 1 {
-
                     let degats: u16;
                     let mut ennemie_clone = ennemie_for_basique.clone();
                     let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
 
                     degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque_base());
-                    if ennemie_clone.application_degats(&degats,&mut joueur) {
-                        //joueur.completion_quete(ennemie_clone.clone().get_id());
-                        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
-                        s.add_layer(create_dialog_victoire_combat());
-                        return;
-                    }
-
-                    s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone()));
-
+                    ennemie_clone.application_degats(&degats);
+                    s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone(), degats, joueur_copie_for_basique.clone()));
                 }
             });
         select_attaque_bas.set_inactive_highlight(false);
@@ -1458,13 +1491,8 @@ fn main() {
             }
 
             degats = ennemie_clone.degats_recus_net(&joueur.get_personnage().attaque(&attaque));
-            if ennemie_clone.application_degats(&degats,&mut joueur) {
-                //joueur.completion_quete(ennemie_clone.clone().get_id());
-                { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
-                s.add_layer(create_dialog_victoire_combat());
-                return;
-            }
-            s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone()));
+            ennemie_clone.application_degats(&degats);
+            s.add_layer(create_dialog_attaque_combat(ennemie_clone.clone(), degats, joueur_copie.clone()));
 
         });
         Dialog::around(LinearLayout::vertical()
@@ -1477,25 +1505,34 @@ fn main() {
         })
     }
 
-    fn create_dialog_attaque_combat(ennemie: Ennemie) -> Dialog {
+    fn create_dialog_attaque_combat(ennemie: Ennemie, degats: u16, joueur_copie: Joueur) -> Dialog {        
         let mut layout: LinearLayout = LinearLayout::vertical();
 
-        layout.add_child(TextView::new("Vous avez infligée : ".to_owned()+&ennemie.get_pv_actuel().to_string()+" dégâts"));
-       
-        if ennemie.clone().combat() {
-            return create_dialog_defaite_combat();
+        layout.add_child(TextView::new("Vous avez infligée : ".to_owned() + &degats.to_string() + " dégâts"));
+
+        let mut dialog = Dialog::around(layout)
+            .title("attaque");
+
+        let ennemie_ = ennemie.clone();
+        let pv_ennemie = ennemie.get_pv_actuel();
+        if pv_ennemie == 0 {
+            return dialog.button("Ok", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(create_dialog_victoire_combat(ennemie_.clone(), joueur_copie.clone()));
+            });
         }
+       
+        let pv_avant = { MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel() };
+        ennemie.clone().combat();
+        let degats = { pv_avant - MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel() };
 
-        Dialog::around(layout)
-            .title("attaque")
-            .button("Retour", move |s| {
+        return dialog.button("Ok", move |s| {
                 s.pop_layer();
                 s.pop_layer();
-                s.pop_layer();
-                s.add_layer(combat_screen(ennemie.clone()));
-            })
+                s.add_layer(create_dialog_degats_recus(degats, ennemie.clone(), joueur_copie.clone()));
+            });
     }
-
     
     fn create_dialog_arme_combat(ennemie: Ennemie) -> Dialog {
         let mut layout: LinearLayout = LinearLayout::vertical();
@@ -1504,17 +1541,47 @@ fn main() {
 
         Dialog::around(layout)
             .title("Attaque")
-            .button("Retour", move |s| {
+            .button("Retour", |s| {
                 s.pop_layer();
-                s.pop_layer();
-                s.add_layer(combat_attaque_screen(ennemie.clone()));
             })
     }
 
-    fn create_dialog_victoire_combat() -> Dialog {
+    fn create_dialog_victoire_combat(ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
+        let mut joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+        joueur.reset_stats(joueur_copie.clone());
+        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
+
+        joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+        joueur.completion_quete(ennemie.get_id().clone());
+        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
+
+        let nv_avant = { MasterFile::get_instance().lock().unwrap().get_joueur().get_niveau() };
+        let loots = ennemie.lootable();
+        let xp = ennemie.get_xp();
+
+        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().add_xp(xp); }
+        { MasterFile::get_instance().lock().unwrap().get_joueur_mut().ajout_recompense_inventaire(loots.clone()); }
+
         let mut layout: LinearLayout = LinearLayout::vertical();
 
-        layout.add_child(TextView::new("Vous avez gagnée ! "));
+        let nv_apres = { MasterFile::get_instance().lock().unwrap().get_joueur().get_niveau() };
+        if nv_avant != nv_apres {
+            layout.add_child(TextView::new(format!("Vous avez gagné : {} niveaux", nv_apres - nv_avant)));
+            layout.add_child(DummyView::new().fixed_height(1));
+        }
+        layout.add_child(TextView::new("Vous récupéré :"));
+        let mut layout_recompenses = LinearLayout::vertical();
+        layout_recompenses.add_child(TextView::new(format!("xp : {}", xp)));
+        for (item_id, quantite) in &loots {
+            let nom = { MasterFile::get_instance().lock().unwrap().prendre_item_id(&item_id).expect("Item introuvable").get_nom() };
+            layout_recompenses.add_child(TextView::new(format!("{} : {}", nom, quantite)));
+        }
+        layout.add_child(LinearLayout::horizontal()
+            .child(LinearLayout::vertical()
+                .child(DummyView::new().fixed_width(2))
+            )
+            .child(layout_recompenses)
+        );
 
         Dialog::around(layout)
             .title("Victoire")
@@ -1526,25 +1593,49 @@ fn main() {
             })
     }
 
+    fn create_dialog_degats_recus(degats: u16, ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
+        let alive: bool;
+        { alive = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel() > 0; }
+        let mut dialog = Dialog::around(TextView::new(ennemie.get_nom().clone() + " vous a infligé : " + &degats.to_string()))
+            .title("Dégâts reçus");
+        if alive {
+            dialog.button("Ok", move |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(combat_screen(ennemie.clone(), joueur_copie.clone()));
+            })
+        } else {
+            dialog.button("Ok", |s| {
+                s.pop_layer();
+                s.pop_layer();
+                s.pop_layer();
+                s.add_layer(create_dialog_defaite_combat());
+            })
+        }
+    }
+
     fn create_dialog_defaite_combat() -> Dialog {
         let mut layout: LinearLayout = LinearLayout::vertical();
 
-        layout.add_child(TextView::new("Vous avez perdu ! "));
+        layout.add_child(TextView::new("Vous avez perdu !\nRechargement depuis la dernière sauvegarde..."));
+
+        { MasterFile::get_instance().lock().unwrap().recharger(); }
 
         Dialog::around(layout)
             .title("Défaite")
-            .button("Retour", move |s| {
+            .button("Continuer", move |s| {
                 s.pop_layer();
                 s.pop_layer();
                 s.pop_layer();
-                s.add_layer(actions_screen());
+                s.add_layer(game_screen());
+            })
+            .button("Quitter", |s| {
+                s.quit();
             })
     }
 
-
-
-
-    fn combat_consommable_screen(ennemie: Ennemie) -> Dialog {
+    fn combat_consommable_screen(ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
         let inventaire: HashMap<String, u32>;
         { inventaire = MasterFile::get_instance().lock().unwrap().get_joueur().get_inventaire().clone() }
         let mut consommables: Vec<Consommable> = vec![];
@@ -1576,6 +1667,7 @@ fn main() {
             if i % 10 == 0 {
                 let consommables_clone = consommables.clone();
                 let ennemie_value = ennemie_clone.clone();
+                let joueur_copie_for_closure = joueur_copie.clone();
                 select.set_on_submit(move |s, choice: &String| {
                     if quantite == 0 {
                         s.add_layer(Dialog::text("Vous n'avez plus de ".to_string() + &consommable.get_nom().clone())
@@ -1586,7 +1678,7 @@ fn main() {
                     else {
                         let index = choice.parse::<usize>().unwrap() - 1;
                         let consommable = consommables_clone[index].clone();
-                        s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone()));
+                        s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone(), joueur_copie_for_closure.clone()));
                     }
                 });
                 layout.add_child(select);
@@ -1600,11 +1692,12 @@ fn main() {
         if consommables.len() % 10 != 0 {
             let ennemie_value = ennemie_clone.clone();
             let consommables_clone = consommables.clone();
+            let joueur_copie_for_closure = joueur_copie.clone();
             select.set_on_submit(move |s, choice: &String| {
                 let index = choice.parse::<usize>().unwrap() - 1;
                 let consommable = consommables_clone[index].clone();
                 s.pop_layer();
-                s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone()));
+                s.add_layer(create_dialog_utiliser_consommable_combat(consommable, ennemie_value.clone(), joueur_copie_for_closure.clone()));
             });
             layout.add_child(select);
         }
@@ -1612,13 +1705,13 @@ fn main() {
             layout.add_child(TextView::new("Vous n'avez aucun consommable."));
         }
         Dialog::around(layout)
-            .title("Vendre consommable")
+            .title("Consommable")
             .button("Retour", move |s| {
                 s.pop_layer();
             })
     }
 
-    fn create_dialog_utiliser_consommable_combat(consommable: Consommable, ennemie: Ennemie) -> Dialog {
+    fn create_dialog_utiliser_consommable_combat(consommable: Consommable, ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
         let consommable_clone = consommable.clone();
         let mut layout: LinearLayout = LinearLayout::vertical();
         layout.add_child(TextView::new(consommable.get_description().clone()));
@@ -1648,16 +1741,16 @@ fn main() {
                 if *choice == 1 {
                     { MasterFile::get_instance().lock().unwrap().get_joueur_mut().utiliser_item(&consommable, &true) }
                     let mut ennemie_value = ennemie_clone.clone();
-                    //ennemie_value.combat();
+                    let pv_avant = { MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel() };
                     ennemie_value.combat();
-                    //ennemie_value.combat();
+                    let degats = { pv_avant - MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel() };
+                    let joueur_copie_value = joueur_copie.clone();
                     s.add_layer(Dialog::text("L'objet : ".to_string() + &consommable.get_nom() + " a bien été utilisé")
-                        .title("Equiper")
+                        .title("Consommable")
                         .button("Ok", move |s| {
                             s.pop_layer();
                             s.pop_layer();
-                            s.pop_layer();
-                            s.add_layer(combat_screen(ennemie_value.clone()));
+                            s.add_layer(create_dialog_degats_recus(degats, ennemie_value.clone(), joueur_copie_value.clone()));
                         })
                     );
                 }
@@ -2860,6 +2953,7 @@ fn main() {
         Dialog::around(SelectView::new()
             .item("Sauvegarder", 1)
             .item("Recharger", 2)
+            .item("Nouvelle partie", 3)
             .on_submit(|s, choice| {
                 if *choice == 1 {
                     { MasterFile::get_instance().lock().unwrap().sauvegarder(); }
@@ -2871,6 +2965,13 @@ fn main() {
                     { MasterFile::get_instance().lock().unwrap().recharger(); }
                     s.add_layer(Dialog::text("Rechargement de la dernière sauvegarde effectuée").title("Rechargement").button("Ok", |s| {
                         s.pop_layer();
+                    }));
+                } else if *choice == 3 {
+                    { MasterFile::get_instance().lock().unwrap().newGame(); }
+                    s.add_layer(Dialog::text("Démarrage une nouvelle partie").title("Nouvelle Partie").button("Ok", |s| {
+                        s.pop_layer();
+                        s.pop_layer();
+                        s.add_layer(main_menu_screen());
                     }));
                 }
             })
