@@ -259,6 +259,7 @@ impl MasterFile {
                 pnj.remove_item_commerce_table(item_id.clone(), quantite.clone());
                 self.get_joueur_mut().add_inventaire(item_id.clone(), quantite.clone());
                 self.get_joueur_mut().remove_inventaire(&"monnaie".to_string(), prix);
+                self.get_joueur_mut().add_reputation(1);
                 return;
             }
         }

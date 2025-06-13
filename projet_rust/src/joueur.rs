@@ -17,7 +17,7 @@ pub struct Joueur {
     pronom: String,
     niveau: u8,
     temps: u32,
-    reputations: Vec<u16>,
+    reputations: HashMap<String, u16>,
     xp: u32,
     multiplicateur_xp: u16,
     points_competence: u8,
@@ -233,8 +233,29 @@ impl Joueur {
     pub fn get_temps(&self) -> u32 { self.temps.clone() }
     pub fn set_temps(&mut self, temps: u32) { self.temps = temps; }
 
-    pub fn get_reputations(&self) -> Vec<u16> { self.reputations.clone() }
-    pub fn set_reputations(&mut self, reputation: Vec<u16>) { self.reputations = reputation; }
+    pub fn get_reputations(&self) -> HashMap<String, u16> { self.reputations.clone() }
+    pub fn get_reputation(&self) -> u16 { self.reputations.get(&self.get_position().clone()).unwrap().clone() }
+    pub fn set_reputation(&mut self, reputation: u16) {
+        if let Some(entry) = self.reputations.get_mut(&self.get_position().clone()) {
+            *entry = reputation;
+        }
+    }
+    pub fn add_reputation(&mut self, reputation: u16) {
+        if let Some(entry) = self.reputations.get_mut(&self.get_position().clone()) {
+            *entry += reputation;
+        } else {
+            self.reputations.insert(self.get_position().clone(), 50 + reputation);
+        }
+    }
+    pub fn remove_reputation(&mut self, reputation: u16) {
+        if let Some(entry) = self.reputations.get_mut(&self.get_position().clone()) {
+            if *entry < reputation {
+                *entry = 0;
+            } else {
+                *entry -= reputation;
+            }
+        }
+    }
 
     pub fn get_xp(&self) -> u32 { self.xp.clone() }
     pub fn add_xp(&mut self, xp: u32) {
@@ -265,13 +286,11 @@ impl Joueur {
     }
     
     fn str_reputations(&self) -> String {
-        let mut res = String::new();
-        for i in 0..self.reputations.len()-1 {
-            res.push_str(&self.reputations[i].to_string());
-            res.push_str(", ");
+        let mut reputations_str = String::new();
+        for (lieu_id, reputation) in &self.reputations {
+            reputations_str += &format!("{}: {}\n", lieu_id, reputation);
         }
-        res.push_str(&self.reputations[self.reputations.len()-1].to_string());
-        res
+        reputations_str
     }
 
     fn str_quetes(&self) -> String {

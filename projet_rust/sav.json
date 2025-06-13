@@ -6,7 +6,7 @@
         "description": "Un joueur lambda",
         "nom": "Jane"
       },
-      "pv_actuel": 9,
+      "pv_actuel": 90,
       "pv_max": 100,
       "force": 10,
       "dexterite": 1,
@@ -42,10 +42,10 @@
     "pronom": "elle",
     "niveau": 1,
     "temps": 0,
-    "reputations": [
-      40,
-      90
-    ],
+    "reputations": {
+      "pièce1": 40,
+      "pièce2": 90
+    },
     "xp": 0,
     "multiplicateur_xp": 1,
     "points_competence": 5,

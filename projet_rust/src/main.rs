@@ -206,6 +206,7 @@ fn main() {
 
     let mut siv = Cursive::new();
 
+
     // Créez un écran de menu principal
     fn main_menu_screen() -> Dialog {
         let mut select = SelectView::new().item("Jouer", 1);
@@ -264,6 +265,7 @@ fn main() {
             })
     }
 
+
     // Créez un écran de jeu
     fn game_screen() -> Dialog {
         let mut layout = LinearLayout::vertical();
@@ -315,6 +317,7 @@ fn main() {
         Dialog::around(layout)
             .title("Jeu")
     }
+
 
     // Créer un écran de déplacement
     fn move_screen() -> Dialog {
@@ -392,6 +395,7 @@ fn main() {
         })
     }
 
+
     // Créer un écran d'intéraction
     fn actions_screen() -> Dialog {
         Dialog::around(SelectView::new()
@@ -445,6 +449,7 @@ fn main() {
             s.add_layer(game_screen());
         })
     }
+
 
     // Créer un écran d'analyse de zone
     fn analyse_screen() -> Dialog {
@@ -551,6 +556,7 @@ fn main() {
                 s.pop_layer();
             })
     }
+
 
     // Créer un écran de récolte
     fn recolter_screen() -> Dialog {
@@ -717,7 +723,13 @@ fn main() {
                         let joueur_pv: u16;
                         { joueur_pv = MasterFile::get_instance().lock().unwrap().get_joueur().get_pv_actuel().clone(); }
                         { MasterFile::get_instance().lock().unwrap().get_joueur_mut().set_pv_actuel(joueur_pv - 10); }
-                        s.add_layer(Dialog::around(TextView::new("Vous vous êtes fait prendre !\nVous perdez 10pv.".to_string()))
+
+                        let mut joueur: Joueur = { MasterFile::get_instance().lock().unwrap().get_joueur_mut().clone() };
+                        joueur.remove_reputation(10);
+                        { *MasterFile::get_instance().lock().unwrap().get_joueur_mut() = joueur; }
+                        let reputation: u16 = { MasterFile::get_instance().lock().unwrap().get_joueur().get_reputation() };
+
+                        s.add_layer(Dialog::around(TextView::new("Vous vous êtes fait prendre !\n\nVous perdez 10pv.".to_string()))
                             .title("Vol raté")
                             .button("Ok", |s| {
                                 s.pop_layer();
@@ -820,24 +832,28 @@ fn main() {
         let mut layout = LinearLayout::vertical();
         let mut select = SelectView::new();
         let mut counter = 0;
+        let reputation = 1.1 - { MasterFile::get_instance().lock().unwrap().get_joueur().get_reputation() as f32 } / 100.0;
         for (ressource_id, quantite) in pnj.get_commerce_table() {
             if quantite > 0 {
                 let consommable: Result<Consommable, String>;
                 { consommable = MasterFile::get_instance().lock().unwrap().prendre_consommable_id(&ressource_id); }
                 if consommable.is_ok() {
-                    select.add_item(consommable.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                    let prix = consommable.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
+                    select.add_item(consommable.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &prix.to_string(), ressource_id.clone());
                 }
                 else {
                     let ressource: Result<Ressource, String>;
                     { ressource = MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&ressource_id); }
                     if ressource.is_ok() {
-                        select.add_item(ressource.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                        let prix = ressource.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
+                        select.add_item(ressource.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &prix.to_string(), ressource_id.clone());
                     }
                     else {
                         let equipement: Result<Equipement, String>;
                         { equipement = MasterFile::get_instance().lock().unwrap().prendre_equipement_id(&ressource_id); }
                         if equipement.is_ok() {
-                            select.add_item(equipement.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &consommable.clone().unwrap().get_prix().clone().to_string(), ressource_id.clone());
+                            let prix = equipement.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
+                            select.add_item(equipement.clone().unwrap().get_nom().clone() + " x " + &quantite.to_string() + " : " + &prix.to_string(), ressource_id.clone());
                         }
                     }
                 }
@@ -857,7 +873,8 @@ fn main() {
                 }
                 decomposer_string += "}";
                 layout.add_child(TextView::new(decomposer_string));
-                layout.add_child(TextView::new("Prix : ".to_owned() + &consommable.clone().expect("Consommable non trouvé").get_prix().clone().to_string()));
+                let prix = consommable.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
+                layout.add_child(TextView::new("Prix : ".to_owned() + &prix.to_string()));
                 let effets = consommable.clone().expect("Consommable non trouvé").get_effets().clone();
                 layout.add_child(DummyView::new().fixed_height(1));
                 layout.add_child(TextView::new("Régenération pv : ".to_string() + &effets[0].to_string()));
@@ -873,7 +890,7 @@ fn main() {
                 s.add_layer(Dialog::around(layout)
                     .title("Acheter : ".to_owned() + &consommable.clone().unwrap().get_nom().clone())
                     .button("Acheter", move |s| {
-                        { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), consommable.clone().expect("Consommable non trouvé").get_id(), 1, consommable.clone().expect("Consommable non trouvé").get_prix().clone()) }
+                        { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), consommable.clone().expect("Consommable non trouvé").get_id(), 1, prix.clone()) }
                         s.pop_layer();
                         s.pop_layer();
                         let pnj_mod: Pnj;
@@ -901,12 +918,13 @@ fn main() {
                     }
                     decomposer_string += "}";
                     layout.add_child(TextView::new(decomposer_string));
-                    layout.add_child(TextView::new("Prix : ".to_owned() + &ressource.clone().expect("Ressource non trouvée").get_prix().clone().to_string()));
+                    let prix = ressource.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
+                    layout.add_child(TextView::new("Prix : ".to_owned() + &prix.to_string()));
                     let pnj_clone_clone = pnj_clone.clone();
                     s.add_layer(Dialog::around(layout)
                         .title("Acheter : ".to_owned() + &ressource.clone().expect("Ressource non trouvée").get_nom().clone())
                         .button("Acheter", move |s| {
-                            { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), ressource.clone().expect("Ressource non trouvée").get_id(), 1, ressource.clone().expect("Ressource non trouvée").get_prix().clone()) }
+                            { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), ressource.clone().expect("Ressource non trouvée").get_id(), 1, prix.clone()) }
                             s.pop_layer();
                             s.pop_layer();
                             let pnj_mod: Pnj;
@@ -931,10 +949,11 @@ fn main() {
                             decomposer_string += &(MasterFile::get_instance().lock().unwrap().prendre_ressource_id(&id).unwrap().get_nom().clone().to_string() + " : " + &quantite.to_string() + ", ");
                         }
                         decomposer_string += "}";
+                        let prix = equipement.clone().unwrap().get_prix() + (consommable.clone().unwrap().get_prix() as f32 * reputation) as u32;
                         let layout: LinearLayout = LinearLayout::vertical()
                             .child(TextView::new(equipement.clone().expect("Equipement non trouvée").get_description().clone()))
                             .child(TextView::new(&decomposer_string))
-                            .child(TextView::new("Prix : ".to_owned() + &equipement.clone().expect("Equipement non trouvée").get_prix().to_string()))
+                            .child(TextView::new("Prix : ".to_owned() + &prix.to_string()))
                             .child(DummyView::new().fixed_height(1))
                             .child(TextView::new("Pv : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_pv().to_string()))
                             .child(TextView::new("Force : ".to_string() + &equipement.clone().expect("Equipement non trouvée").get_bonus_force().to_string()))
@@ -962,7 +981,7 @@ fn main() {
                         s.add_layer(Dialog::around(layout)
                             .title("Acheter : ".to_owned() + &equipement.clone().expect("Equipement non trouvée").get_nom().clone())
                             .button("Acheter", move |s| {
-                                { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), equipement.clone().expect("Equipement non trouvée").get_id(), 1, equipement.clone().expect("Equipement non trouvée").get_prix().clone()) }
+                                { MasterFile::get_instance().lock().unwrap().acheter(pnj_clone_clone.clone().get_id(), equipement.clone().expect("Equipement non trouvée").get_id(), 1, prix.clone()) }
                                 s.pop_layer();
                                 s.pop_layer();
                                 let pnj_mod: Pnj;
@@ -1399,6 +1418,7 @@ fn main() {
         }
     }
 
+
     // Créer un écran de combat
     fn combat_screen(ennemie: Ennemie, joueur_copie: Joueur) -> Dialog {
         let ennemie_clone = ennemie.clone();
@@ -1762,6 +1782,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran de personnage
     fn personnage_screen() -> Dialog {
         Dialog::around(SelectView::new()
@@ -1789,6 +1810,7 @@ fn main() {
             s.add_layer(game_screen());
         })
     }
+
 
     // Créer un écran d'information
     fn informations_screen() -> Dialog {
@@ -1823,6 +1845,7 @@ fn main() {
         })
     }
 
+
     // Créer un écran d'attribution des points
     fn points_attribution() -> Dialog {
         let mut layout = LinearLayout::vertical();
@@ -1855,6 +1878,7 @@ fn main() {
                 s.add_layer(informations_screen());
             })
     }
+
 
     // Créer un écran de choix de stats
     fn stat_choice() -> Dialog {
@@ -1925,6 +1949,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran de statistiques
     fn statistiques_screen() -> Dialog {
         let mut layout = LinearLayout::vertical();
@@ -1971,6 +1996,7 @@ fn main() {
                 s.add_layer(informations_screen());
             })
     }
+
 
     // Créer un écran de l'équipement du joueur
     fn equipement_screen() -> Dialog {
@@ -2158,6 +2184,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran d'attaques
     fn attaques_screen() -> Dialog {
         let attaques_id: Vec<String>;
@@ -2231,6 +2258,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran de l'inventaire
     fn inventaire_screen() -> Dialog {
         Dialog::around(SelectView::new()
@@ -2263,6 +2291,7 @@ fn main() {
             s.add_layer(personnage_screen());
         })
     }
+
 
     // Créer un écran de consommables
     fn inventaire_consommable() -> Dialog {
@@ -2408,6 +2437,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran de ressources
     fn inventaire_ressources() -> Dialog {
         let inventaire: HashMap<String, u32>;
@@ -2520,6 +2550,7 @@ fn main() {
                 s.pop_layer();
             })
     }
+
 
     // Créer un écran d'équipement
     fn inventaire_equipements() -> Dialog {
@@ -2883,6 +2914,7 @@ fn main() {
             })
     }
 
+
     // Créer un écran de quête
     fn quetes_screen() -> Dialog {
         let mut quetes: Vec<Quete> = vec![];
@@ -2947,6 +2979,7 @@ fn main() {
                 s.pop_layer();
             })
     }
+
 
     // Créer un écran de menu
     fn menu_screen() -> Dialog {
